@@ -24,5 +24,9 @@ interface StyledData extends Main{
 
 
 }
-
+declare module '*.png' {
+    const value: string;
+    export default value;
+  }
+  
 type ItmesType  = { name: string, brand: string }

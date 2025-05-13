@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "./Navbar/page";
-import { Footer } from "./Footer/page";
+import { Footer} from "./Footer/page";
 
 
 const geistMono = Geist_Mono({
@@ -26,6 +26,7 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
         <main>
         {children}
         </main>
+
         <Footer/>
       </body>
     </html>
