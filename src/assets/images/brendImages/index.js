@@ -1,0 +1,66 @@
+import brendImage1 from "./brendImage1.png";
+import brendImage2 from "./brendImage2.png";
+import brendImage3 from "./brendImage3.png";
+import brendImage4 from "./brendImage4.png";
+import brendImage5 from "./brendImage5.png";
+import brendImage6 from "./brendImage6.png";
+import brendImage7 from "./brendImage7.png";
+import brendImage8 from "./brendImage8.png";
+import brendImage9 from "./brendImage9.png";
+import brendImage10 from "./brendImage10.png";
+import brendImage11 from "./brendImage11.png";
+import brendImage12 from "./brendImage12.png";
+import brendImage13 from "./brendImage13.png";
+import brendImage14 from "./brendImage14.png";
+import brendImage15 from "./brendImage15.png";
+import brendImage16 from "./brendImage16.png";
+import brendImage17 from "./brendImage17.png";
+import brendImage18 from "./brendImage18.png";
+import brendImage19 from "./brendImage19.png";
+import brendImage20 from "./brendImage20.png";
+import brendImage21 from "./brendImage21.png";
+import brendImage22 from "./brendImage22.png";
+import brendImage23 from "./brendImage23.png";
+import brendImage24 from "./brendImage24.png";
+import brendImage25 from "./brendImage25.png";
+import brendImage26 from "./brendImage26.png";
+import brendImage27 from "./brendImage27.png";
+import brendImage28 from "./brendImage28.png";
+import brendImage29 from "./brendImage29.png";
+import brendImage30 from "./brendImage30.png";
+import brendImage31 from "./brendImage31.png";
+import brendImage32 from "./brendImage32.png";
+import brendImage33 from "./brendImage33.png";
+import brendImage34 from "./brendImage34.png";
+import brendImage35 from "./brendImage35.png";
+import brendImage36 from "./brendImage36.png";
+import brendImage37 from "./brendImage37.png";
+import brendImage38 from "./brendImage38.png";
+import brendImage39 from "./brendImage39.png";
+import brendImage40 from "./brendImage40.png";
+import brendImage41 from "./brendImage41.png";
+import brendImage42 from "./brendImage42.png";
+import brendImage43 from "./brendImage43.png";
+import brendImage44 from "./brendImage44.png";
+import brendImage45 from "./brendImage45.png";
+import brendImage46 from "./brendImage46.png";
+import brendImage47 from "./brendImage47.png";
+import brendImage48 from "./brendImage48.png";
+
+export const brendImages = [
+  brendImage1, brendImage2, brendImage3, brendImage4,
+  brendImage5, brendImage6, brendImage7, brendImage8,
+  brendImage9, brendImage10, brendImage11, brendImage12,
+  brendImage13, brendImage14, brendImage15, brendImage16,
+  brendImage17, brendImage18, brendImage19, brendImage20,
+  brendImage21, brendImage22, brendImage23, brendImage24,
+  brendImage25, brendImage26, brendImage27, brendImage28,
+  brendImage29, brendImage30, brendImage31, brendImage32,
+  brendImage33, brendImage34, brendImage35, brendImage36,
+  brendImage37, brendImage38, brendImage39, brendImage40,
+  brendImage41, brendImage42, brendImage43, brendImage44,
+  brendImage45, brendImage46, brendImage47, brendImage48,
+].map((img, index) => ({
+  img,
+  id: index + 1,
+}));
