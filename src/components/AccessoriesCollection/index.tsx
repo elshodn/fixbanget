@@ -51,6 +51,7 @@ export const AccessoriesCollection: React.FC<AccessoriesCollectionProps> = ({
                 <Image
                   src={item.image}
                   alt={item.name}
+                  priority
                   fill
                   className="object-contain transition-all hover:scale-105"
                 />
