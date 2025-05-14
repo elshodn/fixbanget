@@ -19,11 +19,11 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
   return (
     <html lang="en">
       <body
-        className={` ${geistMono.variable} antialiased`}
+        className={` ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
         <Navbar />
         {/** Main content */}
-        <main>
+        <main className="flex-grow">
         {children}
         </main>
 
