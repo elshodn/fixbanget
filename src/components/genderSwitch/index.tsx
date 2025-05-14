@@ -17,7 +17,7 @@ export const GenderSwitch: React.FC<GenderSwitchProps> = ({
 }) => {
   return (
     <div className="flex justify-center mb-4 md:mb-8">
-      <div className="flex border gap-0.5 rounded-[15px] bg-[#F2F2F2] p-1 sm:p-2">
+      <div className="flex flex-col md:flex-row border gap-0.5 rounded-[15px] bg-[#F2F2F2] p-1 sm:p-2">
         <Button
           className={clsx(
             "rounded-[10px] px-3 py-3 sm:px-5 sm:py-5 text-xs sm:text-sm font-bold",
@@ -27,7 +27,7 @@ export const GenderSwitch: React.FC<GenderSwitchProps> = ({
           )}
           onClick={() => setActiveGender("men")}
         >
-          Мужчинам
+          Для него
         </Button>
         <Button
           className={clsx(
@@ -38,7 +38,7 @@ export const GenderSwitch: React.FC<GenderSwitchProps> = ({
           )}
           onClick={() => setActiveGender("women")}
         >
-          Женщинам
+          Для неё
         </Button>
       </div>
     </div>

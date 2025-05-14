@@ -37,7 +37,6 @@ const SearchPage = () => {
     const router = useRouter();
 
     useEffect(() => {
-        // Server-side renderingda window obyekti mavjud emasligini tekshirish
         if (typeof window !== 'undefined') {
             const checkIfMobile = () => {
                 setIsMobile(window.innerWidth < 768);
@@ -50,7 +49,6 @@ const SearchPage = () => {
         }
     }, []);
 
-    // Debounce filter changes
     useEffect(() => {
         const timer = setTimeout(() => {
             applyFilters();
@@ -198,10 +196,10 @@ const SearchPage = () => {
                     </>
                 )}
 
+                {/*
                 <h1 className='text-base text-[#222222] font-medium'>Из наличия или под заказ?</h1>
                 <p className='text-sm font-normal text-[#535353]'>Под заказ кроссовки будут дешевле, а из наличия приедут сегодня или завтра</p>
-
-                <div className="flex justify-center mb-8">
+                 <div className="flex justify-center mb-8">
                     <div className="flex w-full border gap-0.5 rounded bg-[#F2F2F2] p-2 my-5">
                         <Button
                             className={clsx(
@@ -232,9 +230,9 @@ const SearchPage = () => {
                             🤑 Под заказ
                         </Button>
                     </div>
-                </div>
+                </div> */}
 
-                <div className="mb-6">
+                <div className="my-6">
                     <h1 className="text-base text-[#222222] font-medium mb-3">Цена, RUB</h1>
                     <div className="flex items-center gap-3">
                         <div className="flex-1">
