@@ -7,8 +7,8 @@ import { Heart } from 'lucide-react';
 
 interface Product {
   id: number;
-  name: String;
-  image: String; 
+  name: string;
+  image: string; 
 }
 
 const Collections: React.FC = () => {
@@ -45,7 +45,8 @@ const Collections: React.FC = () => {
             </button>
 
             <div className="bg-[#EFEDEC] h-72 relative">
-              <img
+              <Image
+                priority
                 src={item.image}
                 alt={item.name}
                 fill

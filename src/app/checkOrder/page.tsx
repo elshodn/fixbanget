@@ -21,7 +21,7 @@ import sizeImage from "../assets/images/size.png";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-
+import Image from 'next/image';
 interface FormData {
   name: string;
   email: string;
@@ -99,13 +99,11 @@ const DetailCard = ({ params }: { params: { id: string } }) => {
             <Dialog>
               <DialogTrigger asChild>
                 <div className="relative h-full cursor-zoom-in">
-                  <img
+                  <Image
+                    priority
+                    
                     src={mainImage}
-<<<<<<< HEAD
                     alt={product.name}
-=======
-                    alt={product.title}
->>>>>>> bda6c1fae8971ea7128ec5ef6c3d0dba314f2c33
                     className="w-full h-full object-contain"
                   />
                 </div>
@@ -216,7 +214,9 @@ const DetailCard = ({ params }: { params: { id: string } }) => {
                       </div>
                     </DialogHeader>
                     <div className="py-0">
-                      <img className='w-32 md:w-1/4 mx-auto' src={sizeImage} alt="size image" />
+                      <Image
+                        priority
+                      className='w-32 md:w-1/4 mx-auto' src={sizeImage} alt="size image" />
                       <p className="text-center mb-4">Измеряется в см</p>
                       <div className="border rounded-md overflow-hidden">
                         <Table className="text-[12px] md:text-[14px]">
@@ -275,9 +275,8 @@ const DetailCard = ({ params }: { params: { id: string } }) => {
                   <Button
                     key={idx}
                     size="sm"
-                    className={`px-2 sm:px-3 py-1 text-xs font-bold sm:text-sm bg-transparent text-black border-2 border-[#D1D1D1] rounded ${selectedSize === size ? "border-black" : ""}`}
-                    onClick={() => setSelectedSize(size)}
-                  >
+                    className={`px-2 sm:px-3 py-1 text-xs font-bold sm:text-sm bg-transparent text-black border-2 border-[#D1D1D1] rounded ${selectedSize === size.toString() ? "border-black" : ""}`}
+                    onClick={() => setSelectedSize(size.toString())}>
                     {size}
                   </Button>
                 ))}
@@ -289,7 +288,7 @@ const DetailCard = ({ params }: { params: { id: string } }) => {
           <div className="flex items-center justify-between gap-1 sm:gap-4 mt-4 sm:mt-6">
             <div className="border p-1 sm:p-2 rounded-md flex gap-2 sm:gap-3 items-center">
               <Button
-                variant="ghost"
+                variant="outline"
                 size="sm"
                 className="h-6 w-6 sm:h-8 sm:w-8 p-0"
                 onClick={() => handleQuantityChange(-1)}
@@ -298,7 +297,7 @@ const DetailCard = ({ params }: { params: { id: string } }) => {
               </Button>
               <p className="text-sm sm:text-base">{quantity}</p>
               <Button
-                variant="ghost"
+                variant="outline"
                 size="sm"
                 className="h-6 w-6 sm:h-8 sm:w-8 p-0"
                 onClick={() => handleQuantityChange(1)}

@@ -52,6 +52,8 @@ function SheetContent({
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
   side?: "top" | "right" | "bottom" | "left"
 }) {
+  const descriptionId = React.useId();
+
   return (
     <SheetPortal>
       <SheetOverlay />
@@ -69,6 +71,7 @@ function SheetContent({
             "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 h-auto border-t",
           className
         )}
+        aria-describedby={descriptionId}
         {...props}
       >
         {children}

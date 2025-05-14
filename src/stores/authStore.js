@@ -2,8 +2,8 @@ import { create } from 'zustand';
 import { initialUsers } from '../lib/mockData';
 
 export const useAuthStore = create((set) => ({
-  user: JSON.parse(localStorage.getItem('user')) || null,
-  isAuthenticated: !!localStorage.getItem('user'),
+  user: typeof localStorage !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : null,
+  isAuthenticated: typeof localStorage !== 'undefined' && !!localStorage.getItem('user'),
   isLoading: false,
   error: null,
 
@@ -87,6 +87,7 @@ export const useAuthStore = create((set) => ({
   clearError: () => set({ error: null }),
 
   checkAuth: () => {
+    if (typeof localStorage === 'undefined') return;
     const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
       set({ user, isAuthenticated: true });
