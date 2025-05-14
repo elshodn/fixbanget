@@ -25,19 +25,13 @@ export default function Home() {
     <>
     <div className="min-h-screen bg-white home">
             <main className="container mx-auto px-4 py-8">
-                <GenderSwitch
-                    activeGender={activeGender}
-                    setActiveGender={setActiveGender}
-                />
                 <Header />
             </main>
 
-            <ProductCarousel product={productCarousel} />
             <ClothCollection />
             <ProductCarousel product={productCarousel} />
             <StyliesCollection />
             <AccessoriesCollection product={AccessoriesData} />
-            <ProductCarousel product={productCarousel} />
             <Assortment />
             <BrendImagesCollection />
             {/* <Catalogs link="/search" linkButtonTitle="Перейти в каталог" product={products.slice(0, 10)} title="Кроссовок в каталоге" desc="В Unicflo есть такие культовые модели как: Nike Air Max, Dunk, New Balance 550, Air Jordan, Adidas Samba, Asics Gel Kahana. Разные расцветки от классических до редких коллекционные вариантов." /> */}
