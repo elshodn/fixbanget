@@ -3,6 +3,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import image from "@/assets/images/chinaImage.png"
 
 const AboutContainer: React.FC = () => {
   return (
@@ -10,7 +11,7 @@ const AboutContainer: React.FC = () => {
       <div
         className="absolute inset-0 bg-center bg-cover"
         style={{
-          backgroundImage: `linear-gradient(90deg, #FFE5D2 10.1%, rgba(255, 255, 255, 0) 75%), url(${"/assets/images/chinaImage.png"})`,
+          backgroundImage: `linear-gradient(90deg, #FFE5D2 10.1%, rgba(255, 255, 255, 0) 75%), url(${image.src})`,
         }}
       />
       <div className="relative w-full md:w-1/2 flex justify-center md:justify-end h-full">

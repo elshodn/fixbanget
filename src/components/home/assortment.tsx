@@ -3,8 +3,8 @@
 import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import image from '../../assets/images/erasebg-transformed.png';
 
-// Props uchun interfeysni hozircha ishlatmadik, chunki statik rasm va matnlar bor
 export const Assortment: React.FC = () => {
   return (
     <div className="text-center relative bg-gradient-to-b from-[#ccc8c5] to-white pt-10 md:pt-0">
@@ -14,7 +14,7 @@ export const Assortment: React.FC = () => {
       <div className="flex mx-auto w-11/12 relative z-10 gap-4 lg:gap-0">
         <div className="relative w-1/3 xl:w-full lg:w-auto mx-auto lg:mx-0">
           <Image
-            src="/assets/images/erasebg-transformed.png"
+            src={image.src}
             alt="Assortment"
             width={600}
             height={600}

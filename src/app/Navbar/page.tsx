@@ -28,7 +28,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { LoginSheet } from "@/components/home/LoginSheet";
 import { useLikeStore } from "../../stores/likeStore";
-import { useAuthStore } from "../../stores/authStore";
+// import { useAuthStore } from "../../stores/authStore";
 import {
   DialogTitle,
   DialogDescription,
@@ -91,7 +91,7 @@ export function Navbar() {
   ];
 
   const likedCount = useLikeStore((state) => state.likedProducts.length);
-  const isLoggedIn = useAuthStore((state) => state.isAuthenticated);
+  // const isLoggedIn = useAuthStore((state) => state.isAuthenticated);
 
   return (
     <nav className="bg-[#1B1B1B] text-white shadow-lg">
@@ -120,7 +120,6 @@ export function Navbar() {
                 <div className="w-full mt-8 md:w-7/12 relative flex justify-center items-center">
                   <div className="w-full md:w-8/12 space-y-2 p-10 md:p-0 flex flex-col h-full md:h-auto">
                     <div className="md:hidden flex">
-                      {isLoggedIn ? (
                         <Link
                           href="/profile"
                           className="cursor-pointer flex gap-4 items-center text-xl md:text-3xl font-semibold hover:text-gray-300"
@@ -129,16 +128,7 @@ export function Navbar() {
                             Профиль
                           </SheetClose>
                         </Link>
-                      ) : (
-                        <Link
-                          href="/login"
-                          className="cursor-pointer flex gap-4 items-center text-xl md:text-3xl font-semibold hover:text-gray-300"
-                        >
-                          <SheetClose className="cursor-pointer">
-                            Войти
-                          </SheetClose>
-                        </Link>
-                      )}
+                    
                     </div>
 
                     {navLinks.map((link, index) => (
@@ -338,13 +328,9 @@ export function Navbar() {
             </Sheet>
 
             <div className="hidden md:flex">
-              {isLoggedIn ? (
                 <Link href="/profile" className="cursor-pointer">
                   <UserRound className="h-5 w-5" />
                 </Link>
-              ) : (
-                <LoginSheet />
-              )}
             </div>
           </div>
         </div>
@@ -352,3 +338,13 @@ export function Navbar() {
     </nav>
   );
 }
+// : (
+//   <Link
+//     href="/login"
+//     className="cursor-pointer flex gap-4 items-center text-xl md:text-3xl font-semibold hover:text-gray-300"
+//   >
+//     <SheetClose className="cursor-pointer">
+//       Войти
+//     </SheetClose>
+//   </Link>
+// )}

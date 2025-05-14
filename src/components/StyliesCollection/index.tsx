@@ -10,8 +10,7 @@ import 'swiper/css/navigation';
 import Link from 'next/link';
 import { ChevronRight, ArrowLeft, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
-const katalogImage = '/images/katalog.png'; // public/images/katalog.png
+import katalogImage from '../../assets/images/katalog.png'; 
 
 interface StyleItem {
   name: string;
@@ -39,7 +38,8 @@ export const StyliesCollection = () => {
       >
         <div
           className="absolute inset-0 bg-[#EFEDEC] bg-cover bg-center bg-no-repeat transition-transform duration-500 group-hover:scale-105"
-          style={{ backgroundImage: `url(${katalogImage})` }}
+          style={{ backgroundImage: `url(${katalogImage.src})` }}
+
         />
         <div className="relative z-10 w-full h-full flex flex-col justify-end p-3 bg-black/50">
           <div className="text-center flex flex-col justify-center h-full">
@@ -71,7 +71,7 @@ export const StyliesCollection = () => {
           </div>
           <div
             onClick={(e) => {
-              e.stopPropagation(); // Prevent parent click
+              e.stopPropagation();
               router.push('/');
             }}
             className="flex justify-center items-center rounded-full bg-[#EFEFEF] w-7 h-7 sm:w-8 sm:h-8 hover:bg-[#DFDFDF]"
@@ -110,8 +110,6 @@ export const StyliesCollection = () => {
           {renderCatalogSlide()}
           {styleData.map((item, index) => renderProductSlide(item, index))}
         </Swiper>
-
-        {/* Prev button */}
         <button
           style={{ boxShadow: '0px 1px 7px 0px rgba(0,0,0,0.3)' }}
           className={`hidden sm:flex product-carousel-prev cursor-pointer absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full items-center justify-center transition-opacity duration-200 ${
@@ -121,8 +119,6 @@ export const StyliesCollection = () => {
         >
           <ArrowLeft size={18} className="sm:size-5" />
         </button>
-
-        {/* Next button */}
         <button
           style={{ boxShadow: '0px 1px 7px 0px rgba(0,0,0,0.3)' }}
           className={`hidden sm:flex product-carousel-next cursor-pointer absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full shadow-md items-center justify-center transition-opacity duration-200 ${

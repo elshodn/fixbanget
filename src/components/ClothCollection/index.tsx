@@ -5,15 +5,15 @@ import { ChevronRight } from 'lucide-react';
 import { categories } from '@/lib/mockData';
 import { CategoriesCollection } from '../categoriesCollection';
 
-const image1 = '../../assets/images/mock/image12.png';
-const image2 = '../../assets/images/mock/image8.png';
-const image3 = '../../assets/images/mock/image11.png';
-const image4 = '../../assets/images/mock/image7.png';
-const image5 = '../../assets/images/mock/image9.png';
-const image6 = '../../assets/images/mock/image10.png';
+import image1 from '../../assets/images/mock/image12.png';
+import image2 from '../../assets/images/mock/image8.png';
+import image3 from '../../assets/images/mock/image11.png';
+import image4 from '../../assets/images/mock/image7.png';
+import image5 from '../../assets/images/mock/image9.png';
+import image6 from '../../assets/images/mock/image10.png';
 interface ProductCardProps {
   children: React.ReactNode;
-  image: string;
+  // image: StaticImageData;
 }
 
 const ProductCard = ({ children, image }: ProductCardProps) => (
@@ -22,7 +22,7 @@ const ProductCard = ({ children, image }: ProductCardProps) => (
     className="block h-full w-full p-3 rounded-xl md:bg-center bg-right md:rounded-2xl overflow-hidden"
     style={{
       backgroundColor: '#EFEDEC',
-      backgroundImage: `url(${image})`,
+      backgroundImage: `url(${image.src})`,
       backgroundSize: 'contain',
       backgroundRepeat: 'no-repeat',
     }}
@@ -31,7 +31,7 @@ const ProductCard = ({ children, image }: ProductCardProps) => (
   </Link>
 );
 
-export const ClothCollection = () => {
+export const ClothCollection = () => {  
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Header */}

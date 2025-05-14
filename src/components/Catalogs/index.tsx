@@ -90,7 +90,7 @@ export const Catalogs: React.FC<CatalogsProps> = ({
                     product.oldPrice ? "text-[#FF3A5C]" : "text-gray-900"
                   }`}
                 >
-                  {product.quantity} ₽
+                  {product.price} ₽
                 </span>
                 {product.oldPrice && (
                   <span className="text-sm text-gray-500 line-through">

@@ -151,6 +151,7 @@ export const products = [
     id: 7,
     name: "Vans Old Skool",
     price: 79.99,
+    oldPrice:343,
     category: "sneakers",
     gender: ["men", "women"],
     image: "https://i.pinimg.com/originals/9a/06/a9/9a06a9d5fb3daddd463ae7f84b82904f.png",

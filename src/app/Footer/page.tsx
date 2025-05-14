@@ -1,20 +1,23 @@
 import React from 'react';
+
 import telegram from '@/assets/images/telegramIcon.png';
 import instagram from '@/assets/images/instagramIcon.png';
 import youtube from '@/assets/images/youtubeIcon.png';
 import logo from '@/assets/images/logo.png';
+import Image from 'next/image';
 
 export const Footer: React.FC = () => {
   return (
     <footer className="bg-black mt-20">
       <div className="flex w-11/12 mx-auto md:w-full items-center p-4">
         <div className="flex gap-2 items-center w-1/3">
-          <img className="w-7 object-cover" src={telegram} alt="Telegram Icon" />
-          <img className="w-7 object-cover" src={instagram} alt="Instagram Icon" />
-          <img className="w-7 object-cover" src={youtube} alt="YouTube Icon" />
+          <Image className="w-7 object-cover" src={telegram} alt="Telegram Icon" />
+          <Image className="w-7 object-cover" src={instagram} alt="Instagram Icon" />
+          <Image className="w-7 object-cover" src={youtube} alt="YouTube Icon" />
         </div>
         <div className="w-1/3 flex justify-center">
-          <img className="object-contain" src={logo} alt="Company Logo" />
+          <Image className="object-contain" src={logo} alt="Company Logo" loading="lazy" />
+
         </div>
       </div>
       <div className="flex w-11/12 mx-auto md:w-full mb-4">

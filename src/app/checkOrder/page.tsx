@@ -101,7 +101,11 @@ const DetailCard = ({ params }: { params: { id: string } }) => {
                 <div className="relative h-full cursor-zoom-in">
                   <img
                     src={mainImage}
+<<<<<<< HEAD
+                    alt={product.name}
+=======
                     alt={product.title}
+>>>>>>> bda6c1fae8971ea7128ec5ef6c3d0dba314f2c33
                     className="w-full h-full object-contain"
                   />
                 </div>

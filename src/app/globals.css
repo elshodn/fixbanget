@@ -125,7 +125,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @custom-variant dark (&:is(.dark *));
-@font-face {
+/* @font-face {
   font-family: "SF Pro Display";
   src: url("/src/assets/fonts/SF-Pro-Display-Regular.woff") format("woff"),
        url("/src/assets/fonts/SF-Pro-Display-Regular.ttf") format("truetype");
@@ -155,7 +155,7 @@
        url("/src/assets/fonts/SF-Pro-Display-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
-}
+} */
 
 * {
   outline: none;
@@ -163,9 +163,9 @@
 body {
   background: #FAFAFA;
 }
-.home {
+/* .home {
   font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
-}
+} */
 
 
 @theme inline {
