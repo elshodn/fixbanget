@@ -5,13 +5,14 @@
     image:string,
  }
  interface Product extends Main{
-    category: string,
-    gender: string[],
-    colors: string[],
-    sizes: number[],
-    rating: number,
-    reviews: number,
-    oldPrice?: number,
+    title: string; 
+    category: string;
+    gender: string[];
+    colors: string[];
+    sizes: number[];
+    rating: number;
+    reviews: number;
+    oldPrice?: number;
 }
 interface StyledData extends Main{
     quantity: number,

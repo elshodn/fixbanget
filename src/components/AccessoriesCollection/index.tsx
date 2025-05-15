@@ -15,7 +15,9 @@ interface ProductItem {
 }
 
 // Props interfeysi
-
+interface AccessoriesCollectionProps {
+  product: ProductItem[];
+}
 
 export const AccessoriesCollection: React.FC<AccessoriesCollectionProps> = ({
   product,

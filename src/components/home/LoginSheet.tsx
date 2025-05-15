@@ -40,7 +40,7 @@ export function LoginSheet() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" className="hidden md:block cursor-pointer hover:bg-gray-100">
+        <Button variant="outline" className="hidden md:block cursor-pointer hover:bg-gray-100">
           Войти
         </Button>
       </SheetTrigger>

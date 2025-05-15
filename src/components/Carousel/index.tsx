@@ -9,16 +9,9 @@ import { ArrowRight, ArrowLeft, ChevronRight } from "lucide-react"
 import Link from "next/link"
 import { ProductCarouselCard } from "./ProductCarouselCard"
 
-type Product = {
-  id: string | number
-  [key: string]: any 
-}
 
-interface ProductCarouselProps {
-  product: Product[]
-}
 
-export const ProductCarousel: React.FC<ProductCarouselProps> = ({ product }) => {
+export const ProductCarousel: React.FC<any> = ({ product }) => {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 relative group">
       <div className="flex justify-between items-center py-2 md:py-4">
@@ -66,11 +59,11 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ product }) => 
             },
           }}
         >
-          {product.map((product) => (
+            {product.map((product: Product) => (
             <SwiperSlide className="mb-3" key={product.id}>
               <ProductCarouselCard product={product} />
             </SwiperSlide>
-          ))}
+            ))}
         </Swiper>
       </div>
 

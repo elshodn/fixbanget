@@ -31,7 +31,7 @@ const Wishlist = () => {
         <h1 className='font-semibold text-xl sm:text-3xl md:text-4xl'>Мой список желаний</h1>
         {hasItems && !showEmptyState && (
           <Button
-            variant="ghost"
+            variant="outline"
             onClick={handleDeleteAll}
             className="text-[#F04438] hover:bg-transparent font-medium text-sm sm:text-base"
           >
@@ -55,6 +55,8 @@ const Wishlist = () => {
               <Link href={`/product/${item.id}`} className="block">
                 <div className="aspect-square relative bg-gray-100 rounded-lg overflow-hidden">
                   <Image
+                  priority
+                    fill
                     src={item.image}
                     alt={item.name}
                     className="object-cover w-full h-full transition-transform group-hover:scale-105"

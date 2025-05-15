@@ -61,7 +61,7 @@ const Carts: React.FC = () => {
         <h1 className='font-semibold text-2xl sm:text-3xl md:text-4xl'>Ваша корзина</h1>
         {deleteAll && (
           <Button
-            variant="ghost"
+            variant="outline"
             onClick={handleDeleteAll}
             className="text-[#F04438] hover:bg-transparent font-medium text-sm sm:text-base"
           >
@@ -95,13 +95,13 @@ const Carts: React.FC = () => {
                   />
                   <div className='flex-1 flex flex-wrap justify-between'>
                     <p className='font-medium text-sm sm:text-base'>{item.name}</p>
-                    <div className='hidden md:flex gap-2'>
+                    <div className='md:flex gap-2'>
                       {/* Edit Dialog */}
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button variant="link" className="p-0 h-auto text-xs sm:text-sm">
                             <NotepadText className='w-4 h-4 mr-1' />
-                            <span className='hidden sm:inline'>Редактировать</span>
+                            <span className='hidden'>Редактировать</span>
                           </Button>
                         </DialogTrigger>
                         <DialogContent>
@@ -156,7 +156,7 @@ const Carts: React.FC = () => {
                         <DialogTrigger asChild>
                           <Button variant="link" className="p-0 h-auto text-red-600 text-xs sm:text-sm">
                             <Trash2 className='w-4 h-4 mr-1' />
-                            <span className='hidden sm:inline'>Удалить</span>
+                            <span className='hidden'>Удалить</span>
                           </Button>
                         </DialogTrigger>
                         <DialogContent className="text-center max-w-xs sm:max-w-md">
@@ -179,9 +179,9 @@ const Carts: React.FC = () => {
                     {/* Mobile actions */}
                     <div className='flex sm:hidden justify-between items-center mt-2 w-full'>
                       <div className='border p-1 rounded-sm flex gap-3 items-center'>
-                        <Button variant="ghost" size="sm" onClick={() => updateQuantity(index, -1)}>-</Button>
+                        <Button variant="outline" size="sm" onClick={() => updateQuantity(index, -1)}>-</Button>
                         <p className='text-sm'>{item.quantity}</p>
-                        <Button variant="ghost" size="sm" onClick={() => updateQuantity(index, 1)}>+</Button>
+                        <Button variant="outline" size="sm" onClick={() => updateQuantity(index, 1)}>+</Button>
                       </div>
                       <p className='font-medium'>${(item.price * item.quantity).toFixed(2)}</p>
                     </div>
@@ -193,9 +193,9 @@ const Carts: React.FC = () => {
                   <p className='w-1/4 text-center'>${item.price}</p>
                   <div className='w-1/4 flex justify-center'>
                     <div className='border p-2 rounded-sm flex gap-3 items-center'>
-                      <Button variant="ghost" size="sm" onClick={() => updateQuantity(index, -1)}>-</Button>
+                      <Button variant="outline" size="sm" onClick={() => updateQuantity(index, -1)}>-</Button>
                       <p>{item.quantity}</p>
-                      <Button variant="ghost" size="sm" onClick={() => updateQuantity(index, 1)}>+</Button>
+                      <Button variant="outline" size="sm" onClick={() => updateQuantity(index, 1)}>+</Button>
                     </div>
                   </div>
                   <p className='w-1/4 text-center'>${(item.price * item.quantity).toFixed(2)}</p>

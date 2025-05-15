@@ -11,9 +11,11 @@ import image3 from '../../assets/images/mock/image11.png';
 import image4 from '../../assets/images/mock/image7.png';
 import image5 from '../../assets/images/mock/image9.png';
 import image6 from '../../assets/images/mock/image10.png';
+import type { StaticImageData } from 'next/image';
+
 interface ProductCardProps {
   children: React.ReactNode;
-  // image: StaticImageData;
+  image: StaticImageData;
 }
 
 const ProductCard = ({ children, image }: ProductCardProps) => (

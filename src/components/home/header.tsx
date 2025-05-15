@@ -1,14 +1,15 @@
 import Image from "next/image";
 import image1 from "../../assets/images/mock/image1.png";
-import image2 from "../../assets/images/mock/image2.png";
-import image3 from "../../assets/images/mock/image3.png";
-import image4 from "../../assets/images/mock/image4.png";
-import image5 from "../../assets/images/mock/image5.png";
-import image6 from "../../assets/images/mock/image6.png";
+
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-const ProductCard = ({ children, image }) => (
+type ProductCardProps = {
+  children: React.ReactNode;
+  image: any;
+};
+
+const ProductCard = ({ children, image }: ProductCardProps) => (
   <Link
     href="/search"
     className={`block h-full w-full p-3 rounded-2xl overflow-hidden bg-[#EFEDEC] relative`}
