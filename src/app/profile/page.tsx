@@ -14,10 +14,10 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from '@/components/ui/separator';
 import { ProfileComponent } from "@/components/profileComponent/index";
-// import { ProfileOrdersComponent } from "../components/profileOrders";
-// import { TermsComponent } from "../components/termsComponent";
-// import { PrivacyComponent } from "../components/privacyComponent";
-// import { HelpComponent } from "../components/helpComponent";
+import ProfileOrdersComponent from "@/components/ProfileOrdersComponent";
+import TermsComponent  from "@/components/TermsComponent";
+import {PrivacyComponent} from "@/components/privacyComponent";
+import HelpComponent from "@/components/HelpComponent";
 import { useAuthStore } from '@/stores/authStore';
 import { useRouter } from 'next/navigation';
 
@@ -55,13 +55,13 @@ const Profile: React.FC = () => {
             case 'profile':
                 return <ProfileComponent />;
             case 'orders':
-                // return <ProfileOrdersComponent />;
+                return <ProfileOrdersComponent />;
             case 'terms':
-                // return <TermsComponent />;
+                return <TermsComponent />;
             case 'privacy':
-                // return <PrivacyComponent />;
+                return <PrivacyComponent />;
             case 'help':
-                // return <HelpComponent />;
+                return <HelpComponent />;
             default:
                 return <ProfileComponent />;
         }
@@ -110,7 +110,7 @@ const Profile: React.FC = () => {
                 <div className="flex flex-col md:flex-row gap-4">
                     <div className="w-full md:w-1/4 bg-white p-3 rounded-lg h-max shadow-sm">
                         <div className="space-y-1 md:space-y-0 md:block flex overflow-x-auto pb-2 md:pb-0 w-full">
-                            <div className="flex flex-nowrap md:flex-col gap-2 md:gap-0">
+                            <div className="flex flex-nowrap md:flex-col items-center gap-2 md:gap-0">
                                 {menuItems.map((item) => (
                                     <Button
                                         key={item.id}
