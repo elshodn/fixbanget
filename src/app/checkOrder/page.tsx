@@ -17,7 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useLikeStore } from '@/stores/likeStore';
-import sizeImage from "../assets/images/size.png";
+import sizeImage from "@/assets/images/size.png";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -28,6 +28,8 @@ interface FormData {
   title: string;
   review: string;
 }
+
+import { GetServerSideProps } from 'next';
 
 const DetailCard = ({ params }: { params: { id: string } }) => {
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
