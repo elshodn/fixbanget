@@ -17,7 +17,7 @@ type Order = {
   status: 'processing' | 'shipped' | 'delivery' | 'delivered' | 'refund' | string;
   refundStatus?: string;
   date: string;
-  trackingNumber: string;
+  trackingNumber: string | null;
   items: OrderItem[];
 };
 
@@ -110,9 +110,11 @@ export default function ProfileOrdersComponent() {
                 <div className="flex items-center gap-2">
                   <Button
                     onClick={() => {
-                      navigator.clipboard.writeText(selectedOrder.trackingNumber);
-                      setIsCopied(true);
-                      setTimeout(() => setIsCopied(false), 2000);
+                      if (selectedOrder.trackingNumber) {
+                        navigator.clipboard.writeText(selectedOrder.trackingNumber);
+                        setIsCopied(true);
+                        setTimeout(() => setIsCopied(false), 2000);
+                      }
                     }}
                     className={`px-2 text-sm sm:text-base flex items-center gap-1 ${
                       isCopied ? 'bg-[#FF385C] text-white' : 'bg-[#F4F4F4] text-[#FF385C]'

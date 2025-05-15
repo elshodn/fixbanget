@@ -31,7 +31,10 @@ export default function Home() {
             <ClothCollection />
             <ProductCarousel product={productCarousel} />
             <StyliesCollection />
-            <AccessoriesCollection product={AccessoriesData} />
+            <AccessoriesCollection product={AccessoriesData.map(item => ({
+                ...item,
+                image: typeof item.image === "string" ? item.image : item.image.src
+            }))} />
             <Assortment />
             <BrendImagesCollection />
             {/* <Catalogs link="/search" linkButtonTitle="Перейти в каталог" product={products.slice(0, 10)} title="Кроссовок в каталоге" desc="В Unicflo есть такие культовые модели как: Nike Air Max, Dunk, New Balance 550, Air Jordan, Adidas Samba, Asics Gel Kahana. Разные расцветки от классических до редких коллекционные вариантов." /> */}

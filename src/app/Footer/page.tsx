@@ -6,7 +6,7 @@ import youtube from '@/assets/images/youtubeIcon.png';
 import logo from '@/assets/images/logo.png';
 import Image from 'next/image';
 
-export const Footer: React.FC = () => {
+const Footer: React.FC = () => {
   return (
     <footer className="bg-black mt-20">
       <div className="flex w-11/12 mx-auto md:w-full items-center p-4">
@@ -58,3 +58,5 @@ export const Footer: React.FC = () => {
     </footer>
   );
 };
+
+export default Footer;

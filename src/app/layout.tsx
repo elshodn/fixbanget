@@ -2,8 +2,8 @@
 
 import type { Metadata } from "next";
 import "./globals.css";
-import { Navbar } from "./Navbar/page";
-import { Footer } from "./Footer/page";
+import  Navbar  from "./Navbar/page";
+import  Footer  from "./Footer/page";
 import localFont from 'next/font/local';
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";

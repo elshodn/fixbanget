@@ -59,11 +59,11 @@ export const ProductCarousel: React.FC<any> = ({ product }) => {
             },
           }}
         >
-          {product.map((product) => (
+            {product.map((product: Product) => (
             <SwiperSlide className="mb-3" key={product.id}>
               <ProductCarouselCard product={product} />
             </SwiperSlide>
-          ))}
+            ))}
         </Swiper>
       </div>
 

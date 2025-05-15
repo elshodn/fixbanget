@@ -19,6 +19,7 @@ import tiktokIcon from "@/assets/images/tiktokIcon.png";
 import navbar from "@/assets/images/navbar.png";
 import Link from "next/link";
 import Image from "next/image";
+
 import { LoginSheet } from "@/components/home/LoginSheet";
 import { useLikeStore } from "../../stores/likeStore";
 // import { useAuthStore } from "../../stores/authStore";
@@ -40,7 +41,7 @@ interface CartItem {
   oldPrice?: number;
 }
 
-export function Navbar() {
+function Navbar() {
   const [cartData, setCartData] = useState(
     styleData.slice(0, 3).map((item) => ({ ...item, quantity: 1 }))
   );
@@ -102,11 +103,11 @@ export function Navbar() {
               <MenuSheet
                 {...{
                   navLinks,
-                  whatsappIcon,
-                  telegramIcon,
-                  instagramIcon,
-                  tiktokIcon,
-                  navbar,
+                  whatsappIcon: whatsappIcon.src,
+                  telegramIcon: telegramIcon.src,
+                  instagramIcon: instagramIcon.src,
+                  tiktokIcon: tiktokIcon.src,
+                  navbar: navbar.src,
                 }}
               />
             </div>
@@ -286,11 +287,11 @@ export function Navbar() {
               <MenuSheet
                 {...{
                   navLinks,
-                  whatsappIcon,
-                  telegramIcon,
-                  instagramIcon,
-                  tiktokIcon,
-                  navbar,
+                  whatsappIcon: whatsappIcon.src,
+                  telegramIcon: telegramIcon.src,
+                  instagramIcon: instagramIcon.src,
+                  tiktokIcon: tiktokIcon.src,
+                  navbar: navbar.src,
                 }}
               />
             </div>
@@ -307,6 +308,8 @@ export function Navbar() {
     </nav>
   );
 }
+
+export default Navbar;
 // : (
 //   <Link
 //     href="/login"

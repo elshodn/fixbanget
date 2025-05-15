@@ -5,6 +5,14 @@ import { Heart, ChevronRight, Zap, Gem } from "lucide-react";
 import Link from "next/link";
 import { useLikeStore } from "@/stores/likeStore";
 
+type StyledData = {
+  id: string | number;
+  name: string;
+  price: number;
+  image: string;
+  oldPrice?: number;
+};
+
 type CatalogsProps = {
   title: string;
   desc: string;
@@ -28,7 +36,7 @@ export const Catalogs: React.FC<CatalogsProps> = ({
   useEffect(() => {
     const initialLikes: Record<string, boolean> = {};
     product?.forEach((p) => {
-      initialLikes[p.id] = isLiked(p.id);
+      initialLikes[String(p.id)] = isLiked(String(p.id));
     });
     setLocalLikes(initialLikes);
   }, [product]);
@@ -57,21 +65,21 @@ export const Catalogs: React.FC<CatalogsProps> = ({
             className="relative gap-0 overflow-hidden group border-none shadow-none"
           >
             <button
-              onClick={() => handleLike(product.id)}
+              onClick={() => handleLike(String(product.id))}
               aria-label={
-                localLikes[product.id]
+                localLikes[String(product.id)]
                   ? "Remove from favorites"
                   : "Add to favorites"
               }
               className={`absolute cursor-pointer top-3 left-3 z-10 p-2 rounded-full transition-colors duration-200 ${
-                localLikes[product.id]
+                localLikes[String(product.id)]
                   ? "text-red-500 fill-red-500"
                   : "text-gray-400 hover:text-red-500"
               }`}
             >
               <Heart
                 size={20}
-                className={localLikes[product.id] ? "fill-current" : "fill-none"}
+                className={localLikes[String(product.id)] ? "fill-current" : "fill-none"}
               />
             </button>
 

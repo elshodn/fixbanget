@@ -6,7 +6,23 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
-export default function MenuSheet({ navLinks, whatsappIcon, telegramIcon, instagramIcon, tiktokIcon, navbar }) {
+type MenuSheetProps = {
+  navLinks: { href: string; label: string }[];
+  whatsappIcon: string;
+  telegramIcon: string;
+  instagramIcon: string;
+  tiktokIcon: string;
+  navbar: string;
+};
+
+export default function MenuSheet({
+  navLinks,
+  whatsappIcon,
+  telegramIcon,
+  instagramIcon,
+  tiktokIcon,
+  navbar,
+}: MenuSheetProps) {
   return (
     <Sheet>
       <SheetTrigger asChild>
