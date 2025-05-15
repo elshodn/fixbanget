@@ -61,7 +61,7 @@ const Carts: React.FC = () => {
         <h1 className='font-semibold text-2xl sm:text-3xl md:text-4xl'>Ваша корзина</h1>
         {deleteAll && (
           <Button
-            variant="ghost"
+            variant="outline"
             onClick={handleDeleteAll}
             className="text-[#F04438] hover:bg-transparent font-medium text-sm sm:text-base"
           >
@@ -179,9 +179,9 @@ const Carts: React.FC = () => {
                     {/* Mobile actions */}
                     <div className='flex sm:hidden justify-between items-center mt-2 w-full'>
                       <div className='border p-1 rounded-sm flex gap-3 items-center'>
-                        <Button variant="ghost" size="sm" onClick={() => updateQuantity(index, -1)}>-</Button>
+                        <Button variant="outline" size="sm" onClick={() => updateQuantity(index, -1)}>-</Button>
                         <p className='text-sm'>{item.quantity}</p>
-                        <Button variant="ghost" size="sm" onClick={() => updateQuantity(index, 1)}>+</Button>
+                        <Button variant="outline" size="sm" onClick={() => updateQuantity(index, 1)}>+</Button>
                       </div>
                       <p className='font-medium'>${(item.price * item.quantity).toFixed(2)}</p>
                     </div>
@@ -193,9 +193,9 @@ const Carts: React.FC = () => {
                   <p className='w-1/4 text-center'>${item.price}</p>
                   <div className='w-1/4 flex justify-center'>
                     <div className='border p-2 rounded-sm flex gap-3 items-center'>
-                      <Button variant="ghost" size="sm" onClick={() => updateQuantity(index, -1)}>-</Button>
+                      <Button variant="outline" size="sm" onClick={() => updateQuantity(index, -1)}>-</Button>
                       <p>{item.quantity}</p>
-                      <Button variant="ghost" size="sm" onClick={() => updateQuantity(index, 1)}>+</Button>
+                      <Button variant="outline" size="sm" onClick={() => updateQuantity(index, 1)}>+</Button>
                     </div>
                   </div>
                   <p className='w-1/4 text-center'>${(item.price * item.quantity).toFixed(2)}</p>

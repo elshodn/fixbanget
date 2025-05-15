@@ -446,7 +446,7 @@ const SearchPage = () => {
                                 <p className="text-base font-bold">Быстрая доставка ⚡</p>
                                 <p className="text-sm text-gray-600">Товары с доставкой за 0-2 дня или самовывоз</p>
                             </div>
-                            <Button variant="ghost" className="flex items-center rounded-2xl h-12 gap-1">
+                            <Button variant="outline" className="flex items-center rounded-2xl h-12 gap-1">
                                 Все <ChevronRight className="text-4xl" />
                             </Button>
                         </div>

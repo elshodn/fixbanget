@@ -114,7 +114,7 @@ const Profile: React.FC = () => {
                                 {menuItems.map((item) => (
                                     <Button
                                         key={item.id}
-                                        variant={activeTab === item.id ? 'secondary' : 'ghost'}
+                                        variant={activeTab === item.id ? 'secondary' : 'outline'}
                                         className="w-max md:w-full justify-start text-start my-2 md:my-0.5 gap-2 whitespace-normal"
                                         onClick={() => setActiveTab(item.id)}
                                     >
