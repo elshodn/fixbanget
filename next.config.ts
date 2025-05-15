@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         hostname: 'i.pinimg.com',
         pathname: '/originals/**',
       },
+        {
+        protocol: 'https',
+        hostname: 'images.pexels.com',
+        pathname: '/photos/**',
+      },
     ],
   },
 };

@@ -95,13 +95,13 @@ const Carts: React.FC = () => {
                   />
                   <div className='flex-1 flex flex-wrap justify-between'>
                     <p className='font-medium text-sm sm:text-base'>{item.name}</p>
-                    <div className='hidden md:flex gap-2'>
+                    <div className='md:flex gap-2'>
                       {/* Edit Dialog */}
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button variant="link" className="p-0 h-auto text-xs sm:text-sm">
                             <NotepadText className='w-4 h-4 mr-1' />
-                            <span className='hidden sm:inline'>Редактировать</span>
+                            <span className='hidden'>Редактировать</span>
                           </Button>
                         </DialogTrigger>
                         <DialogContent>
@@ -156,7 +156,7 @@ const Carts: React.FC = () => {
                         <DialogTrigger asChild>
                           <Button variant="link" className="p-0 h-auto text-red-600 text-xs sm:text-sm">
                             <Trash2 className='w-4 h-4 mr-1' />
-                            <span className='hidden sm:inline'>Удалить</span>
+                            <span className='hidden'>Удалить</span>
                           </Button>
                         </DialogTrigger>
                         <DialogContent className="text-center max-w-xs sm:max-w-md">

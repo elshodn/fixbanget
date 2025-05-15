@@ -17,7 +17,20 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 const SearchPage = () => {
-    const [filters, setFilters] = useState({
+    type FiltersState = {
+        availability: string;
+        priceRange: {
+            min: string;
+            max: string;
+        };
+        selectedSizes: string[];
+        selectedBrands: string[];
+        sizeSystem: string;
+        sortBy: string;
+        searchQuery: string;
+    };
+
+    const [filters, setFilters] = useState<FiltersState>({
         availability: "",
         priceRange: {
             min: '',
@@ -57,7 +70,13 @@ const SearchPage = () => {
         return () => clearTimeout(timer);
     }, [filters]);
 
-    const handlePriceChange = (e) => {
+    interface PriceChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
+
+    interface PriceChangeHandler {
+        (e: PriceChangeEvent): void;
+    }
+
+    const handlePriceChange: PriceChangeHandler = (e) => {
         const { name, value } = e.target;
         if (value === '' || /^[0-9\b]+$/.test(value)) {
             setFilters(prev => ({
@@ -70,10 +89,14 @@ const SearchPage = () => {
         }
     };
 
-    const toggleSize = (size) => {
-        setFilters(prev => {
+    interface ToggleSizeFn {
+        (size: string): void;
+    }
+
+    const toggleSize: ToggleSizeFn = (size) => {
+        setFilters((prev: FiltersState) => {
             const newSizes = prev.selectedSizes.includes(size)
-                ? prev.selectedSizes.filter(s => s !== size)
+                ? prev.selectedSizes.filter((s: string) => s !== size)
                 : [...prev.selectedSizes, size];
 
             return {
@@ -83,10 +106,14 @@ const SearchPage = () => {
         });
     };
 
-    const toggleBrand = (brand) => {
-        setFilters(prev => {
+    interface ToggleBrandFn {
+        (brand: string): void;
+    }
+
+    const toggleBrand: ToggleBrandFn = (brand) => {
+        setFilters((prev: FiltersState) => {
             const newBrands = prev.selectedBrands.includes(brand)
-                ? prev.selectedBrands.filter(b => b !== brand)
+                ? prev.selectedBrands.filter((b: string) => b !== brand)
                 : [...prev.selectedBrands, brand];
 
             return {
@@ -96,15 +123,24 @@ const SearchPage = () => {
         });
     };
 
-    const setSizeSystem = (system) => {
-        setFilters(prev => ({
+    interface SizeSystem {
+        system: string;
+    }
+
+    const setSizeSystem = (system: string) => {
+        setFilters((prev: FiltersState) => ({
             ...prev,
             sizeSystem: system
         }));
     };
 
-    const handleSortChange = (sortOption) => {
-        setFilters(prev => ({
+    interface SortOption {
+        value: string;
+        label: string;
+    }
+
+    const handleSortChange = (sortOption: SortOption['value']) => {
+        setFilters((prev: FiltersState) => ({
             ...prev,
             sortBy: sortOption
         }));
@@ -112,14 +148,14 @@ const SearchPage = () => {
 
     const applyFilters = () => {
         let result = [...products];
-    
+
         // Availability filter
         if (filters.availability === "in-stock") {
-            result = result.filter(product => product.inStock);
+            result = result.filter(product => 'inStock' in product && (product as any).inStock);
         } else if (filters.availability === "pre-order") {
-            result = result.filter(product => !product.inStock);
+            result = result.filter(product => 'inStock' in product && !(product as any).inStock);
         }
-    
+
         // Price range filter
         if (filters.priceRange.min) {
             const minPrice = parseFloat(filters.priceRange.min);
@@ -129,21 +165,21 @@ const SearchPage = () => {
             const maxPrice = parseFloat(filters.priceRange.max);
             result = result.filter(product => product.price <= maxPrice);
         }
-    
+
         // Size filter
         if (filters.selectedSizes.length > 0) {
             result = result.filter(product =>
-                product.sizes.some(size => filters.selectedSizes.includes(size))
+                product.sizes.some(size => filters.selectedSizes.includes(String(size)))
             );
         }
-    
+
         // Brand filter
         if (filters.selectedBrands.length > 0) {
             result = result.filter(product =>
-                filters.selectedBrands.includes(product.brand || product.name.split(' ')[0])
+                filters.selectedBrands.includes((product as any).brand ?? product.name.split(' ')[0])
             );
         }
-    
+
         // Search query filter
         if (filters.searchQuery) {
             const searchQuery = filters.searchQuery.toLowerCase();
@@ -151,7 +187,7 @@ const SearchPage = () => {
                 product.name.toLowerCase().includes(searchQuery)
             );
         }
-    
+
         // Sorting
         switch (filters.sortBy) {
             case "price-asc":
@@ -164,7 +200,7 @@ const SearchPage = () => {
             default:
                 break;
         }
-    
+
         setFilteredProducts(result);
     };
 
@@ -181,17 +217,17 @@ const SearchPage = () => {
                 {isMobile && (
                     <>
                         <div className="flex justify-between items-center pb-4 mb-3 border-b">
-                        <Search size={30}/>
-                        <Input
-                            type="text"
-                            placeholder="Поиск..."
-                            value={filters.searchQuery}
-                            onChange={(e) => setFilters(prev => ({
-                                ...prev,
-                                searchQuery: e.target.value
-                            }))}
-                            className="w-11/12 border-none rounded focus-visible:outline-none focus-visible:ring-0 shadow-none focus:shadow-none"
-                        />
+                            <Search size={30} />
+                            <Input
+                                type="text"
+                                placeholder="Поиск..."
+                                value={filters.searchQuery}
+                                onChange={(e) => setFilters(prev => ({
+                                    ...prev,
+                                    searchQuery: e.target.value
+                                }))}
+                                className="w-11/12 border-none rounded focus-visible:outline-none focus-visible:ring-0 shadow-none focus:shadow-none"
+                            />
                         </div>
                     </>
                 )}
@@ -282,8 +318,8 @@ const SearchPage = () => {
                                 <div key={item.size} className='flex items-center gap-3'>
                                     <Checkbox
                                         className="rounded-full border border-[#848484]"
-                                        checked={filters.selectedSizes.includes(item.size)}
-                                        onCheckedChange={() => toggleSize(item.size)}
+                                        checked={filters.selectedSizes.includes(String(item.size))}
+                                        onCheckedChange={() => toggleSize(String(item.size))}
                                     />
                                     <p className='text-[#222222]'>{item.size}</p>
                                 </div>
@@ -468,8 +504,10 @@ const SearchPage = () => {
                             >
                                 {products.map((product) => (
                                     <SwiperSlide className="mb-3" key={product.id}>
-                                        <ProductCarouselCard product={product} />
-                                    </SwiperSlide>
+                                        <ProductCarouselCard
+                                            key={product.id}
+                                            product={{ ...product, title: product.name }}
+                                        />                                    </SwiperSlide>
                                 ))}
                             </Swiper>
                         </div>
@@ -500,7 +538,10 @@ const SearchPage = () => {
                     ) : (
                         <div className={`grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6`}>
                             {filteredProducts.map((product) => (
-                                <ProductCarouselCard key={product.id} product={product} />
+                                <ProductCarouselCard
+                                    key={product.id}
+                                    product={{ ...product, title: product.name }}
+                                />
                             ))}
                         </div>
                     )}
