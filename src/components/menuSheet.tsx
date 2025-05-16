@@ -14,7 +14,10 @@ type MenuSheetProps = {
   tiktokIcon: string;
   navbar: string;
 };
-
+let styleAuto = {
+  width: "auto",
+  height: "auto",
+}
 export default function MenuSheet({
   navLinks,
   whatsappIcon,
@@ -55,11 +58,11 @@ export default function MenuSheet({
               </Link>
             ))}
 
-            <div className="flex items-center gap-8 my-3 md:my-8">
-              <Image className="w-4 md:w-6" src={whatsappIcon} alt="WhatsApp" />
-              <Image className="w-4 md:w-6" src={telegramIcon} alt="Telegram" />
-              <Image className="w-4 md:w-6" src={instagramIcon} alt="Instagram" />
-              <Image className="w-4 md:w-6" src={tiktokIcon} alt="TikTok" />
+            <div className="flex items-center gap-8 my-3 md:my-8 ">
+              <Image className="w-4 md:w-6" width={48} height={48} src={tiktokIcon} alt="TikTok" />
+              <Image className="w-4 md:w-6" width={48} height={48} src={instagramIcon} alt="Instagram" />
+              <Image className="w-4 md:w-6" width={48} height={48} src={whatsappIcon} alt="WhatsApp" />
+              <Image className="w-4 md:w-6" width={48} height={48} src={telegramIcon} alt="Telegram" />
             </div>
 
             <p className="text-xl md:text-2xl">+0 (000) 000-00-00</p>
@@ -74,7 +77,7 @@ export default function MenuSheet({
         </div>
 
         <div className="relative z-10 w-5/12 hidden md:block">
-          <Image src={navbar} alt="Navbar visual" />
+          <Image src={navbar} fill alt="Navbar visual" />
         </div>
       </SheetContent>
     </Sheet>

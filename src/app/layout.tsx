@@ -1,6 +1,5 @@
 'use client';
 
-import type { Metadata } from "next";
 import "./globals.css";
 import  Navbar  from "./Navbar/page";
 import  Footer  from "./Footer/page";
@@ -37,7 +36,7 @@ const SFProDisplay = localFont({
 });
 
 
-const hideFooterRoutes = ['/checkout', '/paymentMethed', '/paymentComplete'];
+const hideFooterRoutes = ['/checkout', '/paymentMethed', '/paymentComplete','/detailCard/:slug'];  
 
 export default function RootLayout({
   children,
@@ -55,8 +54,13 @@ export default function RootLayout({
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  const shouldShowFooter = !(isMobile && hideFooterRoutes.includes(pathname));
-
+const shouldShowFooter = !(
+  isMobile &&
+  (
+    pathname.startsWith('/detailCard/') ||
+    ['/checkout', '/paymentMethed', '/paymentComplete'].includes(pathname)
+  )
+);
   return (
     <html lang="en" className={`${SFProDisplay.variable}`}>
       <body className={`antialiased flex flex-col min-h-screen font-sans`}>

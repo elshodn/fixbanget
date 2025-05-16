@@ -50,9 +50,7 @@ function CheckOrder() {
 
   const handleChange = (name: string, value: string) => {
     setFormValues(prev => ({ ...prev, [name]: value }));
-    // if (invalidFields[name]) {
-    //   setInvalidFields(prev => ({ ...prev, [name]: false }));
-    // }
+
   };
 
   const dialogCloseRef = useRef<HTMLButtonElement>(null);
@@ -127,14 +125,12 @@ function CheckOrder() {
               </div>
             ))}
           </Card>
-
           <div className="mt-8">
             <h1 className="text-[#1B1B1B] text-xl font-semibold my-3">Детали доставки</h1>
             <Card className="p-4 space-y-2">
               <Label className="flex gap-2 items-center">
                 <span className="font-semibold text-[14px]">Адрес</span>
               </Label>
-
               <Dialog>
                 <DialogTrigger asChild>
                   <div className="relative flex w-full">
@@ -210,7 +206,6 @@ function CheckOrder() {
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
-
               {isAddressSaved &&
                 <div className="mt-4 space-y-3">
                   <h2 className="text-[14px] font-semibold">Доставка</h2>
