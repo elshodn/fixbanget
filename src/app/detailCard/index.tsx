@@ -24,14 +24,17 @@ import {
 } from "@/components/ui/table";
 import sizeImage from "@/assets/images/size.png";
 import { Separator } from "@/components/ui/separator";
+import { PaymentSummary } from "./PaymentSummary";
+import Link from "next/link";
 interface ProductDetailCardProps {
   product: Product;
 }
 
 const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
 
- 
+
   const [method, setMethod] = useState<'store' | 'pickup'>('store');
+  const [minmax, setMinmax] = useState<'min' | 'max'>('min');
   const [countryCode, setCountryCode] = useState('+7');
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState<string | number | null>(null);
@@ -94,7 +97,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
     setQuantity((prev: number) => Math.max(1, prev + delta));
   };
 
- const handleThumbnailClick = (img: string, index: number) => {
+  const handleThumbnailClick = (img: string, index: number) => {
     setMainImage(img);
     setCurrentThumbnailIndex(index);
   };
@@ -112,7 +115,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
   const isLiked = likedProducts.includes(product.id);
 
   return (
-    <div className="pb-12">
+    <div className="pb-18">
       {/* Main Product Section */}
       <div className="w-11/12 mx-auto px-4 sm:px-6 py-6 grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12">
         {/* Image Gallery */}
@@ -155,7 +158,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
                 freeMode={true}                 // silliq surish
                 watchSlidesProgress={true}     // ruxsat etilgan progress kuzatuvchi
                 touchRatio={1.5}               // touch sezuvchanligini oshiradi
-                speed={400}                    // surish tezligi (ms)
+                speed={400}          // surish tezligi (ms)
               >
                 {thumbnails.map((img, index) => (
                   <SwiperSlide key={index}>
@@ -192,21 +195,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
 
         {/* Product Info */}
         <div className="space-y-3 sm:space-y-4 md:space-y-6">
-          <span className="text-xs sm:text-sm text-gray-500">Весенняя коллекция</span>
-          <h1 className="text-2xl sm:text-3xl font-bold">{product.name}</h1>
-          <p className="text-xl sm:text-2xl font-semibold">{product.price} ₽</p>
-
-          <div className="flex justify-between items-center gap-2 text-xs sm:text-sm text-gray-600">
-            <p className='font-bold text-[#1B1B1B]'>398 товаров было продано</p>
-            <button className="flex items-center gap-1 sm:gap-2 text-black font-bold cursor-pointer" onClick={share}>
-              <Share2 size={16} />
-              <span>Делиться</span>
-            </button>
-          </div>
-          <hr />
-          {/* Color and Size Selectors */}
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mt-4 justify-between">
-            <div className="w-full sm:w-1/2">
+              <div className="w-full sm:w-1/2">
               <p className="mb-2 text-[#5F5F5F] font-medium">Цвет</p>
               <div className="flex gap-2 flex-wrap">
                 {product.colors.map((color, idx) => (
@@ -223,6 +212,30 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
               </div>
             </div>
 
+          <span className="text-xs sm:text-sm text-gray-500">Весенняя коллекция</span>
+          <h1 className="text-2xl sm:text-3xl font-bold">{product.name}</h1>
+          <p className="text-xl sm:text-2xl font-semibold">{product.price} ₽</p>
+          <div className="flex gap-2">
+            <Button
+              variant='outline'
+              className={`${minmax == "min" && "border-[#FF3A5C]"}`}
+              onClick={() => setMinmax('min')}
+            >
+              4880R 12-18 den
+            </Button>
+            <Button
+              variant='outline'
+              className={`${minmax == "max" && "border-[#FF3A5C]"}`}
+              onClick={() => setMinmax('max')}
+            >
+              4832R 25-30 den
+            </Button>
+          </div>
+     
+          <hr />
+          {/* Color and Size Selectors */}
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mt-4 justify-between">
+        
             <div className="w-full sm:w-1/2">
               <div className="flex gap-4 items-start">
                 <p className="font-medium mb-2">Размер</p> |
@@ -333,9 +346,9 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
                 +
               </Button>
             </div>
-            <Button onClick={addCart} className="bg-[#FF385C] hover:bg-[#E0314D] py-2 h-full text-white text-sm sm:text-base px-5 md:px-15 sm:py-3">
+            {/* <Button onClick={addCart} className="bg-[#FF385C] hover:bg-[#E0314D] py-2 h-full text-white text-sm sm:text-base px-5 md:px-15 sm:py-3">
               Добавить в корзину
-            </Button>
+            </Button> */}
             <Button onClick={() => toggleLike(product.id)} className={`border bg-transparent w-9 h-9 md:w-12 md:h-12 p-5 ${isLiked
               ? 'text-[#FF385C] fill-[#FF385C]'
               : 'text-gray-400 hover:text-[#FF385C]'
@@ -364,13 +377,16 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
             <Label className="text-sm font-medium">Как получать</Label>
             <div className="flex gap-2">
               <Button
-                variant={method === 'store' ? 'default' : 'outline'}
+                variant='outline'
+                className={`${method == "store" && "border-[#FF3A5C]"}`}
+
                 onClick={() => setMethod('store')}
               >
                 В магазине
               </Button>
               <Button
-                variant={method === 'pickup' ? 'default' : 'outline'}
+               variant='outline'
+                className={`${method == "pickup" && "border-[#FF3A5C]"}`}
                 onClick={() => setMethod('pickup')}
               >
                 В пункт выдачи
@@ -384,7 +400,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
 
             <div className="space-y-2">
               <Label htmlFor="phone">Телефон</Label>
-              <div className="flex gap-2">
+              <div className="flex gap-2 mb-5">
                 <Select onValueChange={setCountryCode} defaultValue={countryCode}>
                   <SelectTrigger className="w-20">
                     <SelectValue placeholder="+7" />
@@ -397,13 +413,22 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
                 </Select>
                 <Input id="phone" placeholder="000" type="tel" />
               </div>
+        <Separator />
+<Link href="/statusInfo">
+               <Button
+                onClick={addCart}
+                variant='outline'
+                className="rounded-full bg-[#FF385C] text-white text-[16px] w-full h-12 mt-4"
+                >
+                оплатить 1000₽
+              </Button>
+                </Link>
             </div>
           </div>
         </div>
-        <Separator />
+        <PaymentSummary/>
       </div>
       <ProductCarousel product={products} />
-
     </div>
   );
 };
