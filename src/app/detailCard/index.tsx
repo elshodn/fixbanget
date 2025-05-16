@@ -105,9 +105,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
     alert("Делиться");
   };
 
-  const addCart = () => {
-    alert("добавлено в корзину");
-  };
+
   const thumbnails = [product.image, product.image, product.image, product.image];
 
   // Like store usage
@@ -416,7 +414,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
         <Separator />
 <Link href="/statusInfo">
                <Button
-                onClick={addCart}
+              
                 variant='outline'
                 className="rounded-full bg-[#FF385C] text-white text-[16px] w-full h-12 mt-4"
                 >

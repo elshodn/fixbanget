@@ -36,7 +36,6 @@ const SFProDisplay = localFont({
 });
 
 
-const hideFooterRoutes = ['/checkout', '/paymentMethed', '/paymentComplete','/detailCard/:slug'];  
 
 export default function RootLayout({
   children,
@@ -58,9 +57,10 @@ const shouldShowFooter = !(
   isMobile &&
   (
     pathname.startsWith('/detailCard/') ||
-    ['/checkout', '/paymentMethed', '/paymentComplete'].includes(pathname)
+    ['/checkout', '/paymentMethed', '/paymentComplete','/congratulations'].includes(pathname)
   )
 );
+  const isShowNav = !(['/congratulations'].includes(pathname))
   return (
     <html lang="en" className={`${SFProDisplay.variable}`}>
       <body className={`antialiased flex flex-col min-h-screen font-sans`}>
@@ -76,7 +76,7 @@ const shouldShowFooter = !(
         toastClassName="custom-toast"
       />
 
-        <Navbar />
+        {isShowNav && <Navbar />}
         <main className="flex-grow">
           {children}
         </main>
