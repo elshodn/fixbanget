@@ -2,11 +2,9 @@
 import { useState } from "react";
 import { ProductCarousel } from "@/components/Carousel";
 // import { Catalogs } from "@/components/Catalogs";
-import { GenderSwitch } from "@/components/genderSwitch";
 import { StyliesCollection } from "@/components/StyliesCollection";
 import { ClothCollection } from "@/components/ClothCollection";
-import { AccessoriesCollection } from "@/components/AccessoriesCollection";
-import { AccessoriesData, products } from "@/lib/mockData";
+import { AccessoriesData, famousData, obuv, products, odejda } from "@/lib/mockData";
 import { Header } from "@/components/home/header";
 import { Assortment } from "../components/home/assortment"
 import BrendImagesCollection from "../components/home/brendImagesCollection";
@@ -30,13 +28,17 @@ export default function Home() {
         </main>
 
 
-        <ClothCollection />
-        <ProductCarousel product={productCarousel} />
+        <ClothCollection title={"Популярный Продукт"} product={famousData} />
+        <ClothCollection title={"Обувь"} product={obuv} />
+        <ProductCarousel title="Последний покупки" product={productCarousel} />
+        <ClothCollection title={"Одежда"} product={odejda} />
+        <ProductCarousel title="Посмотрели" product={productCarousel} />
+        <ClothCollection title={"Аксессуары"} product={AccessoriesData}/>
+
         <StyliesCollection />
-        <AccessoriesCollection product={AccessoriesData.map(item => ({
-          ...item,
-          image: typeof item.image === "string" ? item.image : item.image.src
-        }))} />
+     
+        <ProductCarousel title="Лайкнули" product={productCarousel} />
+
         <Assortment />
         <BrendImagesCollection />
         <AboutContainer />

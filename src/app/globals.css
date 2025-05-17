@@ -161,12 +161,11 @@
   outline: none;
 }
 body {
-  background: #FAFAFA;
+  background: #fafafa;
 }
 /* .home {
   font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
 } */
-
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);

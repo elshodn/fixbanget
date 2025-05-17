@@ -21,6 +21,9 @@ export const TelegramChannels = () => {
                             <Image
                                 src={item.image}
                                 alt={item.name}
+                                priority
+                                width={400}
+                                height={400}
                                 className='object-contain object-center w-full h-full'
                             />
                         </div>
