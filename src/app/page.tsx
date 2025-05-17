@@ -10,33 +10,38 @@ import { AccessoriesData, products } from "@/lib/mockData";
 import { Header } from "@/components/home/header";
 import { Assortment } from "../components/home/assortment"
 import BrendImagesCollection from "../components/home/brendImagesCollection";
-import  AboutContainer  from "../components/aboutContainer"
+import AboutContainer from "../components/aboutContainer"
 import { TelegramChannels } from "@/components/telegram/TelegramChannels";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const productCarousel = [...products];
-
+  const [genderSwitch, setGenderSwitch] = useState<"man" | "woman">("man")
   return (
     <>
-    <div className="min-h-screen bg-white home">
-            <main className="container mx-auto px-4 py-8">
-                <Header />
-            </main>
+      <div className="min-h-screen bg-white home">
 
-            <ClothCollection />
-            <ProductCarousel product={productCarousel} />
-            <StyliesCollection />
-            <AccessoriesCollection product={AccessoriesData.map(item => ({
-                ...item,
-                image: typeof item.image === "string" ? item.image : item.image.src
-            }))} />
-            <Assortment />
-            <BrendImagesCollection />
-            {/* <Catalogs link="/search" linkButtonTitle="Перейти в каталог" product={products.slice(0, 10)} title="Кроссовок в каталоге" desc="В Unicflo есть такие культовые модели как: Nike Air Max, Dunk, New Balance 550, Air Jordan, Adidas Samba, Asics Gel Kahana. Разные расцветки от классических до редких коллекционные вариантов." /> */}
-            {/* <Catalogs link="/search" linkButtonTitle="Смотреть все кроссовки" product={products.slice(0, 10)} title="Забрать сегодня" desc="Самовывоз из магазина в Москве или доставка СДЭКом в любой город РФ" /> */}
-            <AboutContainer />
-            <TelegramChannels/>
-        </div>
-        </>
-  ); 
+        <main className="container mx-auto px-4 py-8">
+          <div className="flex flex-col items-stretch gap-4 mb-8">
+            <Button variant="outline" onClick={()=>setGenderSwitch("man")} className={`${genderSwitch == "man" ? "bg-[#EEEDEB]":"bg-white"} rounded-full`}>Для него</Button>
+            <Button variant="outline" onClick={()=>setGenderSwitch("woman")} className={`${genderSwitch == "woman" ? "bg-[#EEEDEB]":"bg-white"} rounded-full`}>Для неё</Button>
+          </div>
+          <Header />
+        </main>
+
+
+        <ClothCollection />
+        <ProductCarousel product={productCarousel} />
+        <StyliesCollection />
+        <AccessoriesCollection product={AccessoriesData.map(item => ({
+          ...item,
+          image: typeof item.image === "string" ? item.image : item.image.src
+        }))} />
+        <Assortment />
+        <BrendImagesCollection />
+        <AboutContainer />
+        <TelegramChannels />
+      </div>
+    </>
+  );
 }

@@ -1,79 +1,37 @@
 import Image from "next/image";
-import image1 from "../../assets/images/mock/image1.png";
-
-import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-
-type ProductCardProps = {
-  children: React.ReactNode;
-  image: any;
-};
-
-const ProductCard = ({ children, image }: ProductCardProps) => (
-  <Link
-    href="/search"
-    className={`block h-full w-full p-3 rounded-2xl overflow-hidden bg-[#EFEDEC] relative`}
-  >
-    <p className="font-bold text-sm md:text-2xl mb-2 whitespace-nowrap absolute z-10">
-      {children}
-    </p>
-    <Image
-      src={image}
-      className="object-contain w-full h-full md:h-[calc(100%-50px)] md:static absolute top-0"
-      alt=""
-      fill
-      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-    />
-  </Link>
-);
 
 export const Header = () => {
   return (
     <>
-      {/* <div className="flex justify-between py-4 items-center">
-        <p className="md:text-[32px] font-bold">Обувь</p>
-        <Link
-          href="/search"
-          className="flex items-center rounded-xl md:rounded-2xl cursor-pointer justify-center text-base bg-[#F2F2F2] text-black p-2 md:p-0 md:w-[96px] md:h-12 gap-1"
-        >
-          Все <ChevronRight className="text-4xl" />
-        </Link>
-      </div> */}
-      <div className="h-72 md:h-[500px]">
+   
+      <div className="h-40">
         <div className="h-full">
           <Link
             href="/search"
-            className={`block h-full w-full p-3 rounded-2xl overflow-hidden bg-[#EFEDEC] relative`}
+            className={`w-fullrounded-2xl bg-[#B4AEAE] relative flex justify-between rounded-[20px] overflow-hidden`}
           >
-            <h1 className="font-bold text-sm md:text-3xl mb-2 whitespace-nowrap relative z-10">
+            <div className=" p-3">
+
+            <h1 className="font-bold text-white text-sm md:text-3xl mb-2 whitespace-nowrap relative z-10">
               МОДНЫЕ ЛИНЕЙКИ
             </h1>
-            <p className="md:text-xl text-[10px] relative z-10">БРЕНДОВОЙ ОДЕЖДЫ 2025 ГОДА</p>
+
+            <p className="md:text-xl  text-gray-200 text-[10px] relative z-10">БРЕНДОВОЙ ОДЕЖДЫ 2025 ГОДА</p>
+            </div>
+            <div>
+
             <Image
-              src={image1}
-              className="object-contain w-full h-full md:h-[calc(100%-50px)] md:static absolute top-0"
+              src={"/imageHero.svg"}
+              width={170}
+              height={170}
               alt=""
-              fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
+              />
+              </div>
           </Link>
-          {/* <ProductCard image={image1}></ProductCard> */}
         </div>
-        {/* <div className="col-span-2 md:col-span-2 md:row-span-2 min-h-[100px] md:min-h-[250px]">
-          <ProductCard image={image2}>Обувь для <br />спорта</ProductCard>
-        </div>
-        <div className="col-span-2 md:col-span-1 min-h-[150px]">
-          <ProductCard image={image3}>Кастомные <br />кроссовки</ProductCard>
-        </div>
-        <div className="col-span-4 md:col-span-1 min-h-[150px]">
-          <ProductCard image={image4}>Ботинки</ProductCard>
-        </div>
-        <div className="col-span-3 md:col-span-1 min-h-[150px]">
-          <ProductCard image={image6}>Тапки</ProductCard>
-        </div>
-        <div className="col-span-3 md:col-span-1 min-h-[150px]">
-          <ProductCard image={image5}>Сапоги</ProductCard>
-        </div> */}
+    
       </div>
     </>
   );
