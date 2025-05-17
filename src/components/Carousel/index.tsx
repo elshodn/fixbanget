@@ -11,11 +11,11 @@ import { ProductCarouselCard } from "./ProductCarouselCard"
 
 
 
-export const ProductCarousel: React.FC<any> = ({ product }) => {
+export const ProductCarousel: React.FC<any> = ({ title,product }) => {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 relative group">
       <div className="flex justify-between items-center py-2 md:py-4">
-        <p className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold">Только что купили</p>
+        <p className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold">{title}</p>
         <Link
           href="/search"
           className="flex items-center rounded-xl md:rounded-2xl cursor-pointer justify-center text-sm md:text-base bg-[#F2F2F2] text-black w-[80px] md:w-[96px] h-8 md:h-12 gap-1"

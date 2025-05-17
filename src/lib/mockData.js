@@ -1,10 +1,4 @@
-import image1 from "../assets/images/mock/category image1.png"
-import image2 from "../assets/images/mock/category image2.png"
-import image3 from "../assets/images/mock/category image3.png"
-import image4 from "../assets/images/mock/category image4.png"
-import image5 from "../assets/images/mock/category image5.png"
-import image11 from "../assets/images/mock/image11.png"
-import image20 from "../assets/images/mock/image20.png"
+
 import newProductImage1 from "../assets/images/mock/newproduct1.png"
 import newProductImage2 from "../assets/images/mock/newproduct2.png"
 import newProductImage3 from "../assets/images/mock/newproduct3.png"
@@ -512,61 +506,188 @@ export const styleData = [
 export const AccessoriesData = [
   {
       id: 1,
-      name: "Сумки и рюкзаки",
-      image: image1
+      name: "Сумки-мессенджеры",
+      image: "/accessories/im1.png"
   },
   {
       id: 2,
-      name: "Часы",
-      image: image2,
+      name: "Сумки на плечо",
+      image: "/accessories/im2.png",
   },
   {
       id: 3,
-      name: "Очки",
-      image: image3,
+      name: "Поясные сумки",
+      image: "/accessories/im3.png",
   },
+
   {
       id: 4,
-      name: "Кошельки",
-      image: image4,
+      name: "Клатчи",
+      image: "/accessories/im4.png",
+  },
+    {
+      id: 4,
+      name: "Дорожные сумки",
+      image: "/accessories/im5.png",
   },
   {
       id: 5,
-      name: "Карточницы",
-      image: image5,
+      name: "Рюкзаки",
+      image:  "/accessories/im6.png",
   },
+    {
+      id: 6,
+      name: "Портфели",
+      image:  "/accessories/im7.png",
+  },  {
+      id: 7,
+      name: "Кошельки",
+      image:  "/accessories/im8.png",
+  },
+]
+export const famousData = [
+{
+  id:1,
+  name:"Одежда",
+  image: "/famous/odejda.png",
+},
+{
+  id:2,
+  name:"Обувь",
+  image: "/famous/shoess.png",
+},{
+  id:3,
+  name:"Часы",
+  image: "/famous/watches.png",
+},{
+  id:4,
+  name:"Аксессуары",
+  image: "/famous/ochki.png",
+},{
+  id:5,
+  name:"Сумки",
+  image: "/famous/sumki.png",
+},
+]
+export const obuv = [
+{
+  id:1,
+  name:"Кроссовки и кеды",
+  image: "/obuv/im1.png",
+},
+{
+  id:2,
+  name:"Ботинки и сапоги",
+  image: "/obuv/im2.png",
+},{
+  id:3,
+  name:"Классическая обувь",
+  image: "/obuv/im3.png",
+},{
+  id:4,
+  name:"Лоферы",
+  image: "/obuv/im4.png",
+},{
+  id:5,
+  name:"Мокасины",
+  image: "/obuv/im5.png",
+},
+{
+  id:5,
+  name:"Угги",
+  image: "/obuv/im6.png",
+},{
+  id:5,
+  name:"Открытая обувь",
+  image: "/obuv/im7.jpg",
+},
+]
+
+export const odejda = [
+{
+  id:1,
+  name:"Пуховики",
+  image: "/odejda/im1.png",
+},
+{
+  id:2,
+  name:"Пальто",
+  image: "/odejda/im2.png",
+},{
+  id:3,
+  name:"Куртки и парки",
+  image: "/odejda/im3.png",
+},{
+  id:4,
+  name:"Ветровки и жилетки",
+  image: "/odejda/im4.png",
+},{
+  id:5,
+  name:"Костюмы и блейзеры",
+  image: "/odejda/im5.png",
+},
+{
+  id:5,
+  name:"Деним",
+  image: "/odejda/im6.png",
+},{
+  id:5,
+  name:"Брюки и шорты",
+  image: "/odejda/im7.png",
+},
+{
+  id:5,
+  name:"Трикотаж и свитшоты",
+  image: "/odejda/im8.png",
+},{
+  id:5,
+  name:"Рубашки и джинсовки",
+  image: "/odejda/im9.png",
+},{
+  id:5,
+  name:"Футболки и поло",
+  image: "/odejda/im10.png",
+},
+{
+  id:5,
+  name:"Нижнее бельё и одежда для дома",
+  image: "/odejda/im11.png",
+},
 ]
 
 export const TelegramChannelsData = [
   {
     id: 1,
-    image: image5,
-    name: "Карточницы",
+  image: '/jenskoe.png',
+    name: "Женское",
+
   },
   {
     id: 2,
-    image: image3,
-    name: "Очки",
+    image: '/sumkiTG.png',
+    name: "Сумки",
   },
   {
     id: 3,
-    image: image20,
-    name: "Женское",
+            image: '/mujskoe.png',
+    name: "Мужское",
+  
   },
   {
     id: 4,
-    image: image11,
-    name: "Мужское",
+       image: '/chasi.png',
+    name: "Часы",
+
   },
   {
     id: 5,
-    image: image2,
-    name: "Часы",
+    image: '/ochki.png',
+    name: "Очки",
   },
   {
     id: 6,
-    image: image4,
-    name: "Кошельки",
+    image: '/kartochnits.png',
+    name: "Карточницы",
   },
 ]
 
