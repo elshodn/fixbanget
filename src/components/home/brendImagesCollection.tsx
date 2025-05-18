@@ -1,6 +1,7 @@
 import React from "react";
 import { brendImages } from "../../assets/images/brendImages/index";
 import Image, { StaticImageData } from "next/image";
+import { Button } from "../ui/button";
 
 type BrendImage = {
   img: StaticImageData;
@@ -26,6 +27,9 @@ const BrendImagesCollection: React.FC = () => {
           </div>
         ))}
       </div>
+      <Button >
+        посмотреть все бренды
+      </Button>
     </div>
   );
 };

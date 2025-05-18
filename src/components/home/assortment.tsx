@@ -21,15 +21,15 @@ export const Assortment: React.FC = () => {
             className="object-contain"
           />
         </div>
-        <div className="flex flex-col justify-center lg:items-end w-1/2 md:w-full pb-10 lg:pb-0">
-          <h1 className="text-xl sm:text-4xl md:text-5xl font-medium text-right">
+        <div className="flex self-end sm:self-center flex-col justify-center lg:items-end w-1/2 md:w-full pb-10 lg:pb-0 ">
+          <h1 className="text-sm sm:text-4xl md:text-5xl font-medium text-right">
             Весь ассортимент
           </h1>
-          <div className="pt-5 flex items-center justify-end gap-2 sm:gap-4">
-            <Button className="bg-transparent border border-black px-6 sm:px-8 md:px-10 text-black text-[10px] sm:text-base font-semibold hover:text-white hover:bg-black transition-colors w-1/2 md:w-1/2">
+          <div className="pt-3 flex items-center justify-end gap-2 sm:gap-4 ">
+            <Button className="bg-transparent border h-6 border-black px-6 sm:px-8 md:px-10 text-black text-[10px] sm:text-base font-semibold hover:text-white hover:bg-black transition-colors w-1/2 md:w-1/2">
               Для неё
             </Button>
-            <Button className="bg-transparent border border-black px-6 sm:px-8 md:px-10 text-black text-[10px] sm:text-base font-semibold hover:text-white hover:bg-black transition-colors w-1/2 md:w-1/2">
+            <Button className="bg-transparent border h-6 border-black px-6 sm:px-8 md:px-10 text-black text-[10px] sm:text-base font-semibold hover:text-white hover:bg-black transition-colors w-1/2 md:w-1/2">
               Для него
             </Button>
           </div>

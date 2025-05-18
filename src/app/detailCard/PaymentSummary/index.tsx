@@ -3,8 +3,9 @@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { ShoppingCart } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
 
+import { Switch } from "@/components/ui/switch"
+import Link from "next/link"
 export const PaymentSummary: React.FC = () => {
   const [enabled, setEnabled] = useState(false);
   const addCart = () => {
@@ -27,9 +28,9 @@ export const PaymentSummary: React.FC = () => {
         <div className="rounded-xl p-2 border-2 ">
           <ShoppingCart onClick={addCart} />
         </div>
-        <Button className=" h-12 rounded-full px-13 bg-[#FF385C] text-white text-lg font-semibold">
-          Купить
-        </Button>
+        <Link href="/statusInfo">
+        <Button className=" h-12 rounded-full px-13 bg-[#FF385C] text-white text-lg font-semibold">Купить</Button>
+        </Link>
       </div>
     </div>
   );

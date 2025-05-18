@@ -5,10 +5,11 @@ import { useRouter } from 'next/navigation';
 import { styleData } from '@/lib/mockData';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
+import { Skeleton } from '../ui/skeleton';
 import 'swiper/css';
 import 'swiper/css/navigation';
 // import Link from 'next/link';
-import { ChevronRight, ArrowLeft, ArrowRight } from 'lucide-react';
+import { ChevronRight, ArrowLeft, ArrowRight,Image } from 'lucide-react';
 // import { Button } from '@/components/ui/button';
 // import katalogImage from '../../assets/images/katalog.png'; 
 
@@ -62,8 +63,12 @@ export const StyliesCollection = () => {
       >
         <div
           className="absolute inset-0 bg-[#EFEDEC] bg-cover bg-center bg-no-repeat transition-transform duration-500 group-hover:scale-105"
-          style={{ backgroundImage: `url(${item.image})` }}
+          
         />
+            <Image className="w-15 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+
+            <Skeleton className="w-full h-full object-contain transition-transform duration-300 hover:scale-105" />
+
         <div className="absolute px-2 bottom-3 left-3 right-3 h-14 sm:h-16 bg-white text-black hidden md:flex rounded-md items-center justify-between">
           <div>
             <h3 className="text-sm font-bold line-clamp-1">{item.name}</h3>
