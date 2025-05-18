@@ -67,7 +67,7 @@ export const products = [
   {
     id: 1,
     name: "Nike Air Max 270",
-    price: 159.99,
+    price:0,
     category: "sneakers",
     gender: ["men", "women"],
     image: "https://i.pinimg.com/originals/9a/06/a9/9a06a9d5fb3daddd463ae7f84b82904f.png",
@@ -79,7 +79,7 @@ export const products = [
   {
     id: 2,
     name: "Adidas Superstar",
-    price: 129.99,
+    price: 0,
     category: "sneakers",
     gender: ["men", "women"],
     image: "https://i.pinimg.com/originals/9a/06/a9/9a06a9d5fb3daddd463ae7f84b82904f.png",
@@ -92,7 +92,7 @@ export const products = [
   {
     id: 3,
     name: "Timberland Premium Boots",
-    price: 229.99,
+    price: 0,
     category: "boots",
     gender: ["men"],
     image: "https://i.pinimg.com/originals/9a/06/a9/9a06a9d5fb3daddd463ae7f84b82904f.png",
@@ -105,7 +105,7 @@ export const products = [
   {
     id: 4,
     name: "Puma RS-X",
-    price: 119.99,
+    price: 0,
     category: "sneakers",
     gender: ["men", "women"],
     image: "https://i.pinimg.com/originals/9a/06/a9/9a06a9d5fb3daddd463ae7f84b82904f.png",
@@ -118,7 +118,7 @@ export const products = [
   {
     id: 5,
     name: "Converse Chuck Taylor",
-    price: 89.99,
+    price: 0,
     category: "sneakers",
     gender: ["men", "women", "kids"],
     image: "https://i.pinimg.com/originals/9a/06/a9/9a06a9d5fb3daddd463ae7f84b82904f.png",
@@ -131,7 +131,7 @@ export const products = [
   {
     id: 6,
     name: "Dr. Martens 1460",
-    price: 179.99,
+    price: 0,
     category: "boots",
     gender: ["women"],
     image: "https://i.pinimg.com/originals/9a/06/a9/9a06a9d5fb3daddd463ae7f84b82904f.png",
@@ -144,7 +144,7 @@ export const products = [
   {
     id: 7,
     name: "Vans Old Skool",
-    price: 79.99,
+    price: 0,
     oldPrice:343,
     category: "sneakers",
     gender: ["men", "women"],
@@ -158,7 +158,7 @@ export const products = [
   {
     id: 8,
     name: "New Balance 574",
-    price: 109.99,
+    price: 0,
     category: "sneakers",
     gender: ["men", "women"],
     image: "https://i.pinimg.com/originals/9a/06/a9/9a06a9d5fb3daddd463ae7f84b82904f.png",
@@ -171,7 +171,7 @@ export const products = [
   {
     id: 9,
     name: "UGG Classic Boots",
-    price: 199.99,
+    price: 0,
     category: "boots",
     gender: ["women"],
     image: "https://i.pinimg.com/originals/9a/06/a9/9a06a9d5fb3daddd463ae7f84b82904f.png",
@@ -184,7 +184,7 @@ export const products = [
   {
     id: 10,
     name: "Reebok Classic Leather",
-    price: 99.99,
+    price: 0,
     category: "sneakers",
     gender: ["men", "women"],
     image: "https://i.pinimg.com/originals/9a/06/a9/9a06a9d5fb3daddd463ae7f84b82904f.png",
@@ -197,7 +197,7 @@ export const products = [
   {
     id: 11,
     name: "Air Jordan 1 Retro",
-    price: 189.99,
+    price: 0,
     category: "sneakers",
     gender: ["men"],
     image: "https://i.pinimg.com/originals/9a/06/a9/9a06a9d5fb3daddd463ae7f84b82904f.png",
@@ -210,7 +210,7 @@ export const products = [
   {
     id: 12,
     name: "Skechers Go Walk",
-    price: 89.99,
+    price: 0,
     category: "sneakers",
     gender: ["women"],
     image: "https://i.pinimg.com/originals/9a/06/a9/9a06a9d5fb3daddd463ae7f84b82904f.png",
@@ -223,7 +223,7 @@ export const products = [
   {
     id: 13,
     name: "Clarks Desert Boots",
-    price: 149.99,
+    price: 0,
     category: "boots",
     gender: ["men"],
     image: "https://i.pinimg.com/originals/9a/06/a9/9a06a9d5fb3daddd463ae7f84b82904f.png",
@@ -236,7 +236,7 @@ export const products = [
   {
     id: 14,
     name: "Asics Gel-Kayano",
-    price: 139.99,
+    price: 0,
     category: "sneakers",
     gender: ["men", "women"],
     image: "https://i.pinimg.com/originals/9a/06/a9/9a06a9d5fb3daddd463ae7f84b82904f.png",
@@ -249,7 +249,7 @@ export const products = [
   {
     id: 15,
     name: "Steve Madden Heels",
-    price: 119.99,
+    price: 0,
     oldPrice: 14.43,
     category: "heels",
     gender: ["women"],
@@ -274,7 +274,6 @@ export const categories = [
   { id: 10, name: "Нижнее белье", },
   { id: 11, name: "Носки и гетры", },
 ];
-
 export const categoriesAccessories = [
   { id: 1, name: "Ключница", },
   { id: 2, name: "Детские рюкзаки", },
@@ -502,7 +501,6 @@ export const styleData = [
     ]
   }
 ];
-
 export const AccessoriesData = [
   {
       id: 1,
@@ -555,6 +553,8 @@ export const famousData = [
   id:2,
   name:"Обувь",
   image: "/famous/shoess.png",
+  rotate:true,
+  scale:true
 },
 {
   id:3,
@@ -565,11 +565,12 @@ export const famousData = [
   id:4,
   name:"Аксессуары",
   image: "/famous/ochki.png",
-  rotate:true
+  rotate:true,
 },{
   id:5,
   name:"Сумки",
   image: "/famous/sumki.png",
+  scale:true
 },
 ]
 export const obuv = [
@@ -582,16 +583,19 @@ export const obuv = [
   id:2,
   name:"Ботинки и сапоги",
   image: "/obuv/im2.png",
-  rotate:true
+  rotate:true,
+  scale:true
 },{
   id:3,
   name:"Классическая обувь",
   image: "/obuv/im3.png",
-  rotate:true
+  rotate:true,
+  scale:true
 },{
   id:4,
   name:"Лоферы",
   image: "/obuv/im4.png",
+  scale:true
 },{
   id:5,
   name:"Мокасины",
@@ -601,11 +605,12 @@ export const obuv = [
   id:5,
   name:"Угги",
   image: "/obuv/im6.png",
-  rotate:true
+  rotate:true,
 },{
   id:5,
   name:"Открытая обувь",
   image: "/obuv/im7.jpg",
+  scale:true
 },
 ]
 

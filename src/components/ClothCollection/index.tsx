@@ -14,6 +14,7 @@ interface Props {
     name: string;
     image: string;
     rotate?: boolean;
+    scale?: boolean;
   }[];
 }
 
@@ -43,12 +44,11 @@ export const ClothCollection: React.FC<Props> = ({title,product}) => {
               </p>
               <div className="absolute w-full h-[80%] bottom-0 left-4 self-end ">
                 <Image
-
                   src={item.image}
                   alt={item.name}
                   priority
                   fill
-                  className={`object-contain transition-all ${item.rotate ? "rotate-y-180":""}`}
+                  className={`object-contain transition-all  ${item.rotate ? "rotate-y-180":""} ${item.scale ? " scale-160" : ""}`}
                 />
               </div>
             </div>
