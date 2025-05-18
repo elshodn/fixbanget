@@ -31,26 +31,11 @@ const Footer: React.FC = () => {
           <p className="text-sm font-bold text-gray-500">Блог</p>
           <p className="text-sm font-bold text-gray-500">Связаться с нами</p>
         </div>
-        <div className="p-2 pt-4 w-1/3 space-y-1">
-          <p className="text-white text-sm font-bold">Каталог</p>
-          <p className="text-sm font-bold text-gray-500">Кроссовки</p>
-          <p className="text-sm font-bold text-gray-500">Все бренды</p>
-          <p className="text-sm font-bold text-gray-500">Air Jordan</p>
-          <p className="text-sm font-bold text-gray-500">Nike</p>
-          <p className="text-sm font-bold text-gray-500">New Balance</p>
-          <p className="text-sm font-bold text-gray-500">Adidas</p>
-          <p className="text-sm font-bold text-gray-500">Asics</p>
-        </div>
-        <div className="p-2 pt-4 w-1/3 space-y-1">
-          <p className="text-white text-sm font-bold">Компания</p>
-          <p className="text-sm font-bold text-gray-500">Приложение</p>
-          <p className="text-sm font-bold text-gray-500">Команда</p>
-          <p className="text-sm font-bold text-gray-500">Отзывы</p>
-          <p className="text-sm font-bold text-gray-500">Контакты</p>
-        </div>
+
+  
       </div>
       <div className="w-11/12 mx-auto md:w-full flex flex-col md:flex-row p-3 gap-4 font-medium text-base border-t-4 md:border-t-0">
-        <p className="text-white">© 2025 ООО «lorem ipsum»</p>
+        <p className="text-white">© 2025 ООО «Unicflo»</p>
         <p className="text-gray-700">Карта сайта</p>
         <p className="text-gray-700">Политика конфиденциальности</p>
         <p className="text-gray-700">Оферта</p>
