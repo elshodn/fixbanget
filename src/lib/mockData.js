@@ -552,7 +552,7 @@ export const famousData = [
 {
   id:2,
   name:"Обувь",
-  image: "/famous/shoess.png",
+  image: "/famous/obuv.png",
   rotate:true,
   scale:true
 },
