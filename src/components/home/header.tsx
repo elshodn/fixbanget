@@ -18,6 +18,7 @@ export const Header = () => {
             </h1>
 
             <p className="md:text-xl  text-gray-200 text-[10px] relative z-10">БРЕНДОВОЙ ОДЕЖДЫ 2025 ГОДА</p>
+            <p className="md:text-xl  text-gray-200 text-[10px] relative z-10 mt-2.5">Охота за модными тенденциями</p>
             </div>
             <div>
 

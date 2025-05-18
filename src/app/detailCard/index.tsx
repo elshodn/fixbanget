@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { products } from "@/lib/mockData";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogClose, DialogContent, DialogTrigger, DialogHeader, DialogDescription, DialogTitle } from "@/components/ui/dialog";
-import { Share2, Heart, Star, X } from "lucide-react";
+import { Share2, Heart, Star, X, ImageIcon } from "lucide-react";
 import { ProductCarousel } from "@/components/Carousel";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -26,6 +26,7 @@ import sizeImage from "@/assets/images/size.png";
 import { Separator } from "@/components/ui/separator";
 import { PaymentSummary } from "./PaymentSummary";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 interface ProductDetailCardProps {
   product: Product;
 }
@@ -123,14 +124,16 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
             <Dialog>
               <DialogTrigger asChild>
                 <div className="relative h-full cursor-zoom-in">
-                  <Image
+                  {/* <Image
                     width={500}
                     height={500}
                     priority
                     src={mainImage}
                     alt={product.title}
                     className="w-full h-full object-contain"
-                  />
+                  /> */}
+                  <ImageIcon className="w-full h-full object-contain" />
+                  <Skeleton className="w-full h-full object-contain" />
                 </div>
               </DialogTrigger>
               <DialogContent className="max-w-4xl p-0 bg-transparent border-none shadow-none">
