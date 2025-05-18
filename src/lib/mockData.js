@@ -568,7 +568,7 @@ export const famousData = [
   rotate:true,
 },{
   id:5,
-  name:"Сумки",
+  name:"Сумки", 
   image: "/famous/sumki.png",
   scale:true
 },
@@ -595,7 +595,6 @@ export const obuv = [
   id:4,
   name:"Лоферы",
   image: "/obuv/im4.png",
-  scale:true
 },{
   id:5,
   name:"Мокасины",
