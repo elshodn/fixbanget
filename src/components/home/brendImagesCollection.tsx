@@ -27,9 +27,11 @@ const BrendImagesCollection: React.FC = () => {
           </div>
         ))}
       </div>
-      <Button >
+      <div className="flex justify-center items-center mt-4">
+      <Button className="bg-[#FF385C] ">
         посмотреть все бренды
       </Button>
+      </div>
     </div>
   );
 };
