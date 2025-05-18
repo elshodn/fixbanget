@@ -1,8 +1,8 @@
-
 import newProductImage1 from "../assets/images/mock/newproduct1.png"
 import newProductImage2 from "../assets/images/mock/newproduct2.png"
 import newProductImage3 from "../assets/images/mock/newproduct3.png"
 import newProductImage4 from "../assets/images/mock/newproduct4.png"
+
 export const initialUsers = [
   { id: 1, name: "Ali", email: "user@gmail.com", password: "123456" },
   { id: 2, name: "Laylo", email: "admin@gmail.com", password: "654321" }
@@ -600,6 +600,7 @@ export const obuv = [
   id:5,
   name:"Мокасины",
   image: "/obuv/im5.png",
+  scale:true
 },
 {
   id:5,
@@ -613,7 +614,6 @@ export const obuv = [
   scale:true
 },
 ]
-
 export const odejda = [
 {
   id:1,
@@ -665,7 +665,6 @@ export const odejda = [
   image: "/odejda/im11.png",
 },
 ]
-
 export const TelegramChannelsData = [
   {
     id: 1,
@@ -701,7 +700,6 @@ export const TelegramChannelsData = [
     name: "Карточницы",
   },
 ]
-
 export const newProductData = [
   {
     id:1,
@@ -729,8 +727,7 @@ export const newProductData = [
   },
 
 ]
-
-export  const sizeArray = [
+export const sizeArray = [
   { id: 1, size: 36 },
   { id: 2, size: 36.5 },
   { id: 3, size: 37 },
@@ -766,7 +763,6 @@ export  const sizeArray = [
   { id: 33, size: 52 },
   { id: 34, size: 52.5 }
 ];
-
 export const brendNames = [
 {id: 1, name:"Nike"},
 {id: 1, name:"Jordan"},
