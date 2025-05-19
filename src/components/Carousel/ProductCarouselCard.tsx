@@ -32,11 +32,7 @@ export const ProductCarouselCard: React.FC<ProductCarouselCardProps> = ({
         </button>
         <Link href={`/detailCard/${product.name}`}>
           <div className="h-36 overflow-hidden flex justify-center items-center">
-            {/* <img
-                            src={product.image}
-                            alt={product.name}
-                            className="w-11/12 h-full object-contain transition-transform duration-300 hover:scale-105"
-                        /> */}
+
             <Image className="w-15 absolute" />
             <Skeleton className="w-11/12 h-full object-contain transition-transform duration-300 hover:scale-105" />
           </div>

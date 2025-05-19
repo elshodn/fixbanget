@@ -64,12 +64,10 @@ export default function RootLayout({
   const isShowNav = !["/congratulations"].includes(pathname);
   return (
     <html
-      suppressHydrationWarning
       lang="en"
       className={`${SFProDisplay.variable}`}
     >
       <body
-        suppressHydrationWarning
         className={`antialiased flex flex-col min-h-screen font-sans`}
       >
         <ToastContainer
