@@ -54,11 +54,9 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
   );
   const [quantity, setQuantity] = useState(1);
   const [currentThumbnailIndex, setCurrentThumbnailIndex] = useState(0);
-  const [switchComment, setSwitchComment] = useState(true);
   const [mainImage, setMainImage] = useState(product?.image || "");
 
   const [rating, setRating] = useState(0);
-  const [hover, setHover] = useState(0);
   const [formData, setFormData] = useState({
     name: "",
     email: "",

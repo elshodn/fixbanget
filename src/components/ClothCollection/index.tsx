@@ -52,7 +52,7 @@ export const ClothCollection: React.FC<Props> = ({ title, product }) => {
                   fill
                   className={`object-contain transition-all right-0   ${
                     item.rotate ? "rotate-y-180" : ""
-                  } ${item.scale ? " scale-160" : ""}`}
+                  } ${item.scale ? " scale-160" : ""} ${item.name == "Ветровки и жилетки"?"scale-70":""}`}
                 />
               </div>
             </div>

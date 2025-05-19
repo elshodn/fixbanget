@@ -17,14 +17,10 @@ interface Props {
 }
 
 const Collection: React.FC<Props> = ({ product, title }) => {
-  // Mahsulot indeksiga qarab col-span qiymatini aniqlash
   const getColSpan = (index: number, totalItems: number) => {
-    // Agar oxirgi element va mahsulotlar soni toq bo'lsa
     if (index === totalItems - 1 && totalItems % 2 !== 0) {
-      return "col-span-5"; // Oxirgi element uchun to'liq kenglik
+      return "col-span-5"; 
     }
-
-    // Boshqa holatlar uchun ketma-ketlik: 3,2,2,3,3,2,2,3,...
     const position = index % 4;
     if (position === 0 || position === 3) {
       return "col-span-3";
@@ -60,6 +56,42 @@ const Collection: React.FC<Props> = ({ product, title }) => {
                 <span className="inset-0 absolute  "></span>
               </Link>
             </div>
+            // <Link
+            //   href="/search"
+            //   key={item.id}
+            //   className={cn(getColSpan(index, product.length), "w-full h-38")}
+            //   prefetch={false}
+            // >
+            //   <div
+            //     style={{
+            //       backgroundImage: `url(${item.image})`,
+            //     }}
+            //     className={cn(
+            //       getColSpan(index, product.length),
+            //       "p-2 bg-contain bg-no-repeat bg-right-bottom bg-[#EFEDEC]",
+            //       item.name === 'Сумки-мессенджеры' ? "bg-size-[auto_90%]" : "",
+            //       (
+            //         item.name === "Ветровки и жилетки" ||
+            //         item.name === "Куртки и парки" ||
+            //         item.name === "Брюки и шорты" ||
+            //         item.name === 'Сумки на плечо'
+            //       ) ? "bg-size-[auto_70%]" : "",
+            //       "w-full h-full rounded-3xl shadow"
+            //     )}>
+            //     <p
+            //       className={cn(
+            //         "text-base ml-2 mt-2 md:text-2xl font-bold z-10",
+            //         (
+            //           item.name === "Нижнее бельё и одежда для дома" ||
+            //           item.name === "Костюмы и блейзеры" ||
+            //           item.name === "Дорожные сумки"
+            //         ) ? "w-1/2" : ""
+            //       )}
+            //     >
+            //       {item.name}
+            //     </p>
+            //   </div>
+            // </Link>
           ))}
         </div>
       </div>

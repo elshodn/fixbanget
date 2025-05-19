@@ -1,9 +1,7 @@
 "use client";
 import { useState } from "react";
 import { ProductCarousel } from "@/components/Carousel";
-// import { Catalogs } from "@/components/Catalogs";
 import { StyliesCollection } from "@/components/StyliesCollection";
-import { ClothCollection } from "@/components/ClothCollection";
 import {
   famousData,
   products,
@@ -17,7 +15,6 @@ import BrendImagesCollection from "../components/home/brendImagesCollection";
 import AboutContainer from "../components/aboutContainer";
 import { TelegramChannels } from "@/components/telegram/TelegramChannels";
 import { Button } from "@/components/ui/button";
-import { AccessoresCollection } from "@/components/AccessoresCollection";
 import Collection from "@/components/collection";
 
 export default function Home() {
@@ -49,23 +46,14 @@ export default function Home() {
           </div>
           <Header />
         </main>
-
         <Collection product={famousData} title={"Популярный Продукт"} />
         <Collection product={obuv} title={"Обувь"} />
-
-        {/* <ClothCollection title={"Популярный Продукт"} product={famousData} /> */}
-        {/* <ClothCollection title={"Обувь"} product={obuv} /> */}
         <ProductCarousel title="Последний покупки" product={productCarousel} />
         <Collection product={odejda} title={"Одежда"} />
-        {/* <ClothCollection title={"Одежда"} product={odejda} /> */}
         <ProductCarousel title="Посмотрели" product={productCarousel} />
         <Collection product={accessoriesData} title={"Аксессуары"} />
-        {/* <AccessoresCollection title={"Аксессуары"} product={accessoriesData} /> */}
-
         <StyliesCollection />
-
         <ProductCarousel title="Лайкнули" product={productCarousel} />
-
         <Assortment />
         <BrendImagesCollection />
         <AboutContainer />
