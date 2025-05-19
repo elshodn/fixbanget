@@ -36,9 +36,8 @@ export default function Home() {
         <ClothCollection title={"Аксессуары"} product={AccessoriesData}/>
 
         <StyliesCollection />
-     
-        <ProductCarousel title="Лайкнули" product={productCarousel} />
 
+        <ProductCarousel title="Лайкнули" product={productCarousel} />
         <Assortment />
         <BrendImagesCollection />
         <AboutContainer />
