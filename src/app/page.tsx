@@ -11,6 +11,7 @@ import BrendImagesCollection from "../components/home/brendImagesCollection";
 import AboutContainer from "../components/aboutContainer"
 import { TelegramChannels } from "@/components/telegram/TelegramChannels";
 import { Button } from "@/components/ui/button";
+import { AccessoresCollection } from "@/components/AccessoresCollection";
 
 export default function Home() {
   const productCarousel = [...products];
@@ -33,7 +34,7 @@ export default function Home() {
         <ProductCarousel title="Последний покупки" product={productCarousel} />
         <ClothCollection title={"Одежда"} product={odejda} />
         <ProductCarousel title="Посмотрели" product={productCarousel} />
-        <ClothCollection title={"Аксессуары"} product={AccessoriesData}/>
+        <AccessoresCollection title={"Аксессуары"} product={AccessoriesData}/>
 
         <StyliesCollection />
 

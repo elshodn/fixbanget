@@ -310,13 +310,3 @@ function Navbar() {
 }
 
 export default Navbar;
-// : (
-//   <Link
-//     href="/login"
-//     className="cursor-pointer flex gap-4 items-center text-xl md:text-3xl font-semibold hover:text-gray-300"
-//   >
-//     <SheetClose className="cursor-pointer">
-//       Войти
-//     </SheetClose>
-//   </Link>
-// )}

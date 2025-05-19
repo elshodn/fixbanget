@@ -65,8 +65,8 @@ export default function MenuSheet({
               <Image className="w-4 md:w-6" width={48} height={48} src={telegramIcon} alt="Telegram" />
             </div>
 
-            <p className="text-xl md:text-2xl">+0 (000) 000-00-00</p>
-            <p className="text-xl md:text-2xl">0000@example.ru</p>
+            <p className="text-xl md:text-2xl">+7 (915) 776-02-11</p>
+            <p className="text-xl md:text-2xl">unicflo@gmail.com</p>
 
             <div className="absolute right-5 top-5">
               <SheetClose asChild>

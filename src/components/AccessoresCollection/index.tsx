@@ -18,7 +18,7 @@ interface Props {
   }[];
 }
 
-export const ClothCollection: React.FC<Props> = ({title,product}) => {
+export const AccessoresCollection: React.FC<Props> = ({title,product}) => {
   return (
     <div className="container mx-auto px-8 py-8 relative">
       <div className="flex justify-between py-4 items-center">
@@ -36,19 +36,19 @@ export const ClothCollection: React.FC<Props> = ({title,product}) => {
           <Link
             href="/search"
             key={index}
-            className={"grow min-w-1/3 h-[112px]"}
+            className={"grow min-w-1/4 h-[112px]"}
           >
             <div className="bg-[#EFEDEC]  relative   h-full overflow-hidden p-1 md:p-5 rounded-3xl">
               <p className="text-[12px] ml-2 mt-2 md:text-2xl font-bold z-10 relative">
                 {item.name}
               </p>
-              <div className={`absolute h-[80%] bottom-0 right-0 top-0  ${product.length -1 == index ? "w-[50%] self-center" : "w-full self-end"}`}>
+              <div className="absolute w-full h-[80%] bottom-0 left-4 self-end ">
                 <Image
                   src={item.image}
                   alt={item.name}
                   priority
                   fill
-                  className={`object-contain transition-all right-0 bg-amber-200  ${item.rotate ? "rotate-y-180":""} ${item.scale ? " scale-160" : ""}`}
+                  className={`object-contain transition-all  ${item.rotate ? "rotate-y-180":""} ${item.scale ? " scale-160" : ""} ${index == 4 ? "scale-70":""}`}
                 />
               </div>
             </div>
