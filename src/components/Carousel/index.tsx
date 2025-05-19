@@ -1,27 +1,23 @@
-"use client"
+"use client";
 
-import { SwiperSlide, Swiper } from "swiper/react"
-import { Navigation, Autoplay } from "swiper/modules"
-import "swiper/css"
-import "swiper/css/autoplay"
-import "swiper/css/navigation"
-import { ArrowRight, ArrowLeft, ChevronRight } from "lucide-react"
-import Link from "next/link"
-import { ProductCarouselCard } from "./ProductCarouselCard"
+import { SwiperSlide, Swiper } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/autoplay";
+import "swiper/css/navigation";
+import { ArrowRight, ArrowLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { ProductCarouselCard } from "./ProductCarouselCard";
+import AllButton from "../all-button";
 
-
-
-export const ProductCarousel: React.FC<any> = ({ title,product }) => {
+export const ProductCarousel: React.FC<any> = ({ title, product }) => {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 relative group">
       <div className="flex justify-between items-center py-2 md:py-4">
-        <p className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold">{title}</p>
-        <Link
-          href="/search"
-          className="flex items-center rounded-xl md:rounded-2xl cursor-pointer justify-center text-sm md:text-base bg-[#F2F2F2] text-black w-[80px] md:w-[96px] h-8 md:h-12 gap-1"
-        >
-          Все <ChevronRight className="text-2xl md:text-4xl" />
-        </Link>
+        <p className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold">
+          {title}
+        </p>
+        <AllButton route="/search" />
       </div>
       <div className="w-full px-1">
         <Swiper
@@ -59,11 +55,11 @@ export const ProductCarousel: React.FC<any> = ({ title,product }) => {
             },
           }}
         >
-            {product.map((product: Product) => (
+          {product.map((product: Product) => (
             <SwiperSlide className="mb-3" key={product.id}>
               <ProductCarouselCard product={product} />
             </SwiperSlide>
-            ))}
+          ))}
         </Swiper>
       </div>
 
@@ -80,5 +76,5 @@ export const ProductCarousel: React.FC<any> = ({ title,product }) => {
         <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
       </button>
     </div>
-  )
-}
+  );
+};
