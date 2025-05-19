@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { ShoppingCart } from "lucide-react";
 
-import { Switch } from "@/components/ui/switch"
-import Link from "next/link"
+import { Switch } from "@/components/ui/switch";
+import Link from "next/link";
 export const PaymentSummary: React.FC = () => {
   const [enabled, setEnabled] = useState(false);
   const addCart = () => {
@@ -21,7 +21,7 @@ export const PaymentSummary: React.FC = () => {
             className="w-[59px] h-[32px] data-[state=checked]:bg-red-500"
           />
           <p className="text-[12px] font-medium">
-            Сплит: <span className="text-[#FF385C]">4810 ₽</span>
+            Сплит: <span className="text-[#FF385C]">0 ₽</span>
             <br /> остаток потом
           </p>
         </div>
@@ -29,7 +29,9 @@ export const PaymentSummary: React.FC = () => {
           <ShoppingCart onClick={addCart} />
         </div>
         <Link href="/statusInfo">
-        <Button className=" h-12 rounded-full px-13 bg-[#FF385C] text-white text-lg font-semibold">Купить</Button>
+          <Button className=" h-12 rounded-full px-13 bg-[#FF385C] text-white text-lg font-semibold">
+            Купить
+          </Button>
         </Link>
       </div>
     </div>

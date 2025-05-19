@@ -8,17 +8,13 @@ import { Navigation } from 'swiper/modules';
 import { Skeleton } from '../ui/skeleton';
 import 'swiper/css';
 import 'swiper/css/navigation';
-// import Link from 'next/link';
 import { ChevronRight, ArrowLeft, ArrowRight,Image } from 'lucide-react';
-// import { Button } from '@/components/ui/button';
-// import katalogImage from '../../assets/images/katalog.png'; 
 
 interface StyleItem {
   name: string;
   image: string;
   quantity: number;
 }
-
 export const StyliesCollection = () => {
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
@@ -30,30 +26,6 @@ export const StyliesCollection = () => {
     setIsBeginning(swiper.isBeginning);
     setIsEnd(swiper.isEnd);
   };
-
-  // const renderCatalogSlide = () => (
-  //   <SwiperSlide>
-  //     <Link
-  //       href="/search"
-  //       className="block relative group rounded-xl overflow-hidden h-64 sm:h-80 md:h-96 mx-1"
-  //     >
-  //       <div
-  //         className="absolute inset-0 bg-[#EFEDEC] bg-cover bg-center bg-no-repeat transition-transform duration-500 group-hover:scale-105"
-  //         style={{ backgroundImage: `url(${katalogImage.src})` }}
-
-  //       />
-  //       <div className="relative z-10 w-full h-full flex flex-col justify-end p-3 bg-black/50">
-  //         <div className="text-center flex flex-col justify-center h-full">
-  //           <h1 className="text-[#FF385C] text-xl md:text-4xl font-extrabold">Каталог</h1>
-  //           <h2 className="text-white text-2xl sm:text-3xl md:text-4xl mt-2 font-extrabold">2025</h2>
-  //         </div>
-  //         <Button className="bg-[#FF385C] w-full py-4 sm:py-5 md:py-7 text-lg sm:text-xl hover:bg-[#FF385C]/90">
-  //           Открыть
-  //         </Button>
-  //       </div>
-  //     </Link>
-  //   </SwiperSlide>
-  // );
 
   const renderProductSlide = (item: StyleItem, index: number) => (
     <SwiperSlide key={index}>
@@ -88,7 +60,6 @@ export const StyliesCollection = () => {
       </div>
     </SwiperSlide>
   );
-
   return (
     <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 relative">
       <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">Образы от стилиста</h1>

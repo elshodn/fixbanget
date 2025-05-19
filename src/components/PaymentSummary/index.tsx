@@ -22,10 +22,10 @@ interface PaymentSummaryProps {
 }
     
 export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
-  total = 3000,
-  shipping = 12,
-  tax = 50,
-  discount = 200,
+  total = 0,
+  shipping = 0,
+  tax = 0,
+  discount = 0,
   redirectTo,
   getData,
 }) => {

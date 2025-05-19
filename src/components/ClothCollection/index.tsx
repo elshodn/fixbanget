@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React from "react";
 import { ChevronRight } from "lucide-react";
@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { CategoriesCollection } from "../categoriesCollection";
 import { categoriesAccessories } from "@/lib/mockData";
+import AllButton from "../all-button";
 
 interface Props {
   title: string;
@@ -18,17 +19,12 @@ interface Props {
   }[];
 }
 
-export const ClothCollection: React.FC<Props> = ({title,product}) => {
+export const ClothCollection: React.FC<Props> = ({ title, product }) => {
   return (
-    <div className="container mx-auto px-8 py-8 relative">
+    <div className="container mx-auto px-4 py-8 relative">
       <div className="flex justify-between py-4 items-center">
         <p className="text-xl md:text-[32px] font-bold">{title}</p>
-        <Link
-          href="/search"
-          className="flex items-center rounded-2xl cursor-pointer justify-center text-base bg-[#F2F2F2] text-black w-[96px] h-12 gap-1"
-        >
-          Все <ChevronRight className="text-4xl" />
-        </Link>
+        <AllButton route="/search" />
       </div>
 
       <div className="flex flex-wrap gap-4">
@@ -42,13 +38,21 @@ export const ClothCollection: React.FC<Props> = ({title,product}) => {
               <p className="text-[12px] ml-2 mt-2 md:text-2xl font-bold z-10 relative">
                 {item.name}
               </p>
-              <div className={`absolute h-[80%] bottom-0 right-0 top-0  ${product.length -1 == index ? "w-[50%] self-center" : "w-full self-end"}`}>
+              <div
+                className={`absolute h-[80%] bottom-0 right-0 top-0  ${
+                  product.length - 1 == index
+                    ? "w-[50%] self-center"
+                    : "w-full self-end"
+                }`}
+              >
                 <Image
                   src={item.image}
                   alt={item.name}
                   priority
                   fill
-                  className={`object-contain transition-all right-0 bg-amber-200  ${item.rotate ? "rotate-y-180":""} ${item.scale ? " scale-160" : ""}`}
+                  className={`object-contain transition-all right-0   ${
+                    item.rotate ? "rotate-y-180" : ""
+                  } ${item.scale ? " scale-160" : ""} ${item.name == "Ветровки и жилетки"?"scale-70":""}`}
                 />
               </div>
             </div>

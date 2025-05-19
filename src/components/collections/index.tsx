@@ -21,7 +21,6 @@ const Collections: React.FC = () => {
       [id]: !prev[id],
     }));
   };
-  console.log(initialData[0].image);
   
   return (
     <div className="my-14 w-11/12 mx-auto">
