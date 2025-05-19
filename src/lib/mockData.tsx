@@ -744,7 +744,9 @@ export const odejda = [
   },
   {
     id: 11,
-    name: "Нижнее бельё и одежда для дома",
+    name: (
+  <>Нижнее бельё и<br /> одежда для дома</>
+),
     image: "/odejda/ichkicha.png",
   },
 ];

@@ -83,7 +83,7 @@ const PaymentCompletePage: React.FC = () => {
           </div>
 
           <Button
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/statusInfo")}
             className="w-full bg-[#FF385C] text-white hover:bg-[#e42f50]"
           >
             Продолжить покупки
@@ -91,7 +91,7 @@ const PaymentCompletePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Instructions Accordion */}
+      {/* Instructions Accordion */}  
       <div className="bg-white p-4 mt-6 w-full max-w-xl rounded-lg shadow-md">
         <h3 className="text-base font-semibold mb-2">Как оплатить</h3>
         <Accordion type="single" collapsible>

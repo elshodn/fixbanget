@@ -28,7 +28,7 @@ export const PaymentSummary: React.FC = () => {
         <div className="rounded-xl p-2 border-2 ">
           <ShoppingCart onClick={addCart} />
         </div>
-        <Link href="/statusInfo">
+        <Link href="/checkout/method">
           <Button className=" h-12 rounded-full px-13 bg-[#FF385C] text-white text-lg font-semibold">
             Купить
           </Button>

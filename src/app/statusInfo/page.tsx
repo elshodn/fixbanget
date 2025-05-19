@@ -5,6 +5,8 @@ import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ImageIcon } from "lucide-react";
 type OrderItem = {
   image: string;
   name: string;
@@ -144,14 +146,16 @@ export default function ProfileOrdersComponent() {
             Подробности продукта
           </h1>
           <div className="flex my-4 py-4 pr-2 md:pr-10 flex-wrap md:flex-nowrap gap-3 sm:gap-4 border-b min-h-[120px] sm:min-h-[160px]">
-            <div className="w-24 sm:w-28 min-h-28 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
-              <Image
+            <div className="w-24 sm:w-28 min-h-28 bg-gray-100 relative rounded-md flex items-center justify-center overflow-hidden">
+              {/* <Image
                 src="https://i.pinimg.com/originals/9a/06/a9/9a06a9d5fb3daddd463ae7f84b82904f.png"
                 alt="product"
                 className="w-full h-full object-cover"
                 width={112}
                 height={112}
-              />
+              /> */}
+              <ImageIcon className="w-10 h-10 text-gray-400 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2  absolute" />
+              <Skeleton className="w-full h-full object-cover" />
             </div>
             <div className="flex-1 flex flex-col justify-between space-y-5">
               <h4 className="font-bold text-sm sm:text-base">

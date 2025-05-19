@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export type Product = {
   id: number;
-  name: string;
+  name:  React.ReactNode;
   image: string;
   rotate?: boolean;
   scale?: boolean;
@@ -50,7 +50,7 @@ const Collection: React.FC<Props> = ({ product, title }) => {
             >
               <Link
                 href={"/search"}
-                className="text-base   ml-2 mt-2 md:text-2xl font-bold z-10 "
+                className={`text-base  ml-2 mt-2 md:text-2xl font-bold z-10 break-words `}
               >
                 {item.name}
                 <span className="inset-0 absolute  "></span>

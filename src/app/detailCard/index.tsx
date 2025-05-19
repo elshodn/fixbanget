@@ -481,7 +481,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
                 className={`${method == "store" && "border-[#FF3A5C]"}`}
                 onClick={() => setMethod("store")}
               >
-                В магазине
+                Курьер
               </Button>
               <Button
                 variant="outline"
@@ -516,14 +516,6 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
                 <Input id="phone" placeholder="000" type="tel" />
               </div>
               <Separator />
-              <Link href="/statusInfo">
-                <Button
-                  variant="outline"
-                  className="rounded-full bg-[#FF385C] text-white text-[16px] w-full h-12 mt-4"
-                >
-                  оплатить 0₽
-                </Button>
-              </Link>
             </div>
           </div>
         </div>

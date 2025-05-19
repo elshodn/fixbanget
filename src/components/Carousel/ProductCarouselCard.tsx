@@ -59,10 +59,10 @@ export const ProductCarouselCard: React.FC<ProductCarouselCardProps> = ({
               </p>
               <p>в сплит</p>
             </div>
-            <div>
-              <p className="text-sm py-2 font-medium">{product.name}</p>
+            <div >
+              <p className="text-sm py-2 font-medium ">{product.name}</p>
               <p className="text-[#656565] flex items-center gap-1">
-                24 дня · <Zap size={16} /> 16 дней
+                0 дня · <Zap size={16} /> 0 дней
               </p>
             </div>
           </div>
