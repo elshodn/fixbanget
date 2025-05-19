@@ -16,7 +16,6 @@ interface Props {
 }
 
 const Collection: React.FC<Props> = ({ product, title }) => {
-  console.log("product", product);
   // Mahsulot indeksiga qarab col-span qiymatini aniqlash
   const getColSpan = (index: number, totalItems: number) => {
     // Agar oxirgi element va mahsulotlar soni toq bo'lsa

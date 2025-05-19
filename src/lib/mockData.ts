@@ -594,7 +594,7 @@ export const accessoriesData = [
     image: "/accessories/rasm4.png",
   },
   {
-    id: 4,
+    id: 8,
     name: "Дорожные сумки",
     image: "/accessories/rasm5.png",
   },
