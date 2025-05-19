@@ -239,7 +239,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
           </div>
 
           <span className="text-xs sm:text-sm text-gray-500">
-            Весенняя коллекция
+            Lorem ipsum
           </span>
           <h1 className="text-2xl sm:text-3xl font-bold">{product.name}</h1>
           <p className="text-xl sm:text-2xl font-semibold">{product.price} ₽</p>
@@ -256,7 +256,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
               className={`${minmax == "max" && "border-[#FF3A5C]"}`}
               onClick={() => setMinmax("max")}
             >
-              3810 ₽ 25-30 дней
+              0 ₽ 25-30 дней
             </Button>
           </div>
 
@@ -462,15 +462,15 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
             <div>
               <h4 className="font-bold text-sm sm:text-base">Описание</h4>
               <p className="text-xs sm:text-sm">
-                Милый и милый вязаный свитер с водолазкой и длинными рукавами,
-                готовый стать вашим лучшим другом в переменчивую погоду.
+                lorem ipsum dolor sit amet ametour to sigma play
+                lorem ipsum dolor sit amet ametour to sigma play
               </p>
             </div>
             <div>
               <h4 className="font-bold text-sm sm:text-base">Материал</h4>
               <p className="text-xs sm:text-sm">
-                Трикотаж из хлопка. Лучший хлопок, гладкий, удобный, впитывает
-                пот и не блестит.
+                lorem ipsum dolor sit amet ametour to sigma play
+                sit amet ametour
               </p>
             </div>
           </div>

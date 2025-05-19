@@ -65,10 +65,6 @@ function Navbar() {
 
   return (
     <nav className="bg-[#1B1B1B] text-white shadow-lg">
-      <div className="pb-3 pt-5">
-        <div className="w-full h-0.5 bg-black"></div>
-      </div>
-
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           {/* LEFT SIDE (Desktop Menu + Search) */}
@@ -104,7 +100,7 @@ function Navbar() {
           </Link>
 
           {/* RIGHT SIDE */}
-          <div className="flex w-1/3 items-center justify-end space-x-5">
+          <div className="flex w-1/3 pt-1 justify-end space-x-5">
             {/* Telegram Label (Desktop only) */}
             <div className="hidden md:flex gap-2">
               <Image
@@ -117,16 +113,16 @@ function Navbar() {
 
             {/* Wishlist */}
             <Link href="/wishlist" className="relative cursor-pointer">
-              <Heart className="h-5 w-5" />
+              <Heart className="" />
               {likedCount > 0 && (
                 <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
                   {likedCount}
                 </div>
               )}
             </Link>
-            <Link href="/cart" className="relative cursor-pointer">
+            <Link href="/cart" className="relative  cursor-pointer">
               <button className="cursor-pointer">
-                <ShoppingBag className="h-5 w-5" />
+                <ShoppingBag className="" />
               </button>
             </Link>
 

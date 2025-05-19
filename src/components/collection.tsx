@@ -42,25 +42,29 @@ const Collection: React.FC<Props> = ({ product, title }) => {
       <div>
         <div className="grid grid-cols-5 gap-4 mb-4">
           {product.map((item, index) => (
-          <Link href="/search" key={index}
-           className={cn(
-                getColSpan(index, product.length),
-                "w-full h-36"
-              )}>
-            <div
-              style={{
-                backgroundImage: `url(${item.image})`,
-              }}
-              className={cn(
-                getColSpan(index, product.length),
-                "p-2 bg-contain bg-no-repeat bg-right-bottom bg-[#EFEDEC] w-full h-full rounded-3xl shadow"
-              )}
+            <Link
+              href="/search"
+              key={index}
+              className={cn(getColSpan(index, product.length), "w-full h-36")}
+            >
+              <div
+                style={{
+                  backgroundImage: `url(${item.image})`,
+                }}
+                className={cn(
+                  getColSpan(index, product.length),
+                  "p-2 bg-contain bg-no-repeat bg-right-bottom bg-[#EFEDEC] w-full h-full rounded-3xl shadow"
+                )}
               >
-              <p className={`text-base  ml-2 mt-2 md:text-2xl font-bold z-10 ${item.name == "Нижнее бельё и одежда для дома" ? "w-1/2":""}`}>
-                {item.name}
-              </p>
-            </div>
-              </Link>
+                <p
+                  className={`text-base  ml-2 mt-2 md:text-2xl font-bold z-10 ${
+                    item.name == "Нижнее бельё и одежда для дома" ? "w-1/2" : ""
+                  }`}
+                >
+                  {item.name}
+                </p>
+              </div>
+            </Link>
           ))}
         </div>
       </div>

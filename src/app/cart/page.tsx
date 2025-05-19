@@ -155,7 +155,6 @@ const Carts: React.FC = () => {
                         </DialogContent>
                       </Dialog>
 
-                      {/* Delete Dialog */}
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button variant="link" className="p-0 h-auto text-red-600 text-xs sm:text-sm">
