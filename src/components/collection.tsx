@@ -17,13 +17,10 @@ interface Props {
 }
 
 const Collection: React.FC<Props> = ({ product, title }) => {
-  // Mahsulot indeksiga qarab col-span qiymatini aniqlash
   const getColSpan = (index: number, totalItems: number) => {
-    // Agar oxirgi element va mahsulotlar soni toq bo'lsa
     if (index === totalItems - 1 && totalItems % 2 !== 0) {
-      return "col-span-5"; // Oxirgi element uchun to'liq kenglik
+      return "col-span-5"; 
     }
-
     const position = index % 4;
     if (position === 0 || position === 3) {
       return "col-span-3";
@@ -44,7 +41,7 @@ const Collection: React.FC<Props> = ({ product, title }) => {
             <Link
               href="/search"
               key={index}
-              className={cn(getColSpan(index, product.length), "w-full h-36")}
+              className={cn(getColSpan(index, product.length), "w-full h-38")}
             >
               <div
                 style={{
@@ -52,7 +49,7 @@ const Collection: React.FC<Props> = ({ product, title }) => {
                 }}
                 className={cn(
                   getColSpan(index, product.length),
-                  `p-2 bg-contain bg-no-repeat bg-right-bottom bg-[#EFEDEC] ${item.name == "Ветровки и жилетки" || item.name == "Куртки и парки" || item.name == "Брюки и шорты" || item.name == 'Сумки на плечо' ? "bg-size-[auto_75%]":""} w-full h-full rounded-3xl shadow`
+                  `p-2 bg-contain bg-no-repeat bg-right-bottom bg-[#EFEDEC] ${item.name == 'Сумки-мессенджеры'?"bg-size-[auto_90%]":""} ${item.name == "Ветровки и жилетки" || item.name == "Куртки и парки" || item.name == "Брюки и шорты" || item.name == 'Сумки на плечо' ? "bg-size-[auto_75%]":""} w-full h-full rounded-3xl shadow`
                 )}>
                 <p
                   className={`text-base  ml-2 mt-2 md:text-2xl font-bold z-10 ${

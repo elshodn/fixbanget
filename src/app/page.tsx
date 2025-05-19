@@ -46,21 +46,13 @@ export default function Home() {
           </div>
           <Header />
         </main>
-
         <Collection product={famousData} title={"Популярный Продукт"} />
         <Collection product={obuv} title={"Обувь"} />
-
-        {/* <ClothCollection title={"Популярный Продукт"} product={famousData} /> */}
-        {/* <ClothCollection title={"Обувь"} product={obuv} /> */}
         <ProductCarousel title="Последний покупки" product={productCarousel} />
         <Collection product={odejda} title={"Одежда"} />
-        {/* <ClothCollection title={"Одежда"} product={odejda} /> */}
         <ProductCarousel title="Посмотрели" product={productCarousel} />
         <Collection product={accessoriesData} title={"Аксессуары"} />
-        {/* <AccessoresCollection title={"Аксессуары"} product={accessoriesData} /> */}
-
         <StyliesCollection />
-
         <ProductCarousel title="Лайкнули" product={productCarousel} />
         <Assortment />
         <BrendImagesCollection />
