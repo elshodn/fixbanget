@@ -38,7 +38,7 @@ const Footer: React.FC = () => {
         </div>
       </div>
       <div className="flex w-11/12 mx-auto md:w-full mb-4">
-        <div className="p-2 pt-4 w-1/3 space-y-1">
+        <div className="p-2 pt-4 flex flex-col gap-2 w-1/2 space-y-1">
           <Link href="/brend" className="text-white text-sm font-bold">
             Магазин
           </Link>

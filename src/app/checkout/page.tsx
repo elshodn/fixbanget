@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { X, Plus, Pencil } from "lucide-react";
+import { X, Plus, Pencil, ImageIcon } from "lucide-react";
 import { mockOrders } from "@/lib/mockData";
 import Image from "next/image";
 import {
@@ -24,6 +24,7 @@ import expressImage from "@/assets/images/express.png"
 import fedExImage from "@/assets/images/fedex.png"
 import productImage from "@/assets/images/mock/image2.png"
 import { PaymentSummary } from "@/components/PaymentSummary";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function CheckOrder() {
   const [promoCode, setPromoCode] = useState("");
@@ -89,14 +90,16 @@ function CheckOrder() {
               <div key={index}>
                 {order.items.map((item, index) => (
                   <div key={index} className="flex my-4 py-4 pr-2 md:pr-10 flex-wrap md:flex-nowrap gap-3 sm:gap-4 border-b min-h-[120px] sm:min-h-[160px]">
-                    <div className="w-24 sm:w-28 min-h-28 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
-                      <Image 
+                    <div className="w-24 sm:w-28 min-h-28 relative bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
+                      {/* <Image 
                         src={productImage} 
                         alt={item.name}
                         className="w-full h-full object-cover"
                         width={112}
                         height={112}
-                      />
+                      /> */}
+                      <ImageIcon className=" left-1/2 absolute -translate-1/2 top-1/2 -translate-y-1/2 text-gray-400 " />
+                      <Skeleton className="w-full h-full object-cover" />
                     </div>
                     <div className="flex-1 flex flex-col justify-between space-y-5">
                       <h4 className="font-bold text-sm sm:text-base">

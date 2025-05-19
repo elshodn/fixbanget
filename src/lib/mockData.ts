@@ -352,7 +352,7 @@ export const styleData = [
     link: "/looks/1",
     stylist: "Анна Петрова",
     season: "Весна 2024",
-    price: 387,
+    price: 0,
     items: [
       { name: "Желтая куртка", brand: "ZARA" },
       { name: "Белый топ", brand: "Massimo Dutti" },
@@ -368,7 +368,7 @@ export const styleData = [
     link: "/looks/2",
     stylist: "Иван Сидоров",
     season: "Всесезонный",
-    price: 324,
+    price: 0,
     items: [
       { name: "Серый костюм", brand: "Boggi" },
       { name: "Голубая рубашка", brand: "Hugo Boss" },
@@ -384,7 +384,7 @@ export const styleData = [
     link: "/looks/3",
     stylist: "Мария Иванова",
     season: "Лето 2024",
-    price: 3244,
+    price: 0,
     items: [
       { name: "Цветное платье", brand: "Mango" },
       { name: "Босоножки", brand: "Rendez-Vous" },
@@ -399,7 +399,7 @@ export const styleData = [
     link: "/looks/4",
     stylist: "Дмитрий Смирнов",
     season: "Всесезонный",
-    price: 3234,
+    price: 0,
     items: [
       { name: "Худи", brand: "Nike" },
       { name: "Леггинсы", brand: "Adidas" },
@@ -414,7 +414,7 @@ export const styleData = [
     link: "/looks/5",
     stylist: "Елена Волкова",
     season: "Осень 2023",
-    price: 3234,
+    price: 0,
     items: [
       { name: "Черное платье", brand: "Gucci" },
       { name: "Туфли", brand: "Jimmy Choo" },
@@ -429,7 +429,7 @@ export const styleData = [
     link: "/looks/6",
     stylist: "Алексей Козлов",
     season: "Зима 2023",
-    price: 746,
+    price: 0,
     items: [
       { name: "Кожаная куртка", brand: "All Saints" },
       { name: "Джинсы", brand: "Diesel" },
@@ -444,7 +444,7 @@ export const styleData = [
     link: "/looks/7",
     stylist: "Ольга Новикова",
     season: "Весна 2024",
-    price: 843,
+    price: 0,
     items: [
       { name: "Блейзер", brand: "Mango" },
       { name: "Футболка", brand: "COS" },
@@ -459,7 +459,7 @@ export const styleData = [
     link: "/looks/8",
     stylist: "Сергей Васильев",
     season: "Лето 2024",
-    price: 897,
+    price: 0,
     items: [
       { name: "Рубашка", brand: "Tommy Hilfiger" },
       { name: "Шорты", brand: "Lacoste" },
@@ -474,7 +474,7 @@ export const styleData = [
     link: "/looks/9",
     stylist: "Алина Семенова",
     season: "Осень 2023",
-    price: 334,
+    price: 0,
     items: [
       { name: "Пальто", brand: "Max Mara" },
       { name: "Свитер", brand: "Uniqlo" },
@@ -489,7 +489,7 @@ export const styleData = [
     link: "/looks/10",
     stylist: "Артем Федоров",
     season: "Всесезонный",
-    price: 3234,
+    price: 0,
     items: [
       { name: "Белая рубашка", brand: "Theory" },
       { name: "Черные брюки", brand: "Arket" },
@@ -504,7 +504,7 @@ export const styleData = [
     link: "/looks/11",
     stylist: "Виктория Морозова",
     season: "Зима 2023",
-    price: 3234,
+    price: 0,
     items: [
       { name: "Платье", brand: "Self-Portrait" },
       { name: "Клатч", brand: "By Far" },
@@ -519,7 +519,7 @@ export const styleData = [
     link: "/looks/12",
     stylist: "Никита Волков",
     season: "Зима 2023",
-    price: 334,
+    price: 0,
     items: [
       { name: "Свитер", brand: "Acne Studios" },
       { name: "Брюки", brand: "COS" },
@@ -534,7 +534,7 @@ export const styleData = [
     link: "/looks/13",
     stylist: "Полина Ковалева",
     season: "Лето 2024",
-    price: 32334,
+    price: 0,
     items: [
       { name: "Платье", brand: "Reformation" },
       { name: "Сандалии", brand: "Ancient Greek" },
@@ -549,7 +549,7 @@ export const styleData = [
     link: "/looks/14",
     stylist: "Максим Орлов",
     season: "Всесезонный",
-    price: 32,
+    price: 0,
     items: [
       { name: "Ветровка", brand: "The North Face" },
       { name: "Кроссовки", brand: "Salomon" },
@@ -564,7 +564,7 @@ export const styleData = [
     link: "/looks/15",
     stylist: "Екатерина Соколова",
     season: "Осень 2023",
-    price: 32334,
+    price: 0,
     items: [
       { name: "Костюм", brand: "Brunello Cucinelli" },
       { name: "Рубашка", brand: "Eton" },

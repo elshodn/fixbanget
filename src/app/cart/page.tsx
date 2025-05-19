@@ -10,11 +10,12 @@ import {
   DialogTrigger,
   DialogClose
 } from '@/components/ui/dialog';
-import { NotepadText, Trash2, ShoppingBag, X } from 'lucide-react';
+import { NotepadText, Trash2, ShoppingBag, X, ImageIcon } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { styleData as initialData } from '@/lib/mockData';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface CartItem {
   id: number;
@@ -27,7 +28,6 @@ interface CartItem {
 const Carts: React.FC = () => {
   const [cartData, setCartData] = useState<CartItem[]>(initialData.slice(0, 3));
   const [deleteAll, setDeleteAll] = useState<boolean>(cartData.length > 0);
-  const router = useRouter();
 
   const updateQuantity = (index: number, change: number) => {
     setCartData(prev => {
@@ -88,11 +88,15 @@ const Carts: React.FC = () => {
               <div key={item.id} className='flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 border-b gap-4 sm:gap-0'>
                 {/* Product Info */}
                 <div className='flex items-center gap-4 w-full sm:w-1/2'>
-                  <img
+                  {/* <img
                     src={item.image}
                     alt={item.name}
                     className='object-cover rounded-lg w-20 h-20 sm:w-32 sm:h-32'
-                  />
+                  /> */}
+                  <div className='w-22 h-28 sm:w-32 sm:h-32 relative'>
+                    <ImageIcon className='text-gray-400 left-1/2 top-1/2 -translate-y-1/2 absolute -translate-1/2' />
+                  <Skeleton className='w-full h-full object-cover' />
+                  </div>
                   <div className='flex-1 flex flex-wrap justify-between'>
                     <p className='font-medium text-sm sm:text-base'>{item.name}</p>
                     <div className='md:flex gap-2'>
@@ -113,11 +117,11 @@ const Carts: React.FC = () => {
                           </DialogHeader>
                           <div className="space-y-4">
                             <div className="flex gap-4">
-                              <img
+                              {/* <img
                                 src={item.image}
                                 alt={item.name}
                                 className="w-24 h-24 object-cover rounded-lg"
-                              />
+                              /> */}
                               <div><h3 className="font-medium text-lg">{item.name}</h3></div>
                             </div>
 
@@ -180,7 +184,7 @@ const Carts: React.FC = () => {
                     <div className='flex sm:hidden justify-between items-center mt-2 w-full'>
                       <div className='border p-1 rounded-sm flex gap-3 items-center'>
                         <Button variant="outline" size="sm" onClick={() => updateQuantity(index, -1)}>-</Button>
-                        <p className='text-sm'>{item.quantity}</p>
+                        <p className='text-sm'>0</p>
                         <Button variant="outline" size="sm" onClick={() => updateQuantity(index, 1)}>+</Button>
                       </div>
                       <p className='font-medium'>${(item.price * item.quantity).toFixed(2)}</p>
@@ -194,7 +198,7 @@ const Carts: React.FC = () => {
                   <div className='w-1/4 flex justify-center'>
                     <div className='border p-2 rounded-sm flex gap-3 items-center'>
                       <Button variant="outline" size="sm" onClick={() => updateQuantity(index, -1)}>-</Button>
-                      <p>{item.quantity}</p>
+                      <p>0</p>
                       <Button variant="outline" size="sm" onClick={() => updateQuantity(index, 1)}>+</Button>
                     </div>
                   </div>
@@ -248,5 +252,4 @@ const Carts: React.FC = () => {
     </div>
   );
 };
-
 export default Carts;
