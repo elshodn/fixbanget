@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Menu, Heart, ShoppingBag, Search, X, UserRound } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import telegramIcon from "@/assets/images/telegramIcon.png";
@@ -13,7 +12,6 @@ import Image from "next/image";
 
 import { useLikeStore } from "../../stores/likeStore";
 
-import { styleData } from "@/lib/mockData";
 import MenuSheet from "@/components/menuSheet";
 
 interface CartItem {
@@ -26,30 +24,6 @@ interface CartItem {
 }
 
 function Navbar() {
-  const [cartData, setCartData] = useState(
-    styleData.slice(0, 3).map((item) => ({ ...item, quantity: 1 }))
-  );
-  const hasItems = cartData.length > 0;
-  const [deleteAll, setDeleteAll] = useState<boolean>(hasItems);
-
-  const updateQuantity = (index: number, change: number) => {
-    setCartData((prev) => {
-      const updated = [...prev];
-      const newQuantity = updated[index].quantity + change;
-
-      if (newQuantity <= 0) {
-        return updated.filter((_, i) => i !== index);
-      }
-
-      updated[index].quantity = newQuantity;
-      return updated;
-    });
-  };
-
-  useEffect(() => {
-    setDeleteAll(cartData.length > 0);
-  }, [cartData]);
-
   const navLinks = [
     { label: "Мужское", href: "/search" },
     { label: "Женское", href: "/search" },
