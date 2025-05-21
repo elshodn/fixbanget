@@ -3,6 +3,8 @@
 import React from 'react';
 import Image from 'next/image';
 import { newProductData } from '@/lib/mockData';
+import { Skeleton } from './ui/skeleton';
+import { ImageIcon } from 'lucide-react';
 
 interface Product {
   title: string;
@@ -30,14 +32,16 @@ const NewProducts: React.FC = () => {
               <p className="text-sm sm:text-base font-normal">{item.desc}</p>
             </div>
             <div className="flex-1 h-full relative min-h-[200px] sm:min-h-[250px] md:min-h-0">
-              <Image
+              {/* <Image
                 src={item.image}
                 alt={item.title}
                 className="object-contain object-center p-2 sm:p-4"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
                 priority={index === 0}
-              />
+              /> */}
+              {/* <ImageIcon className='w-8 h-8 absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2'/>
+              <Skeleton className='w-full h-full' /> */}
             </div>
           </div>
         ))}

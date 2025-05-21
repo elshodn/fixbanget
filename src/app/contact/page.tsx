@@ -25,14 +25,14 @@ const Contact = () => {
                                 <Phone className='fill-[#FF385C] text-[#FF385C] w-5 h-5' />
                                 <p className='text-sm sm:text-base'>Консультация по женскому ассортименту</p>
                             </div>
-                            <p className='text-sm sm:text-base font-medium ml-7 sm:ml-0'>+0 000 000-00-00</p>
+                            <p className='text-sm sm:text-base font-medium ml-7 sm:ml-0'>+7 (915) 776-02-11</p>
                         </div>
                         <div className='flex flex-col sm:flex-row gap-2 sm:gap-4 items-start sm:items-center'>
                             <div className='flex gap-2 sm:gap-4 items-center'>
                                 <Phone className='fill-[#FF385C] text-[#FF385C] w-5 h-5' />
                                 <p className='text-sm sm:text-base'>Консультация по мужскому ассортименту</p>
                             </div>
-                            <p className='text-sm sm:text-base font-medium ml-7 sm:ml-0'>+0 000 000-00-00</p>
+                            <p className='text-sm sm:text-base font-medium ml-7 sm:ml-0'>+7 (915) 776-02-11</p>
                         </div>
                     </div>
                 </div>
@@ -42,7 +42,7 @@ const Contact = () => {
                     <h3 className='text-base font-medium'>Электронная почта</h3>
                     <div className='flex gap-2 sm:gap-4 items-center mt-3 md:mt-5'>
                         <Mail className="fill-[#FF385C] text-[#FF385C] w-5 h-5" />
-                        <p className='text-sm sm:text-base font-medium'>name@email.ru</p>
+                        <p className='text-sm sm:text-base font-medium'>unicflo@gmail.com</p>
                     </div>
                 </div>
 

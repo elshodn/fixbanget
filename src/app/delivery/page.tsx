@@ -15,7 +15,7 @@ const Delivery: React.FC = () => {
 
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left side content */}
-          <div className="w-full lg:w-8/12 text-[#545454]">
+          <div className="w-full  text-[#545454]">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-medium">
               Доставка и оплата <br className="hidden sm:block" /> ЗАКАЗ С ДОСТАВКОЙ ИЗ ПОДНЕБЕСНОЙ
             </h1>
@@ -56,7 +56,7 @@ const Delivery: React.FC = () => {
           </div>
 
           {/* Right side content */}
-          <div className="w-full lg:w-4/12 text-[#545454]">
+          {/* <div className="w-full lg:w-4/12 text-[#545454]">
             <div className="bg-gray-50 p-6 rounded-lg">
               <h3 className="font-bold text-base sm:text-lg md:text-[18px] pt-3">ОТСЛЕЖИВАНИЕ:</h3>
               <div className="font-normal text-sm sm:text-base md:text-[18px] mb-6 space-y-2">
@@ -74,7 +74,7 @@ const Delivery: React.FC = () => {
                 <p>График отправок: пн, ср, пт до 13:00 МСК</p>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 

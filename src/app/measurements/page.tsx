@@ -91,14 +91,14 @@ const Measurements: React.FC = () => {
             </form>
           </div>
 
-          <div className="hidden w-full md:w-2/5 bg-amber-200 md:flex justify-center lg:justify-end mt-8 lg:mt-0">
+          {/* <div className="hidden w-full md:w-2/5 bg-amber-200 md:flex justify-center lg:justify-end mt-8 lg:mt-0">
             <Image
               src={measurementImage}
               alt="Measurement illustration"
               className="w-full  h-auto"
               placeholder="blur"
             />
-          </div>
+          </div> */}
         </div>
       </div>
 

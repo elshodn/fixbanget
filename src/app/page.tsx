@@ -10,14 +10,14 @@ import {
   obuv,
 } from "@/lib/mockData";
 import { Header } from "@/components/home/header";
-import { Assortment } from "../components/home/assortment";
+import { Assortment } from "@/components/home/assortment";
 import BrendImagesCollection from "../components/home/brendImagesCollection";
 import AboutContainer from "../components/aboutContainer";
 import { TelegramChannels } from "@/components/telegram/TelegramChannels";
 import { Button } from "@/components/ui/button";
 import Collection from "@/components/collection";
 
-export default function Home() {
+export default function Home() {  
   const productCarousel = [...products];
   const [genderSwitch, setGenderSwitch] = useState<"man" | "woman">("man");
   return (

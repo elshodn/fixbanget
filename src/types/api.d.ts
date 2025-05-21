@@ -1,3 +1,4 @@
+import { categories } from './../lib/mockData';
 /**
  * Standard API response interface for paginated data
  */
@@ -34,3 +35,12 @@ interface PaginationParams {
   page?: number;
   limit?: number;
 }
+
+
+interface Categories <T>{
+  name : string;
+  id : number;
+  slug : string;
+  data: T[];
+}
+
