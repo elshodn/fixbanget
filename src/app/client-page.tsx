@@ -9,84 +9,65 @@ import AboutContainer from "../components/aboutContainer";
 import { TelegramChannels } from "@/components/telegram/TelegramChannels";
 import { Button } from "@/components/ui/button";
 import Collection from "@/components/collection";
-import useSWR from "swr";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useGender } from "@/hooks/use-gender";
+import SelectGender from "@/components/slelect-gender";
+import { fetchCategories } from "@/lib/api";
 
 // Fetcher function for SWR
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export default function Home() {
-  const [genderSwitch, setGenderSwitch] = useState<"man" | "woman">("man");
+export default function HomeClient() {
+  const { gender } = useGender();
+
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    const getCategories = async () => {
+      const [categoriesData] = Promise.all([await fetchCategories(gender)]);
+    };
+  }, []);
 
   // Fetch data using SWR
-  const { data: famousData, isLoading: isFamousLoading } = useSWR(
-    `/api/products/famous?gender=${genderSwitch}`,
-    fetcher
-  );
 
-  const { data: obuvData, isLoading: isObuvLoading } = useSWR(
-    `/api/products/obuv?gender=${genderSwitch}`,
-    fetcher
-  );
+  //   const { data: recentPurchases, isLoading: isRecentLoading } = useSWR(
+  //     `/api/products/recent-purchases`,
+  //     fetcher
+  //   );
 
-  const { data: recentPurchases, isLoading: isRecentLoading } = useSWR(
-    `/api/products/recent-purchases`,
-    fetcher
-  );
+  //   const { data: odejdaData, isLoading: isOdejdaLoading } = useSWR(
+  //     `/api/products/odejda?gender=${gender}`,
+  //     fetcher
+  //   );
 
-  const { data: odejdaData, isLoading: isOdejdaLoading } = useSWR(
-    `/api/products/odejda?gender=${genderSwitch}`,
-    fetcher
-  );
+  //   const { data: viewedProducts, isLoading: isViewedLoading } = useSWR(
+  //     `/api/products/viewed`,
+  //     fetcher
+  //   );
 
-  const { data: viewedProducts, isLoading: isViewedLoading } = useSWR(
-    `/api/products/viewed`,
-    fetcher
-  );
+  //   const { data: accessoriesData, isLoading: isAccessoriesLoading } = useSWR(
+  //     `/api/products/accessories?gender=${gender}`,
+  //     fetcher
+  //   );
 
-  const { data: accessoriesData, isLoading: isAccessoriesLoading } = useSWR(
-    `/api/products/accessories?gender=${genderSwitch}`,
-    fetcher
-  );
-
-  const { data: likedProducts, isLoading: isLikedLoading } = useSWR(
-    `/api/products/liked`,
-    fetcher
-  );
+  //   const { data: likedProducts, isLoading: isLikedLoading } = useSWR(
+  //     `/api/products/liked`,
+  //     fetcher
+  //   );
 
   // Refetch data when gender changes
   useEffect(() => {
     // SWR will automatically revalidate when the URL changes
-  }, [genderSwitch]);
+  }, [gender]);
 
   return (
     <>
       <div className="min-h-screen bg-white home">
         <main className="container mx-auto px-4 py-8">
-          <div className="flex flex-col items-stretch gap-4 mb-8">
-            <Button
-              variant="outline"
-              onClick={() => setGenderSwitch("man")}
-              className={`${
-                genderSwitch == "man" ? "bg-[#EEEDEB]" : "bg-white"
-              } rounded-full`}
-            >
-              Для него
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => setGenderSwitch("woman")}
-              className={`${
-                genderSwitch == "woman" ? "bg-[#EEEDEB]" : "bg-white"
-              } rounded-full`}
-            >
-              Для неё
-            </Button>
-          </div>
+          <SelectGender />
           <Header />
         </main>
 
-        {isFamousLoading ? (
+        {/* {isFamousLoading ? (
           <CollectionSkeleton />
         ) : (
           <Collection product={famousData || []} title={"Популярный Продукт"} />
@@ -96,9 +77,9 @@ export default function Home() {
           <CollectionSkeleton />
         ) : (
           <Collection product={obuvData || []} title={"Обувь"} />
-        )}
+        )} */}
 
-        {isRecentLoading ? (
+        {/* {isRecentLoading ? (
           <CarouselSkeleton />
         ) : (
           <ProductCarousel
@@ -123,15 +104,15 @@ export default function Home() {
           <CollectionSkeleton />
         ) : (
           <Collection product={accessoriesData || []} title={"Аксессуары"} />
-        )}
+        )} */}
 
         <StyliesCollection />
 
-        {isLikedLoading ? (
+        {/* {isLikedLoading ? (
           <CarouselSkeleton />
         ) : (
           <ProductCarousel title="Лайкнули" product={likedProducts || []} />
-        )}
+        )} */}
 
         <Assortment />
         <BrendImagesCollection />

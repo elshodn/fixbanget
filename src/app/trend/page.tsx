@@ -81,8 +81,8 @@ const Trend = () => {
       </div>
 
       {/* Component Sections */}
-      <NewProducts />
-      <Collections />
+      {/* <NewProducts />
+      <Collections /> */}
       <h1 className="text-center font-bold text-xl md:text-3xl">Все бренды</h1>
       <BrendImagesCollection />
       <Link href="/search" className="flex justify-center">

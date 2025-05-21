@@ -3,7 +3,8 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { styleData } from '@/lib/mockData';
-import { Heart } from 'lucide-react';
+import { Heart, ImageIcon } from 'lucide-react';
+import { Skeleton } from '../ui/skeleton';
 
 interface Product {
   id: number;
@@ -44,14 +45,16 @@ const Collections: React.FC = () => {
             </button>
 
             <div className="bg-[#EFEDEC] h-72 relative">
-              <Image
+              {/* <Image
                 priority
                 src={item.image}
                 alt={item.name}
                 fill
                 className="object-contain w-full h-full"
                 sizes="(max-width: 768px) 100vw, 33vw"
-              />
+              /> */}
+              <ImageIcon className='w-12 h-12 absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2'/>
+            <Skeleton className='w-full h-full' />
               {/* <Image src={item.image} /> */}
             </div>
 
