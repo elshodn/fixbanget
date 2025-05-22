@@ -4,12 +4,12 @@ import { Button } from "./ui/button";
 import { useGender } from "@/hooks/use-gender";
 
 export default function SelectGender() {
-  const { toggleGender, gender } = useGender();
+  const { gender, setGender } = useGender();
   return (
     <div className="flex flex-col items-stretch gap-4 mb-8">
       <Button
         variant="outline"
-        onClick={() => toggleGender()}
+        onClick={() => setGender("male")}
         className={`${
           gender === "male" ? "bg-[#EEEDEB]" : "bg-white"
         } rounded-full`}
@@ -18,7 +18,7 @@ export default function SelectGender() {
       </Button>
       <Button
         variant="outline"
-        onClick={() => toggleGender()}
+        onClick={() => setGender("female")}
         className={`${
           gender === "female" ? "bg-[#EEEDEB]" : "bg-white"
         } rounded-full`}

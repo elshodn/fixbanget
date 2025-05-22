@@ -1,17 +1,37 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import trendHeader from '@/assets/images/trendHeader.png';
-import trendHeader2 from '@/assets/images/trendHeader2.png';
-import { Button } from '@/components/ui/button';
-import BrendImagesCollection from '@/components/home/brendImagesCollection';
-import { TelegramChannels } from '@/components/telegram/TelegramChannels';
-import NewProducts from '@/components/newProducts';
-import  Collections  from '@/components/collections';
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import trendHeader from "@/assets/images/trendHeader.png";
+import trendHeader2 from "@/assets/images/trendHeader2.png";
+import { Button } from "@/components/ui/button";
+import BrendImagesCollection from "@/components/home/brendImagesCollection";
+import { TelegramChannels } from "@/components/telegram/TelegramChannels";
+
+import { fetchBrands } from "@/lib/api";
+import { useGender } from "@/hooks/use-gender";
 
 const Trend = () => {
+  const { gender } = useGender();
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const getCategories = async () => {
+      setLoading(true);
+      const [brandsData] = await Promise.all([await fetchBrands()]);
+      setBrands(brandsData);
+      // setObuvCategories(subcategoriesData);
+
+      setLoading(false);
+    };
+    getCategories();
+  }, [gender]);
+
+  if(loading){
+    return "загрузка"
+  }
+
   return (
     <div className="overflow-x-hidden mt-20">
       <div
@@ -44,13 +64,15 @@ const Trend = () => {
           UniqFlo в Поднебесной: Охота за Модными Тенденциями
         </h3>
         <p className="text-sm sm:text-base font-normal">
-          Коллектив UniqFlo в неустанном поиске элегантности и трендов embarked на увлекательное
-          путешествие в эпицентр фэшн-индустрии - Китайскую Народную Республику. Мы неуклонно
-          придерживаемся принципа, чтобы каждый предмет гардероба, включенный в наш каталог, был не
-          просто модным, но и соответствовал премиальным критериям качества. Не пропустите
-          возможность модернизировать свою коллекцию одежды вместе UniqFlo, каждый квартал
-          организуется приобретение новинок, оставьте заявку и присоединитесь к телеграмм-каналу,
-          чтобы быть в курсе всех обновлений!
+          Коллектив UniqFlo в неустанном поиске элегантности и трендов embarked
+          на увлекательное путешествие в эпицентр фэшн-индустрии - Китайскую
+          Народную Республику. Мы неуклонно придерживаемся принципа, чтобы
+          каждый предмет гардероба, включенный в наш каталог, был не просто
+          модным, но и соответствовал премиальным критериям качества. Не
+          пропустите возможность модернизировать свою коллекцию одежды вместе
+          UniqFlo, каждый квартал организуется приобретение новинок, оставьте
+          заявку и присоединитесь к телеграмм-каналу, чтобы быть в курсе всех
+          обновлений!
         </p>
       </div>
 
@@ -67,13 +89,15 @@ const Trend = () => {
               Самые жаркие тренды прямиком из Поднебесной!
             </h1>
             <p className="text-sm sm:text-base font-normal text-left">
-              Вступайте в наше сообщество в Telegram, чтобы первыми узнавать о свежих коллекциях,
-              уникальных предложениях непосредственно из Китайской Республики! Исследовать актуальные
-              поступления из Страны Дракона Батон преводяшый.
+              Вступайте в наше сообщество в Telegram, чтобы первыми узнавать о
+              свежих коллекциях, уникальных предложениях непосредственно из
+              Китайской Республики! Исследовать актуальные поступления из Страны
+              Дракона Батон преводяшый.
             </p>
             <div className="flex justify-center md:justify-start">
               <Button className="bg-[#FF385C] w-full sm:w-max text-white text-base sm:text-lg md:text-xl font-normal py-6 md:py-8 px-6 sm:px-10 md:px-12">
-                Ознакомиться с новыми <br className="inline" /> поступлениями из Китая
+                Ознакомиться с новыми <br className="inline" /> поступлениями из
+                Китая
               </Button>
             </div>
           </div>
@@ -84,9 +108,11 @@ const Trend = () => {
       {/* <NewProducts />
       <Collections /> */}
       <h1 className="text-center font-bold text-xl md:text-3xl">Все бренды</h1>
-      <BrendImagesCollection />
+      <BrendImagesCollection brands={brands} />
       <Link href="/search" className="flex justify-center">
-        <Button className="bg-[#FF385C] text-2xl font-normal p-5">посмотреть все бренды</Button>
+        <Button className="bg-[#FF385C] text-2xl font-normal p-5">
+          посмотреть все бренды
+        </Button>
       </Link>
       <TelegramChannels />
     </div>

@@ -1,254 +1,353 @@
-'use client'
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogClose
-} from '@/components/ui/dialog';
-import { NotepadText, Trash2, ShoppingBag, X, ImageIcon } from 'lucide-react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { styleData as initialData } from '@/lib/mockData';
-import { Skeleton } from '@/components/ui/skeleton';
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ShoppingCart, ArrowLeft, Trash2, Plus, Minus } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
+import { getCartItems, type CartItem } from "@/lib/api";
+import { toast } from "@/components/ui/use-toast";
+import { PaymentSummary } from "@/components/PaymentSummary";
 
-interface CartItem {
-  id: number;
-  name: string;
-  image: string;
-  price: number;
-  quantity: number;
-}
+export default function CartPage() {
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [promoCode, setPromoCode] = useState<string>("");
+  const [discountApplied, setDiscountApplied] = useState<boolean>(false);
+  const [selectedShipping, setSelectedShipping] = useState<string>("free");
+  const telegramId = 1524783641; // Default Telegram ID
 
-const Carts: React.FC = () => {
-  const [cartData, setCartData] = useState<CartItem[]>(initialData.slice(0, 3));
-  const [deleteAll, setDeleteAll] = useState<boolean>(cartData.length > 0);
-
-  const updateQuantity = (index: number, change: number) => {
-    setCartData(prev => {
-      const updated = [...prev];
-      const newQuantity = updated[index].quantity + change;
-
-      if (newQuantity <= 0) {
-        return updated.filter((_, i) => i !== index);
-      }
-
-      updated[index].quantity = newQuantity;
-      return updated;
-    });
-  };
-
-  const deleteItem = (index: number) => {
-    setCartData(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const handleDeleteAll = () => {
-    setCartData([]);
-  };
-
+  // Fetch cart items
   useEffect(() => {
-    setDeleteAll(cartData.length > 0);
-  }, [cartData]);
+    const fetchCartItems = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getCartItems(telegramId);
+        if (response && response.results) {
+          setCartItems(response.results);
+        }
+      } catch (error) {
+        console.error("Error fetching cart items:", error);
+        toast({
+          title: "Ошибка",
+          description: "Не удалось загрузить корзину",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCartItems();
+  }, [telegramId]);
+
+  // Calculate total price
+  const calculateTotal = () => {
+    return cartItems.reduce((total, item) => {
+      return total + Number(item.total_price);
+    }, 0);
+  };
+
+  // Calculate discount
+  const calculateDiscount = () => {
+    return discountApplied && promoCode ? calculateTotal() * 0.1 : 0; // 10% discount if promo code is applied
+  };
+
+  // Handle quantity update
+  const handleUpdateQuantity = async (
+    cartItemId: number,
+    newQuantity: number
+  ) => {
+    if (newQuantity <= 0) {
+      await handleRemoveItem(cartItemId);
+      return;
+    }
+
+    setIsUpdating(true);
+    try {
+      const formData = new FormData();
+      formData.append("quantity", newQuantity.toString());
+
+      const response = await fetch(`/api/cart/update/${cartItemId}`, {
+        method: "PUT",
+        headers: {
+          "X-Telegram-ID": telegramId.toString(),
+        },
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Refresh cart items
+        const cartResponse = await getCartItems(telegramId);
+        if (cartResponse && cartResponse.results) {
+          setCartItems(cartResponse.results);
+        }
+
+        toast({
+          title: "Успешно",
+          description: "Количество товара обновлено",
+        });
+      } else {
+        toast({
+          title: "Ошибка",
+          description: data.message || "Не удалось обновить количество товара",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Error updating quantity:", error);
+      toast({
+        title: "Ошибка",
+        description: "Произошла ошибка при обновлении количества товара",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  // Handle remove item
+  const handleRemoveItem = async (cartItemId: number) => {
+    setIsUpdating(true);
+    setCartItems((prev) => prev.filter((item) => item.id !== cartItemId));
+    try {
+      const response = await fetch(`/api/cart/items/${cartItemId}`, {
+        method: "DELETE",
+        headers: {
+          "X-Telegram-ID": telegramId.toString(),
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setCartItems((prev) => prev.filter((item) => item.id !== cartItemId));
+        toast({
+          title: "Успешно",
+          description: "Товар удален из корзины",
+        });
+      } else {
+        toast({
+          title: "Ошибка",
+          description: data.message || "Не удалось удалить товар из корзины",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Error removing item:", error);
+      toast({
+        title: "Ошибка",
+        description: "Произошла ошибка при удалении товара из корзины",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  // Handle clear cart
+  const handleClearCart = async () => {
+    setIsUpdating(true);
+    try {
+      // Delete all items one by one
+      const deletePromises = cartItems.map((item) =>
+        fetch(`/api/cart/items/${item.id}`, {
+          method: "DELETE",
+          headers: {
+            "X-Telegram-ID": telegramId.toString(),
+          },
+        })
+      );
+      await Promise.all(deletePromises);
+      setCartItems([]);
+      toast({
+        title: "Успешно",
+        description: "Корзина очищена",
+      });
+    } catch (error) {
+      console.error("Error clearing cart:", error);
+      toast({
+        title: "Ошибка",
+        description: "Произошла ошибка при очистке корзины",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center mb-6">
+          <Skeleton className="h-10 w-10 rounded-full mr-4" />
+          <Skeleton className="h-8 w-40" />
+        </div>
+        <div className="space-y-4">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <div key={index} className="flex border rounded-lg p-4">
+              <Skeleton className="h-24 w-24 rounded-md" />
+              <div className="ml-4 flex-1">
+                <Skeleton className="h-6 w-3/4 mb-2" />
+                <Skeleton className="h-4 w-1/2 mb-4" />
+                <div className="flex justify-between">
+                  <Skeleton className="h-8 w-24" />
+                  <Skeleton className="h-6 w-20" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="mt-8">
+          <Skeleton className="h-12 w-full rounded-lg mb-4" />
+          <Skeleton className="h-12 w-full rounded-lg" />
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className='container mx-auto px-4 sm:px-6 py-6 md:py-10'>
-      <div className='flex justify-between items-start sm:items-center mb-6 md:mb-8 gap-4'>
-        <h1 className='font-semibold text-2xl sm:text-3xl md:text-4xl'>Ваша корзина</h1>
-        {deleteAll && (
-          <Button
-            variant="outline"
-            onClick={handleDeleteAll}
-            className="text-[#F04438] hover:bg-transparent font-medium text-sm sm:text-base"
-          >
-            Удалить все
-          </Button>
-        )}
-      </div>
-
-      {deleteAll ? (
-        <>
-          {/* Table Headers */}
-          <div className='hidden sm:flex items-center justify-between border-b p-3 text-lg font-semibold'>
-            <div className='w-1/2'><p>Продукт</p></div>
-            <div className='flex w-1/2 gap-4 md:gap-10 items-center justify-between'>
-              <p className='w-1/4 text-center'>Цена</p>
-              <p className='w-1/4 text-center'>Количество</p>
-              <p className='w-1/4 text-center'>Общий</p>
-            </div>
+    <div className="container mx-auto px-4 py-8 md:flex md:gap-6">
+      <div className="md:w-2/3">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center">
+            <Link href="/" className="mr-4">
+              <Button variant="outline" size="icon" className="rounded-full">
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+            </Link>
+            <h1 className="text-2xl font-bold flex items-center">
+              <ShoppingCart className="mr-2 h-6 w-6" /> Корзина
+            </h1>
           </div>
+          {cartItems.length > 0 && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600"
+              onClick={handleClearCart}
+              disabled={isUpdating}
+            >
+              <Trash2 className="h-4 w-4 mr-2" /> Очистить
+            </Button>
+          )}
+        </div>
 
-          {/* Cart Items */}
-          <div className='space-y-4 sm:space-y-6'>
-            {cartData.map((item, index) => (
-              <div key={item.id} className='flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 border-b gap-4 sm:gap-0'>
-                {/* Product Info */}
-                <div className='flex items-center gap-4 w-full sm:w-1/2'>
-                  {/* <img
-                    src={item.image}
-                    alt={item.name}
-                    className='object-cover rounded-lg w-20 h-20 sm:w-32 sm:h-32'
-                  /> */}
-                  <div className='w-22 h-28 sm:w-32 sm:h-32 relative'>
-                    <ImageIcon className='text-gray-400 left-1/2 top-1/2 -translate-y-1/2 absolute -translate-1/2' />
-                  <Skeleton className='w-full h-full object-cover' />
-                  </div>
-                  <div className='flex-1 flex flex-wrap justify-between'>
-                    <p className='font-medium text-sm sm:text-base'>{item.name}</p>
-                    <div className='md:flex gap-2'>
-                      {/* Edit Dialog */}
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button variant="link" className="p-0 h-auto text-xs sm:text-sm">
-                            <NotepadText className='w-4 h-4 mr-1' />
-                            <span className='hidden'>Редактировать</span>
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle className="flex justify-between items-center">
-                              Редактировать продукт
-                              <DialogClose className="cursor-pointer"><X /></DialogClose>
-                            </DialogTitle>
-                          </DialogHeader>
-                          <div className="space-y-4">
-                            <div className="flex gap-4">
-                              {/* <img
-                                src={item.image}
-                                alt={item.name}
-                                className="w-24 h-24 object-cover rounded-lg"
-                              /> */}
-                              <div><h3 className="font-medium text-lg">{item.name}</h3></div>
-                            </div>
-
-                            {/* Color & Size selection (static for now) */}
-                            <div className="flex justify-between items-center pt-4">
-                              <div>
-                                <p className='text-[#5F5F5F]'>Цвет</p>
-                                <div className='flex gap-3'>
-                                  {['#FF385C', '#EBC1BB', '#A4A4A4'].map((color, i) => (
-                                    <div key={i} className='rounded w-8 h-8' style={{ backgroundColor: color }}></div>
-                                  ))}
-                                </div>
-                              </div>
-
-                              <div>
-                                <p className='text-[#5F5F5F]'>Размер</p>
-                                <div className='flex gap-3'>
-                                  {['S', 'M', 'L', 'XL', 'XLL'].map(size => (
-                                    <div key={size} className='rounded w-10 h-10 border flex justify-center items-center font-bold'>{size}</div>
-                                  ))}
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="flex justify-end gap-2 mt-4">
-                              <DialogClose asChild>
-                                <Button className="bg-[#FF385C] w-full">Обновить корзину</Button>
-                              </DialogClose>
-                            </div>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button variant="link" className="p-0 h-auto text-red-600 text-xs sm:text-sm">
-                            <Trash2 className='w-4 h-4 mr-1' />
-                            <span className='hidden'>Удалить</span>
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="text-center max-w-xs sm:max-w-md">
-                          <h3 className='font-semibold text-lg sm:text-xl'>удалить товар из корзины</h3>
-                          <p className='text-[#8D8D8D] text-sm sm:text-base'>Вы уверены, что хотите удалить товар из корзины?</p>
-                          <div className='flex justify-center gap-4 mt-4'>
-                            <DialogClose asChild>
-                              <Button className='bg-[#F04438] text-white w-1/2' onClick={() => deleteItem(index)}>
-                                Удалить
-                              </Button>
-                            </DialogClose>
-                            <DialogClose asChild>
-                              <Button variant="outline" className="w-1/2">Отмена</Button>
-                            </DialogClose>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
+        {cartItems.length > 0 ? (
+          <div className="space-y-4 mb-8">
+            {cartItems.map((item) => (
+              <div
+                key={item.id}
+                className="flex border rounded-lg p-4 shadow-sm"
+              >
+                <div className="relative h-24 w-24 rounded-md overflow-hidden">
+                  <Image
+                    src={
+                      item.product.images && item.product.images.length > 0
+                        ? item.product.images[0].image
+                        : "/placeholder.svg?height=96&width=96&query=product"
+                    }
+                    alt={item.product.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="ml-4 flex-1">
+                  <h3 className="font-medium">{item.product.name}</h3>
+                  <p className="text-sm text-gray-500 mb-4">
+                    {item.product.brand.name} •{" "}
+                    {item.product.variants[0]?.size.name || ""}
+                  </p>
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center border rounded-lg">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-8 w-8 rounded-l-lg"
+                        onClick={() =>
+                          handleUpdateQuantity(item.id, item.quantity - 1)
+                        }
+                        disabled={isUpdating}
+                      >
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                      <span className="w-10 text-center">{item.quantity}</span>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-8 w-8 rounded-r-lg"
+                        onClick={() =>
+                          handleUpdateQuantity(item.id, item.quantity + 1)
+                        }
+                        disabled={isUpdating}
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
                     </div>
-
-                    {/* Mobile actions */}
-                    <div className='flex sm:hidden justify-between items-center mt-2 w-full'>
-                      <div className='border p-1 rounded-sm flex gap-3 items-center'>
-                        <Button variant="outline" size="sm" onClick={() => updateQuantity(index, -1)}>-</Button>
-                        <p className='text-sm'>0</p>
-                        <Button variant="outline" size="sm" onClick={() => updateQuantity(index, 1)}>+</Button>
-                      </div>
-                      <p className='font-medium'>${(item.price * item.quantity).toFixed(2)}</p>
+                    <div className="flex flex-col items-end">
+                      <span className="font-bold text-lg">
+                        {Number(item.total_price).toLocaleString()} ₽
+                      </span>
+                      {item.product.discount_price && (
+                        <span className="text-sm text-gray-500 line-through">
+                          {(
+                            Number(item.product.price) * item.quantity
+                          ).toLocaleString()}{" "}
+                          ₽
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
-
-                {/* Desktop Price Section */}
-                <div className='hidden sm:flex w-1/2 gap-4 md:gap-10 items-center justify-between'>
-                  <p className='w-1/4 text-center'>${item.price}</p>
-                  <div className='w-1/4 flex justify-center'>
-                    <div className='border p-2 rounded-sm flex gap-3 items-center'>
-                      <Button variant="outline" size="sm" onClick={() => updateQuantity(index, -1)}>-</Button>
-                      <p>0</p>
-                      <Button variant="outline" size="sm" onClick={() => updateQuantity(index, 1)}>+</Button>
-                    </div>
-                  </div>
-                  <p className='w-1/4 text-center'>${(item.price * item.quantity).toFixed(2)}</p>
-                </div>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="self-start ml-2 text-gray-400 hover:text-red-500"
+                  onClick={() => handleRemoveItem(item.id)}
+                  disabled={isUpdating}
+                >
+                  <Trash2 className="h-5 w-5" />
+                </Button>
               </div>
             ))}
           </div>
-
-          {/* Summary */}
-          <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 bg-[#FAFAFA] border-b-2 gap-4'>
-            <p className='text-gray-500 text-sm sm:text-base'>Налоги и стоимость доставки будут рассчитаны при оформлении заказа.</p>
-            <div className='flex items-center gap-6 sm:gap-10 w-full sm:w-auto justify-between sm:justify-end'>
-              <p className='font-semibold text-lg'>Итого</p>
-              <p className='font-semibold text-lg'>
-                ${cartData.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}
-              </p>
-            </div>
-          </div>
-
-          {/* Buttons */}
-          <div className='flex flex-col-reverse sm:flex-row justify-end gap-3 mt-6'>
-            <Link href="/" className="w-full sm:w-auto">
-              <Button className='w-full sm:w-auto border border-black bg-white text-black py-5 font-semibold'>
-                Продолжить покупки
-              </Button>
-            </Link>
-            <Link href="/checkout" className="w-full sm:w-auto">
-              <Button className='w-full sm:w-auto bg-[#FF385C] py-5 font-semibold'>
-                Проверить
+        ) : (
+          <div className="text-center py-16">
+            <ShoppingCart className="h-16 w-16 mx-auto mb-4 text-gray-300" />
+            <h2 className="text-xl font-semibold mb-2">Ваша корзина пуста</h2>
+            <p className="text-gray-500 mb-6">
+              Добавьте товары в корзину, чтобы оформить заказ
+            </p>
+            <Link href="/products">
+              <Button className="bg-black text-white hover:bg-gray-800">
+                Перейти к покупкам
               </Button>
             </Link>
           </div>
-        </>
-      ) : (
-        <div className='text-center space-y-4 w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-2/5 mx-auto py-10 sm:py-20'>
-          <div className="w-20 h-20 mx-auto bg-gray-100 rounded-full flex items-center justify-center">
-            <ShoppingBag className="w-8 h-8 text-gray-400" />
-          </div>
-          <h1 className="text-[#1B1B1B] text-xl sm:text-2xl font-semibold capitalize mt-4">пустая корзина</h1>
-          <p className='text-[#8D8D8D] font-normal text-sm sm:text-base px-4 sm:px-0'>
-            В вашей корзине нет товаров.
-          </p>
-          <Link href="/" className="inline-block w-full sm:w-auto">
-            <Button className="bg-[#FF385C] w-full sm:w-64 font-semibold text-base mt-4">
-              Продолжить покупки
-            </Button>
-          </Link>
+        )}
+      </div>
+
+      {cartItems.length > 0 && (
+        <div className="md:w-1/3 mt-8 md:mt-0">
+          <PaymentSummary
+            total={calculateTotal()}
+            shipping={0}
+            tax={0}
+            discount={calculateDiscount()}
+            redirectTo="/checkout"
+            promoCode={promoCode}
+            setPromoCode={setPromoCode}
+            discountApplied={discountApplied}
+            setDiscountApplied={setDiscountApplied}
+            selectedShipping={selectedShipping}
+            getData={cartItems.length > 0}
+          />
         </div>
       )}
     </div>
   );
-};
-export default Carts;
+}

@@ -1,12 +1,11 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useLikeStore } from "@/stores/likeStore";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { products } from "@/lib/mockData";
 import {
   Select,
   SelectContent,
@@ -37,14 +36,16 @@ import {
 } from "@/components/ui/table";
 import sizeImage from "@/assets/images/size.png";
 import { Separator } from "@/components/ui/separator";
-import { PaymentSummary } from "./PaymentSummary";
+import { PaymentSummary } from "./summary-appbar";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
+import { fetchProducts } from "@/lib/api";
 interface ProductDetailCardProps {
   product: Product;
 }
 
 const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
+  console.log(product);
   const [method, setMethod] = useState<"store" | "pickup">("store");
   const [minmax, setMinmax] = useState<"min" | "max">("min");
   const [countryCode, setCountryCode] = useState("+7");
@@ -54,7 +55,8 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
   );
   const [quantity, setQuantity] = useState(1);
   const [currentThumbnailIndex, setCurrentThumbnailIndex] = useState(0);
-  const [mainImage, setMainImage] = useState(product?.image || "");
+  const [mainImage, setMainImage] = useState(product.images[0].image || "");
+  const [recommendProducts, setRecommendProducts] = useState<Product[]>([]);
 
   const [rating, setRating] = useState(0);
   const [formData, setFormData] = useState({
@@ -81,6 +83,20 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
       [name]: value,
     }));
   };
+
+  // Ranglarni unique qilib olish (faqat har bir rang bir marta chiqadi)
+  const uniqueColors = Array.from(
+    new Map(
+      product.variants.map((variant) => [variant.color.hex_code, variant.color])
+    ).values()
+  );
+
+  // Razmerlar uchun unique qilib olish (faqat har bir razmer bir marta chiqadi)
+  const uniqueSizes = Array.from(
+    new Map(
+      product.variants.map((variant) => [variant.size.name, variant.size])
+    ).values()
+  );
 
   interface SubmitEvent extends React.FormEvent<HTMLFormElement> {}
 
@@ -118,12 +134,13 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
     alert("Делиться");
   };
 
-  const thumbnails = [
-    product.image,
-    product.image,
-    product.image,
-    product.image,
-  ];
+  useEffect(() => {
+    const getRecommendProducts = async () => {
+      const response = await fetchProducts();
+      setRecommendProducts(response);
+    };
+    getRecommendProducts();
+  }, []);
 
   // Like store usage
   const { likedProducts, toggleLike } = useLikeStore();
@@ -136,19 +153,18 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
         {/* Image Gallery */}
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 h-auto sm:h-[500px]">
           {/* Main Image */}
-          <div className="sm:w-9/12 h-[482px] bg-[#F2F2F2] flex justify-center items-center p-4 sm:p-6 rounded-lg">
+          <div className="sm:w-9/12 h-[350px]  flex justify-center items-center p-4 sm:p-6 rounded-lg relative">
             <Dialog>
               <DialogTrigger asChild>
-                <div className="relative h-full cursor-zoom-in">
-                  {/* <Image
-                    width={500}
-                    height={500}
+                <div className="relative w-full h-full cursor-zoom-in">
+                  <Image
+                    fill
                     priority
                     src={mainImage}
-                    alt={product.title}
-                    className="w-full h-full object-contain"
-                  /> */}
-                  <ImageIcon className="w-16 h-full object-contain" />
+                    alt={product.name}
+                    className="w-full h-full z-10 object-cover rounded-lg"
+                  />
+                  {/* <ImageIcon className="w-16 h-full object-contain" /> */}
                   {/* <Skeleton className="w-full h-full object-contain" /> */}
                 </div>
               </DialogTrigger>
@@ -160,7 +176,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
                   width={500}
                   height={500}
                   priority
-                  src={mainImage || product.image}
+                  src={mainImage}
                   alt="zoomed"
                   className="w-11/12 mx-auto h-auto max-h-[80vh] object-contain"
                 />
@@ -179,7 +195,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
                 touchRatio={1.5} // touch sezuvchanligini oshiradi
                 speed={400} // surish tezligi (ms)
               >
-                {thumbnails.map((img, index) => (
+                {product.images.map((img, index) => (
                   <SwiperSlide key={index}>
                     <div
                       className={`w-16 h-0.5 bg-[#F2F2F2] flex items-center justify-center cursor-pointer ${
@@ -187,7 +203,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
                           ? "border border-[#FF385C]"
                           : ""
                       }`}
-                      onClick={() => handleThumbnailClick(img, index)}
+                      onClick={() => handleThumbnailClick(img?.image, index)}
                     />
                   </SwiperSlide>
                 ))}
@@ -196,7 +212,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
 
             {/* Desktop Thumbnail List (Vertical click) */}
             <div className="hidden sm:flex sm:flex-col gap-3 sm:h-full overflow-y-auto">
-              {thumbnails.map((img, index) => (
+              {product.images.map((img, index) => (
                 <div
                   key={index}
                   className={`w-full h-[100px] bg-[#F2F2F2] flex items-center justify-center p-1 cursor-pointer ${
@@ -204,14 +220,8 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
                       ? "border border-[#FF385C]"
                       : ""
                   }`}
-                  onClick={() => handleThumbnailClick(img, index)}
-                >
-                  <img
-                    src={img}
-                    alt={`Thumbnail ${index}`}
-                    className="w-full h-full object-contain"
-                  />
-                </div>
+                  onClick={() => handleThumbnailClick(img?.image, index)}
+                ></div>
               ))}
             </div>
           </div>
@@ -222,23 +232,22 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
           <div className="w-full sm:w-1/2">
             <p className="mb-2 text-[#5F5F5F] font-medium">Цвет</p>
             <div className="flex gap-2 flex-wrap">
-              {product.colors.map((color, idx) => (
+              {uniqueColors.map((color, idx) => (
                 <div
                   key={idx}
                   className={`w-6 h-6 sm:w-8 sm:h-8 rounded border-2 cursor-pointer`}
                   style={{
-                    backgroundColor: color,
-                    borderColor: selectedColor === color ? "#FF385C" : "#ccc",
+                    backgroundColor: color.hex_code,
+                    borderColor:
+                      selectedColor === color.hex_code ? "#FF385C" : "#ccc",
                   }}
-                  onClick={() => setSelectedColor(color)}
+                  onClick={() => setSelectedColor(color.hex_code)}
                 />
               ))}
             </div>
           </div>
 
-          <span className="text-xs sm:text-sm text-gray-500">
-            Lorem ipsum
-          </span>
+          <span className="text-xs sm:text-sm text-gray-500">Lorem ipsum</span>
           <h1 className="text-2xl sm:text-3xl font-bold">{product.name}</h1>
           <p className="text-xl sm:text-2xl font-semibold">{product.price} ₽</p>
           <div className="flex gap-2">
@@ -400,16 +409,16 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
                 </Dialog>
               </div>
               <div className="flex gap-2 flex-wrap">
-                {product.sizes.map((size, idx) => (
+                {uniqueSizes.map((size, idx) => (
                   <Button
                     key={idx}
                     size="sm"
                     className={`px-2 sm:px-3 py-1 text-xs font-bold sm:text-sm bg-transparent text-black border-2 border-[#D1D1D1] rounded ${
-                      selectedSize === size ? "border-black" : ""
+                      selectedSize === size.name ? "border-black" : ""
                     }`}
-                    onClick={() => setSelectedSize(size)}
+                    onClick={() => setSelectedSize(size.name)}
                   >
-                    {size}
+                    {size.name}
                   </Button>
                 ))}
               </div>
@@ -459,17 +468,11 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
           <div className="mt-6 sm:mt-8 space-y-3 sm:space-y-4 text-gray-700">
             <div>
               <h4 className="font-bold text-sm sm:text-base">Описание</h4>
-              <p className="text-xs sm:text-sm">
-                lorem ipsum dolor sit amet ametour to sigma play
-                lorem ipsum dolor sit amet ametour to sigma play
-              </p>
+              <p className="text-xs sm:text-sm">{product.description}</p>
             </div>
             <div>
               <h4 className="font-bold text-sm sm:text-base">Материал</h4>
-              <p className="text-xs sm:text-sm">
-                lorem ipsum dolor sit amet ametour to sigma play
-                sit amet ametour
-              </p>
+              <p className="text-xs sm:text-sm">{product.materials[0].name}</p>
             </div>
           </div>
           <Separator />
@@ -519,9 +522,9 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
             </div>
           </div>
         </div>
-        <PaymentSummary />
+        <PaymentSummary quantity={quantity}  product={product} />
       </div>
-      <ProductCarousel product={products} />
+      <ProductCarousel product={recommendProducts} />
     </div>
   );
 };

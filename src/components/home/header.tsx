@@ -7,11 +7,11 @@ export const Header = () => {
       <div className="h-[9rem]">
         <div className="h-full">
           <Link
-            href="/search"
-            className={`w-fullrounded-2xl h-full  relative flex justify-between rounded-[20px] overflow-hidden`}
+            href="/products"
+            className={`w-fullrounded-2xl h-full  relative flex justify-start rounded-[20px] overflow-hidden`}
           >
-            <div className="inset-0  w-full bg-[#B4AEAE] h-full absolute z-1"></div>
-            <div className=" p-3">
+            <div className="inset-0  w-full bg-[#B4AEAE] h-full relative z-1"></div>
+            <div className=" p-3 z-20">
               <h1 className="font-bold text-white text-base md:text-3xl mb-1 whitespace-nowrap relative z-10">
                 МОДНЫЕ ЛИНЕЙКИ
               </h1>
@@ -20,9 +20,9 @@ export const Header = () => {
                 БРЕНДОВОЙ ОДЕЖДЫ 2025 ГОДА
               </p>
             </div>
-            <div className="relative z-10 h-full w-52">
+            <div className="absolute z-10 h-full w-full">
               <Image
-                src={"/imageHero.svg"}
+                src={"/hero.jpg"}
                 alt=""
                 fill
                 className="object-cover"

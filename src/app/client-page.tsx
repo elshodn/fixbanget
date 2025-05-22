@@ -12,7 +12,7 @@ import Collection from "@/components/collection";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGender } from "@/hooks/use-gender";
 import SelectGender from "@/components/slelect-gender";
-import { fetchCategories } from "@/lib/api";
+import { fetchBrands, fetchCategories } from "@/lib/api";
 
 // Fetcher function for SWR
 
@@ -20,44 +20,28 @@ export default function HomeClient() {
   const { gender } = useGender();
 
   const [categories, setCategories] = useState<Category[]>([]);
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getCategories = async () => {
-      const [categoriesData] = Promise.all([await fetchCategories(gender)]);
+      setLoading(true);
+      const [categoriesData, brandsData] = await Promise.all([
+        await fetchCategories(gender),
+        await fetchBrands(),
+      ]);
+      setCategories(categoriesData);
+      setBrands(brandsData);
+      // setObuvCategories(subcategoriesData);
+
+      setLoading(false);
     };
-  }, []);
-
-  // Fetch data using SWR
-
-  //   const { data: recentPurchases, isLoading: isRecentLoading } = useSWR(
-  //     `/api/products/recent-purchases`,
-  //     fetcher
-  //   );
-
-  //   const { data: odejdaData, isLoading: isOdejdaLoading } = useSWR(
-  //     `/api/products/odejda?gender=${gender}`,
-  //     fetcher
-  //   );
-
-  //   const { data: viewedProducts, isLoading: isViewedLoading } = useSWR(
-  //     `/api/products/viewed`,
-  //     fetcher
-  //   );
-
-  //   const { data: accessoriesData, isLoading: isAccessoriesLoading } = useSWR(
-  //     `/api/products/accessories?gender=${gender}`,
-  //     fetcher
-  //   );
-
-  //   const { data: likedProducts, isLoading: isLikedLoading } = useSWR(
-  //     `/api/products/liked`,
-  //     fetcher
-  //   );
-
-  // Refetch data when gender changes
-  useEffect(() => {
-    // SWR will automatically revalidate when the URL changes
+    getCategories();
   }, [gender]);
+
+  // const firstCtegory = categories[0]?.subcategories
+  //   ? categories[0]?.subcategories
+  //   : categories[1]?.subcategories;
 
   return (
     <>
@@ -67,44 +51,59 @@ export default function HomeClient() {
           <Header />
         </main>
 
-        {/* {isFamousLoading ? (
+        {loading ? (
           <CollectionSkeleton />
         ) : (
-          <Collection product={famousData || []} title={"Популярный Продукт"} />
+          <Collection
+            category={categories || []}
+            title={"Популярный Продукт"}
+          />
         )}
 
-        {isObuvLoading ? (
+        {loading ? (
           <CollectionSkeleton />
         ) : (
-          <Collection product={obuvData || []} title={"Обувь"} />
-        )} */}
+          <Collection
+            titleId={categories[2]?.id}
+            title={categories[2]?.name || "Обувь"}
+            category={categories[2]?.subcategories || []}
+          />
+        )}
 
-        {/* {isRecentLoading ? (
+        {/* {loading ? (
           <CarouselSkeleton />
         ) : (
           <ProductCarousel
             title="Последний покупки"
             product={recentPurchases || []}
           />
-        )}
+        )} */}
 
-        {isOdejdaLoading ? (
+        {loading ? (
           <CollectionSkeleton />
         ) : (
-          <Collection product={odejdaData || []} title={"Одежда"} />
+          <Collection
+            titleId={categories[1]?.id}
+            category={categories[1]?.subcategories || []}
+            title={categories[1]?.name || "Обувь"}
+          />
         )}
 
-        {isViewedLoading ? (
+        {/* {loading ? (
           <CarouselSkeleton />
         ) : (
           <ProductCarousel title="Посмотрели" product={viewedProducts || []} />
-        )}
+        )} */}
 
-        {isAccessoriesLoading ? (
+        {loading ? (
           <CollectionSkeleton />
         ) : (
-          <Collection product={accessoriesData || []} title={"Аксессуары"} />
-        )} */}
+          <Collection
+            titleId={categories[0]?.id}
+            category={categories[0]?.subcategories || []}
+            title={categories[0]?.name || categories[1]?.name || "Обувь"}
+          />
+        )}
 
         <StyliesCollection />
 
@@ -115,7 +114,7 @@ export default function HomeClient() {
         )} */}
 
         <Assortment />
-        <BrendImagesCollection />
+        <BrendImagesCollection brands={brands} />
         <AboutContainer />
         <TelegramChannels />
       </div>

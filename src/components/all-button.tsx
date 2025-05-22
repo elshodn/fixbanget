@@ -9,7 +9,7 @@ interface Props {
   className?: string;
 }
 
-function AllButton({ route = "/search", className }: Props) {
+function AllButton({ route = "/products", className }: Props) {
   const router = useRouter();
 
   const handleClick = () => {

@@ -77,6 +77,7 @@ interface Category {
   gender: Gender;
   image: string;
   created_at: string;
+  subcategories: Subcategory[];
 }
 
 interface Gender {
@@ -94,6 +95,7 @@ interface Brand {
   description: string;
   logo: string;
   created_at: string;
+  products_count: number;
 }
 
 interface Season {
@@ -136,6 +138,7 @@ interface Color {
   id: number;
   name: string;
   hex_code: string;
+  created_at: string;
 }
 
 interface Size {

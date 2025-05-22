@@ -24,7 +24,7 @@ export const ClothCollection: React.FC<Props> = ({ title, product }) => {
     <div className="container mx-auto px-4 py-8 relative">
       <div className="flex justify-between py-4 items-center">
         <p className="text-xl md:text-[32px] font-bold">{title}</p>
-        <AllButton route="/search" />
+        <AllButton route="/products" />
       </div>
 
       <div className="flex flex-wrap gap-4">
@@ -52,7 +52,9 @@ export const ClothCollection: React.FC<Props> = ({ title, product }) => {
                   fill
                   className={`object-contain transition-all right-0   ${
                     item.rotate ? "rotate-y-180" : ""
-                  } ${item.scale ? " scale-160" : ""} ${item.name == "Ветровки и жилетки"?"scale-70":""}`}
+                  } ${item.scale ? " scale-160" : ""} ${
+                    item.name == "Ветровки и жилетки" ? "scale-70" : ""
+                  }`}
                 />
               </div>
             </div>

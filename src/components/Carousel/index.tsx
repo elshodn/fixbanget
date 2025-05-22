@@ -17,7 +17,7 @@ export const ProductCarousel: React.FC<any> = ({ title, product }) => {
         <p className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold">
           {title}
         </p>
-        <AllButton route="/search" />
+        <AllButton route="/products" />
       </div>
       <div className="w-full px-1">
         <Swiper
