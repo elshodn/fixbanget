@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     const telegramId = request.headers.get("X-Telegram-ID") || "1524783641";
 
     // Tashqi API-ga so'rov yuborish
-    const response = await fetch(`${API_BASE_URL}/cart/items`, {
+    const response = await fetch(`${API_BASE_URL}/cart/my`, {
       method: "GET",
       headers: {
         "X-Telegram-ID": telegramId,

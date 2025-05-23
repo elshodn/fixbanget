@@ -1,19 +1,28 @@
-import React, { FC } from "react";
 import ProductDetailCard from "@/components/detail-card";
 import { fetchProductsBySlug } from "@/lib/api";
-type Props = {
-  params: Promise<{ slug: string }>;
-};
-const page: FC<Props> = async ({ params }) => {
+import { notFound } from "next/navigation";
+
+interface PageProps {
+  params: Promise<{
+    slug: string;
+  }>;
+}
+
+const ProductDetailPage = async ({ params }: PageProps) => {
   const { slug } = await params;
 
-  const product = await fetchProductsBySlug(slug);
+  try {
+    const product = await fetchProductsBySlug(slug);
 
-  if (!product) {
-    return <div>Mahsulot topilmadi.</div>;
+    if (!product) {
+      return notFound();
+    }
+
+    return <ProductDetailCard product={product} />;
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    return notFound();
   }
-
-  return <ProductDetailCard product={product} />;
 };
 
-export default page;
+export default ProductDetailPage;

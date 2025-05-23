@@ -131,7 +131,8 @@ export interface FilterParams {
 }
 
 export async function fetchFilterProducts(
-  filters: FilterParams = {}
+  filters: FilterParams = {},
+  gender: IGender
 ): Promise<ApiResponse<Product>> {
   try {
     // Build query parameters
@@ -142,8 +143,10 @@ export async function fetchFilterProducts(
       if (value !== undefined && value !== null && value !== "") {
         if (Array.isArray(value)) {
           value.forEach((v) => queryParams.append(key, v.toString()));
+          queryParams.append("gender", getGenderId(gender).toString());
         } else {
           queryParams.append(key, value.toString());
+          queryParams.append("gender", getGenderId(gender).toString());
         }
       }
     });
@@ -520,12 +523,14 @@ export async function getCartItems(
 export async function addToHandleCart(
   telegramId: number,
   productId: number,
-  quantity: number
+  quantity: number,
+  variant_id: number
 ): Promise<CartResponse> {
   try {
     const formData = new FormData();
     formData.append("product_id", productId.toString());
     formData.append("quantity", quantity.toString());
+    formData.append("variant_id", variant_id.toString());
 
     const response = await fetch(`/api/cart/add/`, {
       method: "POST",
