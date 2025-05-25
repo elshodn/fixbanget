@@ -1,53 +1,43 @@
 import { type NextRequest, NextResponse } from "next/server";
+import type { AddToCartResponse } from "@/types/handler";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+const API_BASE_URL = "http://192.168.1.118:8000/api/v1";
+
 export async function POST(request: NextRequest) {
   try {
-    // Telegram ID-ni headerdan olish
-    const telegramId = request.headers.get("X-Telegram-ID") || "1524783641";
+    const telegramId = request.headers.get("X-Telegram-ID");
 
-    // Request body-ni olish
-    const formData = await request.formData();
-
-    // Tashqi API-ga yuborish uchun URLSearchParams yaratish
-    const params = new URLSearchParams();
-
-    // Barcha form ma'lumotlarini URLSearchParams-ga qo'shish
-    for (const [key, value] of formData.entries()) {
-      params.append(key, value.toString());
+    if (!telegramId) {
+      return NextResponse.json(
+        { error: "X-Telegram-ID header is required" },
+        { status: 400 }
+      );
     }
 
-    // Tashqi API-ga so'rov yuborish
+    // Parse request body
+    const formData = await request.formData();
+
+    // Make API request
     const response = await fetch(`${API_BASE_URL}/cart/add/`, {
       method: "POST",
       headers: {
         "X-Telegram-ID": telegramId,
-        "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
       },
-      body: params,
+      body: formData,
     });
 
-    // API javobini JSON formatida olish
-    const data = await response.json();
+    if (!response.ok) {
+      const errorData = await response.json();
+      return NextResponse.json(errorData, { status: response.status });
+    }
 
-    // API javobini qaytarish
-    return NextResponse.json(data, {
-      status: response.status,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const data: AddToCartResponse = await response.json();
+    return NextResponse.json(data);
   } catch (error) {
     console.error("Error adding to cart:", error);
-
-    // Xatolik yuz berganda 500 status kodi bilan javob qaytarish
     return NextResponse.json(
-      {
-        success: false,
-        message:
-          error instanceof Error ? error.message : "Unknown error occurred",
-      },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

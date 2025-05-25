@@ -1,36 +1,37 @@
 import { type NextRequest, NextResponse } from "next/server";
+import type { PaginatedResponse, Wishlist } from "@/types/handler";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+const API_BASE_URL = "http://192.168.1.118:8000/api/v1";
+
 export async function GET(request: NextRequest) {
   try {
-    // Telegram ID-ni headerdan olish
-    const telegramId = request.headers.get("X-Telegram-ID") || "1524783641";
+    const telegramId = request.headers.get("X-Telegram-ID");
 
-    // Tashqi API-ga so'rov yuborish
+    if (!telegramId) {
+      return NextResponse.json(
+        { error: "X-Telegram-ID header is required" },
+        { status: 400 }
+      );
+    }
+
+    // Make API request
     const response = await fetch(`${API_BASE_URL}/wishlist/`, {
-      method: "GET",
       headers: {
         "X-Telegram-ID": telegramId,
-        Accept: "application/json",
       },
     });
 
-    // API javobini JSON formatida olish
-    const data = await response.json();
+    if (!response.ok) {
+      const errorData = await response.json();
+      return NextResponse.json(errorData, { status: response.status });
+    }
 
-    // API javobini qaytarish
+    const data: PaginatedResponse<Wishlist> = await response.json();
     return NextResponse.json(data);
   } catch (error) {
     console.error("Error fetching wishlist:", error);
-
-    // Xatolik yuz berganda 500 status kodi bilan javob qaytarish
     return NextResponse.json(
-      {
-        success: false,
-        message:
-          error instanceof Error ? error.message : "Unknown error occurred",
-        products: [],
-      },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

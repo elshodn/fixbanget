@@ -1,0 +1,37 @@
+{
+  "id": 1,
+  "user": 5,
+  "items": [
+    {
+      "id": 8,
+      "product": 3,
+      "product_name": "спортивные шорты",
+      "product_image": "http://192.168.1.118:8000/media/product_images/1747852058584.jpg",
+      "product_price": "18000.00",
+      "product_discount_price": "1200.00",
+      "quantity": 1,
+      "color": "Light blue",
+      "color_hex": "#234324",
+      "size": null,
+      "total_price": 1200.0
+    },
+    {
+      "id": 10,
+      "product": 7,
+      "product_name": "Cпортивные брюки",
+      "product_image": "http://192.168.1.118:8000/media/product_images/1747851480385.jpg",
+      "product_price": "1000.00",
+      "product_discount_price": "249.99",
+      "quantity": 3,
+      "color": "Light blue",
+      "color_hex": "#234324",
+      "size": null,
+      "total_price": 749.97
+    }
+  ],
+  "total_price": "52399.94",
+  "created_at": "2025-05-22T09:18:51.990155+05:00",
+  "updated_at": "2025-05-22T18:10:17.495248+05:00"
+}
+
+

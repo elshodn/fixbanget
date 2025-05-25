@@ -1,11 +1,17 @@
 import { type NextRequest, NextResponse } from "next/server";
-import type { WishlistResponse } from "@/types/handler";
+import type { Product } from "@/types/handler";
 
 const API_BASE_URL = "http://192.168.1.118:8000/api/v1";
 
-export async function POST(request: NextRequest) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ slug: string }> }
+) {
   try {
+    const { slug } = await params;
     const telegramId = request.headers.get("X-Telegram-ID");
+
+    console.log("slug", slug, "telegramId", telegramId);
 
     if (!telegramId) {
       return NextResponse.json(
@@ -14,17 +20,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Parse request body
-    const formData = await request.formData();
-
     // Make API request
-    const response = await fetch(`${API_BASE_URL}/wishlist/add/`, {
-      method: "POST",
+    const response = await fetch(`${API_BASE_URL}/products/${slug}`, {
       headers: {
         "X-Telegram-ID": telegramId,
         Accept: "application/json",
       },
-      body: formData,
     });
 
     if (!response.ok) {
@@ -32,10 +33,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(errorData, { status: response.status });
     }
 
-    const data: WishlistResponse = await response.json();
-    return NextResponse.json(data);
+    const product: Product = await response.json();
+    return NextResponse.json(product);
   } catch (error) {
-    console.error("Error adding to wishlist:", error);
+    console.error("Error fetching product details:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

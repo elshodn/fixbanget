@@ -689,8 +689,6 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
           product={product}
           selectedColor={selectedColor}
           selectedSize={selectedSize}
-          isLiked={isLiked}
-          onToggleLike={() => toggleLike(product.id)}
         />
       </div>
       {recommendProducts.length > 0 && (

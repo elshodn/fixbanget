@@ -667,7 +667,7 @@ const ProductsClient = ({ initialCategory }: { initialCategory?: string }) => {
 
         <div className="my-6">
           <h1 className="text-base text-[#222222] font-medium mb-3">
-            Цена, RUB
+            Цена, RUB mn
           </h1>
           <div className="flex items-center gap-3">
             <div className="flex-1">
@@ -686,34 +686,6 @@ const ProductsClient = ({ initialCategory }: { initialCategory?: string }) => {
                 name="max"
                 value={filters.priceRange.max}
                 onChange={handlePriceChange}
-                placeholder="до 0"
-                className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-black"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="my-6">
-          <h1 className="text-base text-[#222222] font-medium mb-3">
-            Срок доставки, дни
-          </h1>
-          <div className="flex items-center gap-3">
-            <div className="flex-1">
-              <Input
-                type="text"
-                name="min"
-                value={filters.deliveryRange.min}
-                onChange={handleDeliveryChange}
-                placeholder="от 0"
-                className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-black"
-              />
-            </div>
-            <div className="flex-1">
-              <Input
-                type="text"
-                name="max"
-                value={filters.deliveryRange.max}
-                onChange={handleDeliveryChange}
                 placeholder="до 0"
                 className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-black"
               />

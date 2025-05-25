@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getCartItems, type CartItem } from "@/lib/api";
 import { toast } from "@/components/ui/use-toast";
 import { PaymentSummary } from "@/components/PaymentSummary";
+import { useRouter } from "next/navigation";
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -18,6 +19,7 @@ export default function CartPage() {
   const [discountApplied, setDiscountApplied] = useState<boolean>(false);
   const [selectedShipping, setSelectedShipping] = useState<string>("free");
   const telegramId = 1524783641; // Default Telegram ID
+  const router = useRouter();
 
   // Fetch cart items
   useEffect(() => {
@@ -25,8 +27,8 @@ export default function CartPage() {
       setIsLoading(true);
       try {
         const response = await getCartItems(telegramId);
-        if (response && response.results) {
-          setCartItems(response.results);
+        if (response && response.items) {
+          setCartItems(response.items);
         }
       } catch (error) {
         console.error("Error fetching cart items:", error);
@@ -83,8 +85,8 @@ export default function CartPage() {
       if (response.ok && data.success) {
         // Refresh cart items
         const cartResponse = await getCartItems(telegramId);
-        if (cartResponse && cartResponse.results) {
-          setCartItems(cartResponse.results);
+        if (cartResponse && cartResponse.items) {
+          setCartItems(cartResponse.items);
         }
 
         toast({
@@ -125,12 +127,17 @@ export default function CartPage() {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        setCartItems((prev) => prev.filter((item) => item.id !== cartItemId));
         toast({
           title: "Успешно",
           description: "Товар удален из корзины",
         });
       } else {
+        // Refresh cart items to restore if deletion failed
+        const cartResponse = await getCartItems(telegramId);
+        if (cartResponse && cartResponse.items) {
+          setCartItems(cartResponse.items);
+        }
+
         toast({
           title: "Ошибка",
           description: data.message || "Не удалось удалить товар из корзины",
@@ -215,11 +222,14 @@ export default function CartPage() {
       <div className="md:w-2/3">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
-            <Link href="/" className="mr-4">
-              <Button variant="outline" size="icon" className="rounded-full">
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-            </Link>
+            <Button
+              onClick={() => router.back()}
+              variant="outline"
+              size="icon"
+              className="rounded-full"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
             <h1 className="text-2xl font-bold flex items-center">
               <ShoppingCart className="mr-2 h-6 w-6" /> Корзина
             </h1>
@@ -247,21 +257,28 @@ export default function CartPage() {
                 <div className="relative h-24 w-24 rounded-md overflow-hidden">
                   <Image
                     src={
-                      item.product.images && item.product.images.length > 0
-                        ? item.product.images[0].image
-                        : "/placeholder.svg?height=96&width=96&query=product"
+                      item.product_image ||
+                      "/placeholder.svg?height=96&width=96&query=product"
                     }
-                    alt={item.product.name}
+                    alt={item.product_name}
                     fill
                     className="object-cover"
                   />
                 </div>
                 <div className="ml-4 flex-1">
-                  <h3 className="font-medium">{item.product.name}</h3>
-                  <p className="text-sm text-gray-500 mb-4">
-                    {item.product.brand.name} •{" "}
-                    {item.product.variants[0]?.size.name || ""}
-                  </p>
+                  <h3 className="font-medium">{item.product_name}</h3>
+                  {(item.color || item.size) && (
+                    <p className="text-sm text-gray-500 mb-4">
+                      {item.color && (
+                        <span
+                          className="inline-block w-4 h-4 rounded-full mr-2"
+                          style={{ backgroundColor: item.color_hex || "#ccc" }}
+                        ></span>
+                      )}
+                      {item.color && item.color}{" "}
+                      {item.color && item.size && "•"} {item.size && item.size}
+                    </p>
+                  )}
                   <div className="flex justify-between items-center">
                     <div className="flex items-center border rounded-lg">
                       <Button
@@ -292,10 +309,10 @@ export default function CartPage() {
                       <span className="font-bold text-lg">
                         {Number(item.total_price).toLocaleString()} ₽
                       </span>
-                      {item.product.discount_price && (
+                      {item.product_discount_price && (
                         <span className="text-sm text-gray-500 line-through">
                           {(
-                            Number(item.product.price) * item.quantity
+                            Number(item.product_price) * item.quantity
                           ).toLocaleString()}{" "}
                           ₽
                         </span>

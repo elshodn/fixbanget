@@ -10,99 +10,48 @@ const API_BASE_URL =
  * @description Fetches products based on the selected
  */
 
-export async function fetchCategories(gender: IGender): Promise<Category[]> {
-  try {
-    const genderID = gender === "male" ? 1 : 2;
-    const response = await fetch(
-      `${API_BASE_URL}/categories?gender=${genderID}`
-    );
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data: ApiResponse<Category> = await response.json();
-    return data.results;
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-    throw error;
-  }
+export interface CartItem {
+  id: number;
+  product: number;
+  product_name: string;
+  product_image: string;
+  product_price: string;
+  product_discount_price: string | null;
+  quantity: number;
+  color: string | null;
+  color_hex: string | null;
+  size: string | null;
+  total_price: number;
+  variant_id?: number;
 }
 
-/**
- *
- * @param gender
- * @returns Promise<Product[]>
- * @description Fetches products based on the selected
- */
-export async function fetchSubCategories(
-  gender: IGender
-): Promise<Subcategory[]> {
-  try {
-    const response = await fetch(
-      `${API_BASE_URL}/subcategories?gender=${getGenderId(gender)}`
-    );
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data: ApiResponse<Subcategory> = await response.json();
-    return data.results;
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-    throw error;
-  }
+export interface ICartItem {
+  id: number;
+  product: number;
+  quantity: number;
+  total_price: string;
+  created_at: string;
+  updated_at: string;
+}
+export interface CartAddErrorResponse {
+  success: false;
+  message: string;
 }
 
-/**
- * get all brands
- * @returns Promise<Brand[]>
- */
-export async function fetchBrands(): Promise<Brand[]> {
-  try {
-    const response = await fetch(`${API_BASE_URL}/brands?page_size=100`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data: ApiResponse<Brand> = await response.json();
-    return data.results;
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-    throw error;
-  }
+export type CartAddResult = CartAddResponse | CartAddErrorResponse;
+
+export interface CartAddResponse {
+  message: string; // OZGARISH: faqat message maydoni
+  cart_item: Product;
 }
 
-/**
- * Fetches products based on the selected category and
- *@returns Promise<Product[]>
- * @description Fetches products based on the selected
- */
-
-export async function fetchProductsBySlug(slug: string): Promise<Product> {
-  try {
-    const response = await fetch(`${API_BASE_URL}/products/${slug}`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data: Product = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-    throw error;
-  }
-}
-
-export async function fetchProducts(): Promise<Product[]> {
-  try {
-    const response = await fetch(`${API_BASE_URL}/products`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data: ApiResponse<Product> = await response.json();
-    return data.results;
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-    throw error;
-  }
+export interface CartItemsResponse {
+  count: number;
+  total_pages: number;
+  current_page: number;
+  next: string | null;
+  previous: string | null;
+  results: CartItem[];
 }
 
 export interface FilterParams {
@@ -128,173 +77,6 @@ export interface FilterParams {
   size_us?: string | number;
   size_fr?: string | number;
   slug?: string;
-}
-
-export async function fetchFilterProducts(
-  filters: FilterParams = {},
-  gender: IGender
-): Promise<ApiResponse<Product>> {
-  try {
-    // Build query parameters
-    const queryParams = new URLSearchParams();
-
-    // Add all filter parameters to the query
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== "") {
-        if (Array.isArray(value)) {
-          value.forEach((v) => queryParams.append(key, v.toString()));
-          queryParams.append("gender", getGenderId(gender).toString());
-        } else {
-          queryParams.append(key, value.toString());
-          queryParams.append("gender", getGenderId(gender).toString());
-        }
-      }
-    });
-
-    const queryString = queryParams.toString()
-      ? `?${queryParams.toString()}`
-      : "";
-    const url = `${API_BASE_URL}/products/${queryString}`;
-
-    const response = await fetch(url, {
-      headers: {
-        // "X-Telegram-ID": "1524783641",
-        Accept: "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data: ApiResponse<Product> = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching products:", error);
-    return {
-      count: 0,
-      next: null,
-      previous: null,
-      results: [],
-    };
-  }
-}
-
-// Sizes API endpoint path should be updated to match the actual endpoint
-export async function fetchSizes(): Promise<any[]> {
-  try {
-    const response = await fetch(`${API_BASE_URL}/sizes/`);
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data.results;
-  } catch (error) {
-    console.error("Error fetching sizes:", error);
-    return [];
-  }
-}
-export interface CartItem {
-  id: number;
-  product: CartProduct;
-  quantity: number;
-  total_price: string;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface CartResponse {
-  success: boolean;
-  message: string;
-  cart_item?: CartItem;
-}
-/**
- * Add a product to the cart
- * @param telegramId - User's Telegram ID
- * @param productId - Product ID to add to cart
- * @param quantity - Quantity of the product
- * @returns Promise with cart response
- */
-export async function addToCart(
-  telegramId: number,
-  productId: number,
-  quantity: number
-): Promise<CartResponse> {
-  try {
-    // telegramId, productId va quantity ni tekshirish
-    if (!telegramId || !productId || !quantity) {
-      throw new Error("telegramId, productId yoki quantity kiritilmagan");
-    }
-
-    // FormData yaratish
-    const formData = new URLSearchParams();
-    formData.append("product_id", productId.toString());
-    formData.append("quantity", quantity.toString());
-
-    // API so'rov
-    const response = await fetch(`${API_BASE_URL}/cart/add/`, {
-      method: "POST",
-      headers: {
-        "X-Telegram-ID": String(telegramId), // Stringga aylantirish
-        "Content-Type": "application/x-www-form-urlencoded",
-        Accept: "application/json",
-      },
-      body: formData.toString(), // FormData'ni to'g'ri formatda yuborish
-    });
-
-    // Javobni JSON sifatida olish
-    const data = await response.json();
-
-    // Agar javob muvaffaqiyatsiz bo'lsa
-    if (!response.ok) {
-      return {
-        success: false,
-        message: data.message || `HTTP xato: ${response.status}`,
-      };
-    }
-
-    // Muvaffaqiyatli javob
-    return {
-      success: true,
-      message: data.message || "Product added to cart",
-      cart_item: data.cart_item,
-    };
-  } catch (error) {
-    console.error("Error adding product to cart:", error);
-    return {
-      success: false,
-      message:
-        error instanceof Error ? error.message : "Unknown error occurred",
-    };
-  }
-}
-
-/**
- * Get cart items
- * @param telegramId - User's Telegram ID
- * @returns Promise with cart items
- */
-export async function getCart(telegramId: number): Promise<any> {
-  try {
-    const response = await fetch(`api/cart/`, {
-      headers: {
-        "X-Telegram-ID": telegramId.toString(),
-        Accept: "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching cart:", error);
-    throw error;
-  }
 }
 
 export interface CartProductVariant {
@@ -424,11 +206,77 @@ export interface CartGetResponse {
   results: CartGetResult[];
 }
 
-/**
- * Get cart items using the internal API route
- * @param telegramId - User's Telegram ID
- * @returns Promise with cart items
- */
+export interface CartItem {
+  id: number;
+  product: number;
+  product_name: string;
+  product_image: string;
+  product_price: string;
+  product_discount_price: string | null;
+  quantity: number;
+  color: string | null;
+  color_hex: string | null;
+  size: string | null;
+  total_price: number;
+  variant_id?: number;
+}
+
+export interface CartResponse {
+  id: number;
+  items: CartItem[];
+  total_price: string;
+  items_count: number;
+  created_at: string;
+  updated_at: string;
+  is_active: boolean;
+  success: boolean;
+}
+
+export interface CartItemsResponse {
+  count: number;
+  total_pages: number;
+  current_page: number;
+  next: string | null;
+  previous: string | null;
+  results: CartItem[];
+}
+
+export interface Wishlist {
+  id: number;
+  user: number;
+  products: Product[];
+  created_at: string;
+}
+
+export interface WishlistResponse {
+  success: boolean;
+  message: string;
+  wishlist?: Wishlist;
+}
+
+export interface AddToCartResponse {
+  success: boolean;
+  message: string;
+  cart_item?: CartItem;
+}
+
+export async function fetchCategories(gender: IGender): Promise<Category[]> {
+  try {
+    const genderID = gender === "male" ? 1 : 2;
+    const response = await fetch(
+      `${API_BASE_URL}/categories?gender=${genderID}`
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data: ApiResponse<Category> = await response.json();
+    return data.results;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    throw error;
+  }
+}
 
 export async function getHandleCart(
   telegramId: number
@@ -454,29 +302,251 @@ export async function getHandleCart(
   }
 }
 
-export interface CartItem {
-  id: number;
-  product: CartProduct;
-  quantity: number;
-  total_price: string;
-  created_at: string;
-  updated_at: string;
+/**
+ *
+ * @param gender
+ * @returns Promise<Product[]>
+ * @description Fetches products based on the selected
+ */
+export async function fetchSubCategories(
+  gender: IGender
+): Promise<Subcategory[]> {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/subcategories?gender=${getGenderId(gender)}`
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data: ApiResponse<Subcategory> = await response.json();
+    return data.results;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    throw error;
+  }
 }
 
-export interface CartResponse {
-  success: boolean;
-  message: string;
-  cart_item?: CartItem;
+/**
+ * get all brands
+ * @returns Promise<Brand[]>
+ */
+export async function fetchBrands(): Promise<Brand[]> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/brands?page_size=100`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data: ApiResponse<Brand> = await response.json();
+    return data.results;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    throw error;
+  }
 }
 
-export interface CartItemsResponse {
-  count: number;
-  total_pages: number;
-  current_page: number;
-  next: string | null;
-  previous: string | null;
-  results: CartItem[];
+/**
+ * Fetches products based on the selected category and
+ *@returns Promise<Product[]>
+ * @description Fetches products based on the selected
+ */
+
+export async function fetchProductsBySlug(
+  slug: string,
+  tgid: number
+): Promise<Product> {
+  try {
+    const response = await fetch(`/api/products/${slug}`, {
+      headers: {
+        "X-Telegram-ID": tgid.toString(),
+        Accept: "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data: Product = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    throw error;
+  }
 }
+
+export async function fetchProducts(): Promise<Product[]> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/products`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data: ApiResponse<Product> = await response.json();
+    return data.results;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    throw error;
+  }
+}
+
+export async function fetchFilterProducts(
+  filters: FilterParams = {},
+  gender: IGender
+): Promise<ApiResponse<Product>> {
+  try {
+    // Build query parameters
+    const queryParams = new URLSearchParams();
+
+    // Add all filter parameters to the query
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        if (Array.isArray(value)) {
+          value.forEach((v) => queryParams.append(key, v.toString()));
+          queryParams.append("gender", getGenderId(gender).toString());
+        } else {
+          queryParams.append(key, value.toString());
+          queryParams.append("gender", getGenderId(gender).toString());
+        }
+      }
+    });
+
+    const queryString = queryParams.toString()
+      ? `?${queryParams.toString()}`
+      : "";
+    const url = `/api/products${queryString}`;
+
+    const response = await fetch(url, {
+      headers: {
+        "X-Telegram-ID": "1524783641",
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data: ApiResponse<Product> = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return {
+      count: 0,
+      next: null,
+      previous: null,
+      results: [],
+    };
+  }
+}
+
+// Sizes API endpoint path should be updated to match the actual endpoint
+export async function fetchSizes(): Promise<any[]> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/sizes/`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.results;
+  } catch (error) {
+    console.error("Error fetching sizes:", error);
+    return [];
+  }
+}
+
+/**
+ * Add a product to the cart
+ * @param telegramId - User's Telegram ID
+ * @param productId - Product ID to add to cart
+ * @param quantity - Quantity of the product
+ * @returns Promise with cart response
+ */
+
+export async function addToCart(
+  telegramId: number,
+  productId: number,
+  quantity: number
+): Promise<AddToCartResponse> {
+  try {
+    // telegramId, productId va quantity ni tekshirish
+    if (!telegramId || !productId || !quantity) {
+      throw new Error("telegramId, productId yoki quantity kiritilmagan");
+    }
+
+    // FormData yaratish
+    const formData = new URLSearchParams();
+    formData.append("product_id", productId.toString());
+    formData.append("quantity", quantity.toString());
+
+    // API so'rov
+    const response = await fetch(`${API_BASE_URL}/cart/add/`, {
+      method: "POST",
+      headers: {
+        "X-Telegram-ID": String(telegramId), // Stringga aylantirish
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
+      },
+      body: formData.toString(), // FormData'ni to'g'ri formatda yuborish
+    });
+
+    // Javobni JSON sifatida olish
+    const data = await response.json();
+
+    // Agar javob muvaffaqiyatsiz bo'lsa
+    if (!response.ok) {
+      return {
+        success: false,
+        message: data.message || `HTTP xato: ${response.status}`,
+      };
+    }
+
+    // Muvaffaqiyatli javob
+    return {
+      success: true,
+      message: data.message || "Product added to cart",
+      cart_item: data.cart_item,
+    };
+  } catch (error) {
+    console.error("Error adding product to cart:", error);
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "Unknown error occurred",
+    };
+  }
+}
+
+/**
+ * Get cart items
+ * @param telegramId - User's Telegram ID
+ * @returns Promise with cart items
+ */
+export async function getCart(telegramId: number): Promise<any> {
+  try {
+    const response = await fetch(`api/cart/`, {
+      headers: {
+        "X-Telegram-ID": telegramId.toString(),
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching cart:", error);
+    throw error;
+  }
+}
+
+/**
+ * Get cart items using the internal API route
+ * @param telegramId - User's Telegram ID
+ * @returns Promise with cart items
+ */
 
 /**
  * Get cart items using the internal API route
@@ -487,7 +557,7 @@ export async function getCartItems(
   telegramId = 1524783641
 ): Promise<CartItemsResponse> {
   try {
-    const response = await fetch(`/api/cart/items`, {
+    const response = await fetch(`/api/cart`, {
       headers: {
         "X-Telegram-ID": telegramId.toString(),
         Accept: "application/json",
@@ -525,7 +595,7 @@ export async function addToHandleCart(
   productId: number,
   quantity: number,
   variant_id: number
-): Promise<CartResponse> {
+): Promise<CartAddResult> {
   try {
     const formData = new FormData();
     formData.append("product_id", productId.toString());
@@ -550,11 +620,7 @@ export async function addToHandleCart(
       };
     }
 
-    return {
-      success: true,
-      message: data.message || "Product added to cart",
-      cart_item: data.cart_item,
-    };
+    return data as CartAddResponse;
   } catch (error) {
     console.error("Error adding product to cart:", error);
     return {
@@ -639,19 +705,6 @@ export async function addToWishlist(
         error instanceof Error ? error.message : "Unknown error occurred",
     };
   }
-}
-
-export interface Wishlist {
-  id: number;
-  user: number;
-  products: Product[];
-  created_at: string;
-}
-
-export interface WishlistResponse {
-  success: boolean;
-  message: string;
-  wishlist?: Wishlist;
 }
 
 /**

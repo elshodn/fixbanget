@@ -1,53 +1,39 @@
 import { type NextRequest, NextResponse } from "next/server";
+import type { Cart } from "@/types/handler";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL!
+const API_BASE_URL = "http://192.168.1.118:8000/api/v1";
+
 export async function GET(request: NextRequest) {
   try {
-    // Telegram ID-ni headerdan olish
     const telegramId = request.headers.get("X-Telegram-ID");
+
     if (!telegramId) {
       return NextResponse.json(
-        { telegramId: "Telegram ID not provided" },
+        { error: "X-Telegram-ID header is required" },
         { status: 400 }
       );
     }
 
-    // Request body-ni olish
-    // const formData = await request.formData();
-
-    // Tashqi API-ga yuborish uchun URLSearchParams yaratish
-    // const params = new URLSearchParams();
-
-    // // Barcha form ma'lumotlarini URLSearchParams-ga qo'shish
-    // for (const [key, value] of formData.entries()) {
-    //   params.append(key, value.toString());
-    // }
-
-    // Tashqi API-ga so'rov yuborish
-    const response = await fetch(`${API_BASE_URL}/cart/items/`, {
-      method: "GET",
+    // Make API request
+    const response = await fetch(`${API_BASE_URL}/cart`, {
       headers: {
         "X-Telegram-ID": telegramId,
-        "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
       },
     });
 
-    // API javobini JSON formatida olish
-    const data = await response.json();
+    if (!response.ok) {
+      const errorData = await response.json();
+      return NextResponse.json(errorData, { status: response.status });
+    }
 
-    // API javobini qaytarish
-    return NextResponse.json(data);
+    const cart: Cart = await response.json();
+    return NextResponse.json(cart);
   } catch (error) {
-    console.error("Error getting from cart:", error);
-
-    // Xatolik yuz berganda 500 status kodi bilan javob qaytarish
+    console.error("Error fetching cart:", error);
     return NextResponse.json(
-      {
-        success: false,
-        message:
-          error instanceof Error ? error.message : "Unknown error occurred",
-      },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

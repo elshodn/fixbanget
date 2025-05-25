@@ -1,6 +1,33 @@
-import ProductDetailCard from "@/components/detail-card";
-import { fetchProductsBySlug } from "@/lib/api";
 import { notFound } from "next/navigation";
+import ProductDetailCard from "@/components/detail-card";
+
+const API_BASE_URL = "http://192.168.1.118:8000/api/v1";
+const TELEGRAM_ID = "1524783641";
+
+async function getProduct(slug: string): Promise<Product | null> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/products/${slug}`, {
+      headers: {
+        "X-Telegram-ID": TELEGRAM_ID,
+        Accept: "application/json",
+      },
+      cache: "no-store", // Always fetch fresh data
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        return null;
+      }
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const product: Product = await response.json();
+    return product;
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    return null;
+  }
+}
 
 interface PageProps {
   params: Promise<{
@@ -8,21 +35,45 @@ interface PageProps {
   }>;
 }
 
-const ProductDetailPage = async ({ params }: PageProps) => {
+export default async function ProductPage({ params }: PageProps) {
   const { slug } = await params;
 
-  try {
-    const product = await fetchProductsBySlug(slug);
-
-    if (!product) {
-      return notFound();
-    }
-
-    return <ProductDetailCard product={product} />;
-  } catch (error) {
-    console.error("Error fetching product:", error);
-    return notFound();
+  if (!slug) {
+    notFound();
   }
-};
 
-export default ProductDetailPage;
+  const product = await getProduct(slug);
+
+  if (!product) {
+    notFound();
+  }
+
+  return (
+    <div className="min-h-screen">
+      <ProductDetailCard product={product} />
+    </div>
+  );
+}
+
+// Generate metadata for SEO
+export async function generateMetadata({ params }: PageProps) {
+  const { slug } = await params;
+  const product = await getProduct(slug);
+
+  if (!product) {
+    return {
+      title: "Product Not Found",
+      description: "The requested product could not be found.",
+    };
+  }
+
+  return {
+    title: product.name,
+    description: product.description,
+    openGraph: {
+      title: product.name,
+      description: product.description,
+      images: product.images.length > 0 ? [product.images[0].image] : [],
+    },
+  };
+}
