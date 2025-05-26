@@ -6,5 +6,5 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const getGenderId = (gender: IGender) => {
-  return gender === "male" ? 1 : 2;
+  return gender === "male" ? 7 : 8;
 };

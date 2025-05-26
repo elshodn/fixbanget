@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import ProductDetailCard from "@/components/detail-card";
 
-const API_BASE_URL = "http://192.168.1.118:8000/api/v1";
+const API_BASE_URL = "http://192.168.1.118:8000";
 const TELEGRAM_ID = "1524783641";
 
 async function getProduct(slug: string): Promise<Product | null> {
@@ -13,7 +13,7 @@ async function getProduct(slug: string): Promise<Product | null> {
       },
       cache: "no-store", // Always fetch fresh data
     });
-
+    console.log(response);
     if (!response.ok) {
       if (response.status === 404) {
         return null;

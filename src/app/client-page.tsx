@@ -1,13 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import { ProductCarousel } from "@/components/Carousel";
 import { StyliesCollection } from "@/components/StyliesCollection";
 import { Header } from "@/components/home/header";
 import { Assortment } from "../components/home/assortment";
 import BrendImagesCollection from "../components/home/brendImagesCollection";
 import AboutContainer from "../components/aboutContainer";
 import { TelegramChannels } from "@/components/telegram/TelegramChannels";
-import { Button } from "@/components/ui/button";
 import Collection from "@/components/collection";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGender } from "@/hooks/use-gender";
@@ -25,7 +23,7 @@ export default function HomeClient() {
 
   useEffect(() => {
     const getCategories = async () => {
-      setLoading(true);
+      setLoading(true); 
       const [categoriesData, brandsData] = await Promise.all([
         await fetchCategories(gender),
         await fetchBrands(),
@@ -69,15 +67,6 @@ export default function HomeClient() {
             category={categories[2]?.subcategories || []}
           />
         )}
-
-        {/* {loading ? (
-          <CarouselSkeleton />
-        ) : (
-          <ProductCarousel
-            title="Последний покупки"
-            product={recentPurchases || []}
-          />
-        )} */}
 
         {loading ? (
           <CollectionSkeleton />
