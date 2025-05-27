@@ -1,7 +1,7 @@
 import { getGenderId } from "./utils";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://192.168.1.118:8000/api/v1";
+  process.env.NEXT_PUBLIC_API_URL || "http://192.168.1.104:8000";
 
 /**
  *
@@ -262,9 +262,8 @@ export interface AddToCartResponse {
 
 export async function fetchCategories(gender: IGender): Promise<Category[]> {
   try {
-    const genderID = gender === "male" ? 1 : 2;
     const response = await fetch(
-      `${API_BASE_URL}/categories?gender=${genderID}`
+      `/api/categories?gender=${getGenderId(gender)}`
     );
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

@@ -744,12 +744,12 @@ const ProductsClient = ({ initialCategory }: { initialCategory?: string }) => {
             Поиск
           </Button>
           <div className="h-1 w-full bg-[#EDEDED]"></div>
-          <Button
+          {/* <Button
             className="w-full my-4 py-6 text-[#FF385C] border border-[#FF385C] bg-white mb-2"
             onClick={() => router.push("/login")}
           >
             Авторизоваться
-          </Button>
+          </Button> */}
         </div>
       )}
     </div>
@@ -1008,7 +1008,13 @@ const ProductsClient = ({ initialCategory }: { initialCategory?: string }) => {
         </span>
         / продукт
       </p>
-      <h1 className="p-5 text-3xl">Мужские кроссовки и кеды</h1>
+      <h1 className="p-5 text-3xl">
+        {filters.category
+          ? brands.find((brand) => brand.id === Number(filters.category))?.name ||
+        sizes.find((size) => size.id === Number(filters.category))?.name ||
+        "Товары"
+          : "Товары"}
+      </h1>
       <div className="flex p-5 flex-col md:flex-row">
         {/* Filters Sidebar - Desktop */}
         {!isMobile && renderFilters()}
@@ -1278,7 +1284,7 @@ const ProductsClient = ({ initialCategory }: { initialCategory?: string }) => {
               <Swiper
                 slidesPerView={isMobile ? 2 : 6}
                 spaceBetween={10}
-                loop={true}
+                loop={featuredProducts.length > (isMobile ? 2 : 6)}
                 autoplay={{
                   delay: 5000,
                   disableOnInteraction: false,
@@ -1321,8 +1327,8 @@ const ProductsClient = ({ initialCategory }: { initialCategory?: string }) => {
                 className={`grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6`}
               >
                 {products.length > 0 ? (
-                  products.map((product) => (
-                    <ProductCarouselCard key={product.id} product={product} />
+                  products.map((product, index) => (
+                    <ProductCarouselCard key={product.id+index+ Math.random()} product={product} />
                   ))
                 ) : (
                   <div className="col-span-full text-center py-10">

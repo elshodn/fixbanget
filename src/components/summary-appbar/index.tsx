@@ -23,7 +23,7 @@ interface PaymentSummaryProps {
   discountApplied: boolean
   setDiscountApplied: React.Dispatch<React.SetStateAction<boolean>>
   selectedShipping: string
-  getData?: string | number | false | null
+  getData: boolean
   customerName?: string
   phoneNumber?: string
   cartId?: number
@@ -33,6 +33,8 @@ interface PaymentSummaryProps {
   selectedColor: string | null
   selectedSize: string | number | null
   deliveryMethod: "store" | "pickup"
+  selectedShippingMethod?: any
+  selectedBranch?: number | null
 }
 
 export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
@@ -40,7 +42,13 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
   shipping = 0,
   tax = 0,
   discount = 0,
-  getData = false,
+  redirectTo,
+  promoCode,
+  setPromoCode,
+  discountApplied,
+  setDiscountApplied,
+  selectedShipping,
+  getData,
   customerName = "",
   phoneNumber = "",
   cartId,
@@ -49,6 +57,9 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
   quantity,
   selectedColor,
   selectedSize,
+  deliveryMethod,
+  selectedShippingMethod,
+  selectedBranch,
 }) => {
   const [showMobileFullDetails, setShowMobileFullDetails] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
@@ -71,7 +82,10 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
       ? Number(product.price) - Number(product.discount_price)
       : Number(product.price)
 
-    const totalPrice = singleProductPrice * quantity
+    const productTotal = singleProductPrice * quantity
+    const shippingCost = selectedShippingMethod ? Number(selectedShippingMethod.price || 0) : 0
+    const totalPrice = productTotal + shippingCost
+
     return {
       originalPrice: totalPrice,
       splitPrice: enabled ? totalPrice / 2 : totalPrice,
@@ -204,10 +218,10 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
       return
     }
 
-    if (!customerName.trim() || !phoneNumber.trim()) {
+    if (!selectedBranch) {
       toast({
         title: "Ошибка",
-        description: "Пожалуйста, заполните имя и телефон",
+        description: "Пожалуйста, выберите филиал",
         variant: "destructive",
       })
       return
@@ -216,98 +230,60 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
     setIsCreatingOrder(true)
     try {
       const { splitPrice, originalPrice } = calculatePrice()
-      const effectiveQuantity = enabled ? Math.ceil(quantity / 2) : quantity
+      const shippingCost = selectedShippingMethod ? Number(selectedShippingMethod.price || 0) : 0
+      const totalWithShipping = splitPrice + shippingCost
 
-      // Avval cartga qo'shish
-      const cartFormData = new FormData()
-      cartFormData.append("product_id", product.id.toString())
-      cartFormData.append("quantity", effectiveQuantity.toString())
-      cartFormData.append("variant_id", variantId.toString())
-
-      // Split ma'lumotlarini qo'shish
-      if (enabled) {
-        cartFormData.append("is_split_payment", "true")
-        cartFormData.append("split_price", splitPrice.toString())
-        cartFormData.append("original_price", splitPrice.toString())
+      // Direct purchase ma'lumotlarini tayyorlash
+      const purchaseData = {
+        product_id: product.id,
+        variant_id: variantId,
+        quantity: quantity,
+        pickup_branch_id: selectedBranch,
+        shipping_method_id: selectedShippingMethod?.id || 1,
+        payment_method: enabled ? "split" : "cash_on_pickup",
+        customer_name: customerName || "Test User",
+        phone_number: phoneNumber || "+998901234567",
+        order_note: enabled
+          ? `Split to'lov: ${totalWithShipping.toFixed(0)} ₽ hozir (shipping: ${shippingCost} ₽), ${calculatePrice().remainingPrice.toFixed(0)} ₽ keyinroq`
+          : `Oddiy buyurtma (shipping: ${shippingCost} ₽)`,
+        is_split_payment: enabled,
+        shipping_cost: shippingCost,
       }
 
-      const cartResponse = await fetch("/api/cart/add", {
+      console.log("Direct purchase data:", purchaseData)
+
+      const response = await fetch("/api/direct-purchase", {
         method: "POST",
         headers: {
           "X-Telegram-ID": telegramId.toString(),
+          "Content-Type": "application/json",
         },
-        body: cartFormData,
+        body: JSON.stringify(purchaseData),
       })
 
-      if (!cartResponse.ok) {
-        throw new Error("Failed to add to cart")
+      if (!response.ok) {
+        const errorData = await response.text()
+        console.error("Direct purchase failed:", errorData)
+        throw new Error("Failed to create direct purchase")
       }
 
-      // Cart ma'lumotlarini olish
-      const cartGetResponse = await fetch("/api/cart", {
-        headers: {
-          "X-Telegram-ID": telegramId.toString(),
-        },
-      })
-
-      if (!cartGetResponse.ok) {
-        throw new Error("Failed to get cart")
-      }
-
-      const cartData = await cartGetResponse.json()
-
-      // Buyurtma yaratish
-      const orderFormData = new FormData()
-      orderFormData.append("cart_id", cartData.id.toString())
-      orderFormData.append("shipping_method_id", "1")
-      orderFormData.append("pickup_branch_id", "1")
-      orderFormData.append("customer_name", customerName)
-      orderFormData.append("phone_number", phoneNumber)
-      orderFormData.append("payment_method", "cash_on_pickup")
-
-
-      const orderResponse = await fetch("/api/orders", {
-        method: "POST",
-        headers: {
-          "X-Telegram-ID": telegramId.toString(),
-        },
-        body: orderFormData,
-      })
-
-      if (!orderResponse.ok) {
-        throw new Error("Failed to create order")
-      }
-
-      const orderData = await orderResponse.json()
+      const orderData = await response.json()
+      console.log("Direct purchase response:", orderData)
 
       const successMessage = enabled
-        ? `Split to'lov bilan buyurtma yaratildi! Hozir: ${splitPrice.toFixed(0)} ₽, Keyinroq: ${calculatePrice().remainingPrice.toFixed(0)} ₽`
-        : `Buyurtma muvaffaqiyatli yaratildi!`
+        ? `Split to'lov bilan buyurtma yaratildi! Hozir: ${totalWithShipping.toFixed(0)} ₽ (shipping: ${shippingCost} ₽), Keyinroq: ${calculatePrice().remainingPrice.toFixed(0)} ₽`
+        : `Buyurtma muvaffaqiyatli yaratildi! Jami: ${totalWithShipping.toFixed(0)} ₽ (shipping: ${shippingCost} ₽)`
 
       toast({
         title: "Заказ создан успешно!",
-        description: `Заказ #${orderData.id}. ${successMessage}`,
+        description: `Заказ #${orderData.order.id}. ${successMessage}`,
         variant: "default",
       })
 
-      // Local storage ga split ma'lumotlarini saqlash
-      if (enabled) {
-        const splitOrderInfo = {
-          orderId: orderData.id,
-          totalAmount: splitPrice,
-          paidAmount: splitPrice,
-          remainingAmount: calculatePrice().remainingPrice,
-          createdAt: new Date().toISOString(),
-        }
-
-        const existingSplitOrders = JSON.parse(localStorage.getItem("splitOrders") || "[]")
-        existingSplitOrders.push(splitOrderInfo)
-        localStorage.setItem("splitOrders", JSON.stringify(existingSplitOrders))
-      }
-
+      // Orders sahifasiga yo'naltirish
       router.push("/statusInfo")
     } catch (error) {
-      console.error("Error creating order:", error)
+      console.error("Error creating direct purchase:", error)
       toast({
         title: "Ошибка",
         description: "Произошла ошибка при создании заказа",
@@ -373,8 +349,8 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
       )}
       <div className="p-4 space-y-3 bg-white shadow-md border fixed bottom-0 left-0 right-0 z-50 rounded-t-xl md:static md:rounded-md">
         {/* Split Payment Toggle */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex flex-col justify-center items-center gap-3">
             <Switch
               checked={enabled}
               onCheckedChange={setEnabled}
@@ -389,10 +365,11 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
               </p>
             </div>
           </div>
+          <div className="flex gap-3">
 
           {/* Wishlist Button */}
           <div
-            className={`rounded-xl p-2 border-2 cursor-pointer transition-colors ${
+            className={`rounded-xl w-12 h-12 flex justify-center items-center p-2 border-2 cursor-pointer transition-colors ${
               isLiked ? "border-red-500 bg-red-50" : "border-gray-300 hover:border-gray-400"
             } ${isToggling ? "opacity-50 cursor-not-allowed" : ""}`}
             onClick={handleToggleWishlist}
@@ -403,26 +380,66 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
               <Heart className={`h-6 w-6 ${isLiked ? "text-red-500 fill-red-500" : "text-gray-500"}`} />
             )}
           </div>
+          
+         <Button
+            className=" w-20 h-12 rounded-xl flex justify-center items-center border border-gray-300 hover:bg-gray-200 disabled:opacity-50"
+            onClick={handleAddToCart}
+            variant={"outline"}
+            disabled={isLoading || isAddedToCart || !isVariantSelected || !isVariantAvailable}
+          >
+            {isLoading ? (
+              <Loader className="h-5 w-5 animate-spin" />
+            ) : isAddedToCart ? (
+              <>
+                <Check className="h-5 w-5" />
+              </>
+            ) : (
+              <>
+                <ShoppingCart className="h-5 w-5" />
+              </>
+            )}
+          </Button>
+          </div>
+
         </div>
 
-        {/* Promo Code Section 
-        <div className="flex gap-2 items-center">
+        {/* Price Display 
+        {enabled && (
+          <div className="bg-orange-50 p-3 rounded-lg border border-orange-200 mb-3">
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-gray-600">Umumiy narx:</span>
+              <span className="line-through text-gray-500">{originalPrice.toFixed(0)} ₽</span>
+            </div>
+            <div className="flex justify-between items-center text-sm font-medium">
+              <span className="text-green-600">Hozir to'lash:</span>
+              <span className="text-green-600">{splitPrice.toFixed(0)} ₽</span>
+            </div>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-orange-600">Keyinroq:</span>
+              <span className="text-orange-600">{remainingPrice.toFixed(0)} ₽</span>
+            </div>
+          </div>
+        )}
+*/}
+        {/* Promo Code Section */}
+        {/* <div className="flex gap-2 items-center">
           <Input
             placeholder="Промо-код"
             className="flex-1"
+            disabled
             value={promoCode}
             onChange={(e) => setPromoCode(e.target.value)}
           />
           <Button
             variant="outline"
+            disabled
             className={`font-medium ${discountApplied ? "bg-green-100 text-green-700" : ""}`}
             onClick={() => setDiscountApplied(!discountApplied)}
           >
-            {discountApplied ? "Применено" : "Добавить"}
+            {discountApplied ? "Применено" : "Добавить"}`
           </Button>
-        </div>
-*/}
-        <Separator />
+        </div> */}
+
 
         {/* Price Details - Always show on desktop, toggle on mobile */}
         {(showMobileFullDetails || isDesktop) && (
@@ -449,32 +466,18 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
           </>
         )}
 
+        {/* Total Section */}
+
         {/* Action Buttons */}
         <div className="flex gap-2">
           {/* Add to Cart Button */}
-          <Button
-            className="flex-1 h-12 rounded-full bg-gray-100 text-gray-800 border border-gray-300 hover:bg-gray-200 disabled:opacity-50"
-            onClick={handleAddToCart}
-            disabled={isLoading || isAddedToCart || !isVariantSelected || !isVariantAvailable}
-          >
-            {isLoading ? (
-              <Loader className="h-5 w-5 animate-spin" />
-            ) : isAddedToCart ? (
-              <>
-                <Check className="h-5 w-5 mr-2" />В корзине
-              </>
-            ) : (
-              <>
-                <ShoppingCart className="h-5 w-5 mr-2" />В корзину
-              </>
-            )}
-          </Button>
+ 
 
           {/* Buy Now Button */}
           <Button
             className="flex-1 h-12 rounded-full bg-[#FF385C] text-white hover:bg-[#E6325A] disabled:opacity-50"
             onClick={handleDirectPurchase}
-            disabled={isCreatingOrder || !isVariantSelected || !isVariantAvailable}
+            disabled={isCreatingOrder || !isVariantSelected || !isVariantAvailable || !selectedBranch}
           >
             {isCreatingOrder ? (
               <Loader className="h-5 w-5 animate-spin" />
@@ -482,10 +485,15 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
               "Выберите вариант"
             ) : !isVariantAvailable ? (
               "Нет в наличии"
+            ) : !selectedBranch ? (
+              "Выберите филиал"
             ) : (
               <div className="text-center">
                 <p className="text-sm font-semibold">Купить: {splitPrice.toFixed(0)} ₽</p>
                 {enabled && <p className="text-xs opacity-90">(остаток: {remainingPrice.toFixed(0)} ₽)</p>}
+                {selectedShippingMethod && Number(selectedShippingMethod.price) > 0 && (
+                  <p className="text-xs opacity-90">+доставка: {Number(selectedShippingMethod.price)} ₽</p>
+                )}
               </div>
             )}
           </Button>

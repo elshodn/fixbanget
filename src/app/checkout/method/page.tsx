@@ -17,8 +17,8 @@ import koshelokCard3 from "@/assets/images/cardsImages/cashbac.png";
 import koshelokCard4 from "@/assets/images/cardsImages/paytren.png";
 import koshelokCard5 from "@/assets/images/cardsImages/SHOPEEPAY.png";
 import { Checkbox } from "@/components/ui/checkbox";
-import { PaymentSummary } from "@/components/PaymentSummary"; 
 import Image, { StaticImageData } from "next/image";
+import { PaymentSummaryCart } from "@/components/PaymentSummary";
 
 type PaymentOption = {
   label: string;
@@ -116,7 +116,7 @@ function PaymentPage() {
           </AccordionItem>
         </Accordion>
         {/* Summary card */}
-        <PaymentSummary
+        <PaymentSummaryCart
           redirectTo="/checkout/payment"
           getData={!!selectedBank}
           promoCode={promoCode}

@@ -67,7 +67,7 @@ export const StyliesCollection = () => {
         <Swiper
           modules={[Navigation]}
           spaceBetween={0}
-          slidesPerView={2.3}
+          slidesPerView={Math.min(2.3, styleData.length)}
           onSwiper={(swiper) => {
             swiperRef.current = swiper;
             setIsBeginning(swiper.isBeginning);
@@ -75,11 +75,11 @@ export const StyliesCollection = () => {
           }}
           onSlideChange={handleSlideChange}
           breakpoints={{
-            900: { slidesPerView: 3, spaceBetween: 16 },
-            1024: { slidesPerView: 3.5, spaceBetween: 20 },
-            1200: { slidesPerView: 4, spaceBetween: 20 },
-            1400: { slidesPerView: 5, spaceBetween: 20 },
-            1536: { slidesPerView: 6, spaceBetween: 24 },
+            900: { slidesPerView: Math.min(3, styleData.length), spaceBetween: 16 },
+            1024: { slidesPerView: Math.min(3.5, styleData.length), spaceBetween: 20 },
+            1200: { slidesPerView: Math.min(4, styleData.length), spaceBetween: 20 },
+            1400: { slidesPerView: Math.min(5, styleData.length), spaceBetween: 20 },
+            1536: { slidesPerView: Math.min(6, styleData.length), spaceBetween: 24 },
           }}
           className="pb-10 sm:pb-12"
         >

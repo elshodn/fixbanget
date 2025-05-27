@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import ProductDetailCard from "@/components/detail-card";
 
-const API_BASE_URL = "http://192.168.1.118:8000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL!
 const TELEGRAM_ID = "1524783641";
 
 async function getProduct(slug: string): Promise<Product | null> {

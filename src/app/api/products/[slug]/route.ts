@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import type { Product } from "@/types/handler";
 
-const API_BASE_URL = "http://192.168.1.118:8000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL!
 
 export async function GET(
   request: NextRequest,

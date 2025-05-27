@@ -29,7 +29,6 @@ const Profile: React.FC = () => {
     const router = useRouter();
 
     const menuItems = [
-        { id: 'profile', icon: <UserRound size={18} />, label: 'Профиль' },
         { id: 'orders', icon: <ListOrdered size={18} />, label: 'Список заказов' },
         { id: 'terms', icon: <Shield size={18} />, label: 'Срок и условие' },
         { id: 'privacy', icon: <Shield size={18} />, label: 'Политика конфиденциальности' },

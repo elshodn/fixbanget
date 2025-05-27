@@ -5,6 +5,7 @@ import { DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/di
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useGender } from "@/hooks/use-gender";
 
 type MenuSheetProps = {
   navLinks: { href: string; label: string }[];
@@ -26,6 +27,10 @@ export default function MenuSheet({
   tiktokIcon,
   navbar,
 }: MenuSheetProps) {
+  const {gender, setGender} = useGender()
+  const handleClick =(label: string)=> {
+    setGender(label === "Мужское" ? "male" : label === "Женское" ? "female" : gender)
+  }
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -40,18 +45,19 @@ export default function MenuSheet({
         <div className="w-full mt-8 md:w-7/12 relative flex justify-center items-center">
           <div className="w-full md:w-8/12 space-y-2 p-10 md:p-0 flex flex-col h-full md:h-auto">
             <div className="md:hidden flex">
-              <Link
+              {/* <Link
                 href="/profile"
                 className="cursor-pointer flex gap-4 items-center text-xl md:text-3xl font-semibold hover:text-gray-300"
               >
                 <SheetClose className="cursor-pointer">Профиль</SheetClose>
-              </Link>
+              </Link> */}
             </div>
 
             {navLinks.map((link, index) => (
               <Link
                 key={index}
                 href={link.href}
+                onClick={()=>handleClick(link.label)}
                 className="block text-xl md:text-3xl font-bold hover:text-gray-300"
               >
                 <SheetClose className="cursor-pointer">{link.label.toLowerCase()}</SheetClose>

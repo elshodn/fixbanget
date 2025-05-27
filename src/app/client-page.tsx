@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { StyliesCollection } from "@/components/StyliesCollection";
+// import { StyliesCollection } from "@/components/StyliesCollection";
 import { Header } from "@/components/home/header";
 import { Assortment } from "../components/home/assortment";
 import BrendImagesCollection from "../components/home/brendImagesCollection";
@@ -11,6 +11,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useGender } from "@/hooks/use-gender";
 import SelectGender from "@/components/slelect-gender";
 import { fetchBrands, fetchCategories } from "@/lib/api";
+import { ViewedProductsCarousel } from "@/components/viewed-products-viewer";
+import { useViewedProductsStore } from "@/stores/viewed-product-store";
+import { ProductCarousel } from "@/components/Carousel";
+
+import { useWishlistStore } from "@/stores/wishlist-store";
 
 // Fetcher function for SWR
 
@@ -20,16 +25,24 @@ export default function HomeClient() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(false);
+  const [orders, setOrders] = useState<Order[]>([])
+  
 
+  const {wishlistItems, fetchWishlist} =useWishlistStore();
+
+
+  console.log(wishlistItems)
   useEffect(() => {
     const getCategories = async () => {
       setLoading(true); 
+      fetchWishlist()
       const [categoriesData, brandsData] = await Promise.all([
         await fetchCategories(gender),
         await fetchBrands(),
       ]);
       setCategories(categoriesData);
       setBrands(brandsData);
+      
       // setObuvCategories(subcategoriesData);
 
       setLoading(false);
@@ -37,9 +50,12 @@ export default function HomeClient() {
     getCategories();
   }, [gender]);
 
-  // const firstCtegory = categories[0]?.subcategories
-  //   ? categories[0]?.subcategories
-  //   : categories[1]?.subcategories;
+  const {viewedProducts}= useViewedProductsStore()
+  
+
+  
+
+ 
 
   return (
     <>
@@ -57,6 +73,7 @@ export default function HomeClient() {
             title={"Популярный Продукт"}
           />
         )}
+        
 
         {loading ? (
           <CollectionSkeleton />
@@ -78,10 +95,17 @@ export default function HomeClient() {
           />
         )}
 
+         {loading ? (
+          <CarouselSkeleton />
+        ) : (
+          <ViewedProductsCarousel title="Посмотрели" products={viewedProducts || []} />
+        )}
+
+       
         {/* {loading ? (
           <CarouselSkeleton />
         ) : (
-          <ProductCarousel title="Посмотрели" product={viewedProducts || []} />
+          <ViewedProductsCarousel title="zakazali" products={purchasedProducts || []} />
         )} */}
 
         {loading ? (
@@ -94,13 +118,16 @@ export default function HomeClient() {
           />
         )}
 
-        <StyliesCollection />
+        {/* <PreviouslyPurchasedProducts /> */}
 
-        {/* {isLikedLoading ? (
+        {/* <StyliesCollection /> */}
+
+       {/*  */}
+        {loading ? (
           <CarouselSkeleton />
         ) : (
-          <ProductCarousel title="Лайкнули" product={likedProducts || []} />
-        )} */}
+          <ProductCarousel title="Лайкнули" product={wishlistItems || []} />
+        )}
 
         <Assortment />
         <BrendImagesCollection brands={brands} />

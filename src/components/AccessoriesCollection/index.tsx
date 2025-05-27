@@ -27,7 +27,7 @@ export const AccessoriesCollection: React.FC<AccessoriesCollectionProps> = ({
       <div className="flex justify-between py-4 items-center">
         <p className="text-xl md:text-[32px] font-bold">Аксессуары</p>
         <Link
-          href="/search"
+          href="/products"
           className="flex items-center rounded-2xl cursor-pointer justify-center text-base bg-[#F2F2F2] text-black w-[96px] h-12 gap-1"
         >
           Все <ChevronRight className="text-4xl" />
@@ -37,7 +37,7 @@ export const AccessoriesCollection: React.FC<AccessoriesCollectionProps> = ({
       <div className="grid grid-cols-12 lg:grid-cols-7 grid-rows-2 md:grid-rows-1 gap-4">
         {product.slice(0, 5).map((item, index) => (
           <Link
-            href="/search"
+            href="/products"
             key={index}
             className={
               index < 2 ? "col-span-6 lg:col-span-2" : "col-span-4 lg:col-span-1"

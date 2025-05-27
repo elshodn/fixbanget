@@ -149,7 +149,7 @@ const Wishlist = () => {
 
                 <div className="p-3 sm:p-4">
                   <p className="text-gray-600 text-xs sm:text-sm mt-1">
-                    {product.brand.name}
+                    {product.brand?.name || ""}
                   </p>
                   <h3 className="font-medium text-base sm:text-lg line-clamp-1">
                     {product.name}
