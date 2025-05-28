@@ -1,94 +1,18 @@
+// Telegram foydalanuvchi ma'lumotlarini olish
+
 declare global {
   interface Window {
-    Telegram: {
-      WebApp: {
-        ready: () => void;
-        expand: () => void;
-        enableClosingConfirmation: () => void;
-        disableClosingConfirmation: () => void;
-        BackButton: {
-          show: () => void;
-          hide: () => void;
-          onClick: (callback: () => void) => void;
-          offClick: (callback: () => void) => void;
-          isVisible: boolean;
-        };
-        onEvent: (eventType: string, eventHandler: () => void) => void;
-        offEvent: (eventType: string, eventHandler: () => void) => void;
-        MainButton: {
-          text: string;
-          color: string;
-          textColor: string;
-          isVisible: boolean;
-          isActive: boolean;
-          isProgressVisible: boolean;
-          show: () => void;
-          hide: () => void;
-          enable: () => void;
-          disable: () => void;
-          showProgress: (leaveActive: boolean) => void;
-          hideProgress: () => void;
-          onClick: (callback: () => void) => void;
-          offClick: (callback: () => void) => void;
-          setText: (text: string) => void;
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          setParams: (params: any) => void;
-        };
-        HapticFeedback: {
-          impactOccurred: (style: string) => void;
-          notificationOccurred: (type: string) => void;
-          selectionChanged: () => void;
-        };
-        initData: string;
-        initDataUnsafe: {
-          query_id?: string;
-          user?: {
-            id: number;
-            first_name: string;
-            last_name?: string;
-            username?: string;
-            language_code?: string;
-          };
-          auth_date?: number;
-          hash?: string;
-        };
-        version: string;
-        colorScheme: string;
-        themeParams: {
-          bg_color?: string;
-          text_color?: string;
-          hint_color?: string;
-          link_color?: string;
-          button_color?: string;
-          button_text_color?: string;
-        };
-        isExpanded: boolean;
-        viewportHeight: number;
-        viewportStableHeight: number;
-        headerColor: string;
-        setHeaderColor: (color: string) => void;
-        backgroundColor: string;
-        setBackgroundColor: (color: string) => void;
-        isClosingConfirmationEnabled: boolean;
-        sendData: (data: string) => void;
-        openLink: (url: string) => void;
-        openTelegramLink: (url: string) => void;
-        close: () => void;
-      };
+    Telegram?: {
+      WebApp?: any;
     };
-    __telegramWebAppInitialized?: boolean;
   }
 }
 
-// Telegram Web App bilan ishlash uchun utility funksiyalar
-
 export interface TelegramUser {
   id: number;
+  username?: string;
   first_name?: string;
   last_name?: string;
-  username?: string;
-  language_code?: string;
-  is_premium?: boolean;
 }
 
 // Telegram Web App obyektini olish
@@ -108,20 +32,25 @@ export function getTelegramUser(): TelegramUser | null {
   const webApp = getTelegramWebApp();
 
   if (webApp && webApp.initDataUnsafe && webApp.initDataUnsafe.user) {
-    return webApp.initDataUnsafe.user;
+    return {
+      id: webApp.initDataUnsafe.user.id,
+      username: webApp.initDataUnsafe.user.username,
+      first_name: webApp.initDataUnsafe.user.first_name,
+      last_name: webApp.initDataUnsafe.user.last_name,
+    };
   }
 
   return null;
 }
 
-// Telegram foydalanuvchi ID sini olish
+// Faqat user ID ni olish
 export function getTelegramUserId(): number | null {
   const user = getTelegramUser();
   return user ? user.id : null;
 }
 
-// Telegram Web App initData ni olish
-export function getTelegramInitData(): string | null {
-  const webApp = getTelegramWebApp();
-  return webApp ? webApp.initData : null;
+// Faqat username ni olish
+export function getTelegramUsername(): string | null {
+  const user = getTelegramUser();
+  return user ? user.username || null : null;
 }
