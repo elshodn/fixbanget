@@ -1,3 +1,4 @@
+"use client"
 import { getTelegramUserId } from "@/lib/telegram";
 import React from "react";
 
