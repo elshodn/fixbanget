@@ -268,12 +268,12 @@ export interface AddToCartResponse {
 export async function fetchCategories(gender: IGender): Promise<Category[]> {
   try {
     const response = await fetch(
-      `/api/categories?gender=${getGenderId(gender)}`,
-      {
-        headers: {
-          "X-Telegram-ID": getTelegramIdForApi(),
-        },
-      }
+      `/api/categories?gender=${getGenderId(gender)}`
+      // {
+      //   headers: {
+      //     "X-Telegram-ID": getTelegramIdForApi(),
+      //   },
+      // }
     );
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
