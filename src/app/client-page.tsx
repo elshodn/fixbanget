@@ -56,7 +56,6 @@ export default function HomeClient() {
   }, [gender]);
 
   const { viewedProducts } = useViewedProductsStore();
-  const jsonformat = JSON.stringify({ loading, categories });
 
   return (
     <>
@@ -65,7 +64,6 @@ export default function HomeClient() {
           <SelectGender />
           <Header />
         </main>
-        <Card className="fixed bottom-1 left-0 z-10 p-1">{jsonformat}</Card>
 
         {loading ? (
           <CollectionSkeleton />

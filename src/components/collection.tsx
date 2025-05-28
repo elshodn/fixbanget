@@ -5,7 +5,7 @@ import Link from "next/link";
 
 interface Props {
   title?: string;
-  titleId?: number
+  titleId?: number;
   category: Subcategory[] | Category[];
 }
 
@@ -26,7 +26,11 @@ const Collection: React.FC<Props> = ({ category, title, titleId }) => {
     <div className="container mx-auto px-4 py-8 relative">
       <div className="flex justify-between py-4 items-center">
         <p className="text-xl md:text-[32px] font-bold">{title}</p>
-        <AllButton route={`/products?${title === "Популярный Продукт"? "": "categories="+titleId}`} />
+        <AllButton
+          route={`/products?${
+            title === "Популярный Продукт" ? "" : "categories=" + titleId
+          }`}
+        />
       </div>
       <div>
         <div className="grid grid-cols-5 gap-4 mb-4">
@@ -34,7 +38,7 @@ const Collection: React.FC<Props> = ({ category, title, titleId }) => {
             <div
               key={item.id}
               style={{
-                backgroundImage: `url(${item.image})`,
+                backgroundImage: `url(${item.image || "/nm.webp"})`,
               }}
               className={cn(
                 getColSpan(index, categories.length),
@@ -42,7 +46,11 @@ const Collection: React.FC<Props> = ({ category, title, titleId }) => {
               )}
             >
               <Link
-                href={`/products?${title == "Популярный Продукт" ? "categories="+item.id : "subcategories="+item.id}`}
+                href={`/products?${
+                  title == "Популярный Продукт"
+                    ? "categories=" + item.id
+                    : "subcategories=" + item.id
+                }`}
                 className={`text-base  ml-2 mt-2 md:text-2xl font-bold z-10 break-words `}
               >
                 {item.name}
