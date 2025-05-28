@@ -1,14 +1,14 @@
 import { notFound } from "next/navigation";
 import ProductDetailCard from "@/components/detail-card";
+import { getTelegramIdForApi } from "@/lib/api";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL!
-const TELEGRAM_ID = "1524783641";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
 
 async function getProduct(slug: string): Promise<Product | null> {
   try {
     const response = await fetch(`${API_BASE_URL}/products/${slug}`, {
       headers: {
-        "X-Telegram-ID": TELEGRAM_ID,
+        "X-Telegram-ID": getTelegramIdForApi(),
         Accept: "application/json",
       },
       cache: "no-store", // Always fetch fresh data

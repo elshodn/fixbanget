@@ -1,6 +1,6 @@
 "use client";
 
-import { useTelegramUser } from "@/hooks/ue-telegram-user";
+import { useTelegramUser } from "@/hooks/use-telegram-user";
 
 export function UserInfo() {
   const { userId, username, isLoading } = useTelegramUser();

@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { toast } from "@/components/ui/use-toast";
 import type { Product } from "@/types/handler";
+import { getTelegramIdForApi } from "@/lib/api";
 
 interface WishlistState {
   wishlistItems: Product[];
@@ -30,7 +31,7 @@ export const useWishlistStore = create<WishlistState>()((set, get) => ({
     try {
       const response = await fetch(`${API_BASE}/wishlist`, {
         headers: {
-          "X-Telegram-ID": telegramId.toString(),
+          "X-Telegram-ID": getTelegramIdForApi(),
         },
       });
 
@@ -73,7 +74,7 @@ export const useWishlistStore = create<WishlistState>()((set, get) => ({
       const response = await fetch(`${API_BASE}/wishlist/add`, {
         method: "POST",
         headers: {
-          "X-Telegram-ID": telegramId.toString(),
+          "X-Telegram-ID": getTelegramIdForApi(),
         },
         body: formData,
       });

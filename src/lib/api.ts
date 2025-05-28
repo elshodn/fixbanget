@@ -1,6 +1,12 @@
+import { getTelegramUserId } from "./telegram";
 import { getGenderId } from "./utils";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+
+export function getTelegramIdForApi(): string {
+  const telegramId = getTelegramUserId();
+  return telegramId ? telegramId.toString() : "1524783641"; // fallback ID
+}
 
 /**
  *
@@ -262,7 +268,12 @@ export interface AddToCartResponse {
 export async function fetchCategories(gender: IGender): Promise<Category[]> {
   try {
     const response = await fetch(
-      `/api/categories?gender=${getGenderId(gender)}`
+      `/api/categories?gender=${getGenderId(gender)}`,
+      {
+        headers: {
+          "X-Telegram-ID": getTelegramIdForApi(),
+        },
+      }
     );
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -276,13 +287,11 @@ export async function fetchCategories(gender: IGender): Promise<Category[]> {
   }
 }
 
-export async function getHandleCart(
-  telegramId: number
-): Promise<CartGetResponse | null> {
+export async function getHandleCart(): Promise<CartGetResponse | null> {
   try {
     const response = await fetch(`/api/cart/`, {
       headers: {
-        "X-Telegram-ID": telegramId.toString(),
+        "X-Telegram-ID": getTelegramIdForApi(),
         Accept: "application/json",
       },
     });
@@ -311,7 +320,12 @@ export async function fetchSubCategories(
 ): Promise<Subcategory[]> {
   try {
     const response = await fetch(
-      `${API_BASE_URL}/subcategories?gender=${getGenderId(gender)}`
+      `${API_BASE_URL}/subcategories?gender=${getGenderId(gender)}`,
+      {
+        headers: {
+          "X-Telegram-ID": getTelegramIdForApi(),
+        },
+      }
     );
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -331,7 +345,11 @@ export async function fetchSubCategories(
  */
 export async function fetchBrands(): Promise<Brand[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}/brands?page_size=100`);
+    const response = await fetch(`${API_BASE_URL}/brands?page_size=100`, {
+      headers: {
+        "X-Telegram-ID": getTelegramIdForApi(),
+      },
+    });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -349,14 +367,11 @@ export async function fetchBrands(): Promise<Brand[]> {
  * @description Fetches products based on the selected
  */
 
-export async function fetchProductsBySlug(
-  slug: string,
-  tgid: number
-): Promise<Product> {
+export async function fetchProductsBySlug(slug: string): Promise<Product> {
   try {
     const response = await fetch(`/api/products/${slug}`, {
       headers: {
-        "X-Telegram-ID": tgid.toString(),
+        "X-Telegram-ID": getTelegramIdForApi(),
         Accept: "application/json",
       },
     });
@@ -373,7 +388,11 @@ export async function fetchProductsBySlug(
 
 export async function fetchProducts(): Promise<Product[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}/products`);
+    const response = await fetch(`${API_BASE_URL}/products`, {
+      headers: {
+        "X-Telegram-ID": getTelegramIdForApi(),
+      },
+    });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -413,7 +432,7 @@ export async function fetchFilterProducts(
 
     const response = await fetch(url, {
       headers: {
-        "X-Telegram-ID": "1524783641",
+        "X-Telegram-ID": getTelegramIdForApi(),
         Accept: "application/json",
       },
     });
@@ -438,7 +457,11 @@ export async function fetchFilterProducts(
 // Sizes API endpoint path should be updated to match the actual endpoint
 export async function fetchSizes(): Promise<any[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}/sizes/`);
+    const response = await fetch(`${API_BASE_URL}/sizes/`, {
+      headers: {
+        "X-Telegram-ID": getTelegramIdForApi(),
+      },
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -461,13 +484,12 @@ export async function fetchSizes(): Promise<any[]> {
  */
 
 export async function addToCart(
-  telegramId: number,
   productId: number,
   quantity: number
 ): Promise<AddToCartResponse> {
   try {
     // telegramId, productId va quantity ni tekshirish
-    if (!telegramId || !productId || !quantity) {
+    if (!productId || !quantity) {
       throw new Error("telegramId, productId yoki quantity kiritilmagan");
     }
 
@@ -480,7 +502,7 @@ export async function addToCart(
     const response = await fetch(`${API_BASE_URL}/cart/add/`, {
       method: "POST",
       headers: {
-        "X-Telegram-ID": String(telegramId), // Stringga aylantirish
+        "X-Telegram-ID": getTelegramIdForApi(), // Stringga aylantirish
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
       },
@@ -519,11 +541,11 @@ export async function addToCart(
  * @param telegramId - User's Telegram ID
  * @returns Promise with cart items
  */
-export async function getCart(telegramId: number): Promise<any> {
+export async function getCart(): Promise<any> {
   try {
     const response = await fetch(`api/cart/`, {
       headers: {
-        "X-Telegram-ID": telegramId.toString(),
+        "X-Telegram-ID": getTelegramIdForApi(),
         Accept: "application/json",
       },
     });
@@ -548,16 +570,13 @@ export async function getCart(telegramId: number): Promise<any> {
 
 /**
  * Get cart items using the internal API route
- * @param telegramId - User's Telegram ID
  * @returns Promise with cart items
  */
-export async function getCartItems(
-  telegramId = 1524783641
-): Promise<CartItemsResponse> {
+export async function getCartItems(): Promise<CartItemsResponse> {
   try {
     const response = await fetch(`/api/cart`, {
       headers: {
-        "X-Telegram-ID": telegramId.toString(),
+        "X-Telegram-ID": getTelegramIdForApi(),
         Accept: "application/json",
       },
     });
@@ -603,7 +622,7 @@ export async function addToHandleCart(
     const response = await fetch(`/api/cart/add/`, {
       method: "POST",
       headers: {
-        "X-Telegram-ID": telegramId.toString(),
+        "X-Telegram-ID": getTelegramIdForApi(),
         Accept: "application/json",
       },
       body: formData,
@@ -640,7 +659,7 @@ export async function getWishlist(
   try {
     const response = await fetch(`/api/wishlist/`, {
       headers: {
-        "X-Telegram-ID": telegramId.toString(),
+        "X-Telegram-ID": getTelegramIdForApi(),
         Accept: "application/json",
       },
     });
@@ -674,7 +693,7 @@ export async function addToWishlist(
     const response = await fetch(`/api/wishlist/add/`, {
       method: "POST",
       headers: {
-        "X-Telegram-ID": telegramId.toString(),
+        "X-Telegram-ID": getTelegramIdForApi(),
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
       },
@@ -722,7 +741,7 @@ export async function removeFromWishlist(
     const response = await fetch(`${API_BASE_URL}/wishlist/remove/`, {
       method: "POST",
       headers: {
-        "X-Telegram-ID": telegramId.toString(),
+        "X-Telegram-ID": getTelegramIdForApi(),
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
       },
