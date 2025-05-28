@@ -5,7 +5,7 @@ import type {
   ProductFilterParams,
 } from "@/types/handler";
 
-const API_BASE_URL = "http://192.168.1.118:8000";
+const API_BASE_URL = "http://192.168.1.104:8000";
 
 export async function GET(request: NextRequest) {
   try {
