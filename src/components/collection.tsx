@@ -2,6 +2,7 @@
 import { cn } from "@/lib/utils";
 import AllButton from "./all-button";
 import Link from "next/link";
+import Image from "next/image";
 
 interface Props {
   title?: string;
@@ -46,7 +47,8 @@ const Collection: React.FC<Props> = ({ category, title, titleId }) => {
               }}
               title="Rasm manzilini nusxalash"
             >
-              <img
+              <Image
+                fill
                 src={item?.image}
                 alt={item.name}
                 className="absolute right-0 bottom-0 h-full object-contain pointer-events-none select-none"
