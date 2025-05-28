@@ -345,7 +345,7 @@ export async function fetchSubCategories(
  */
 export async function fetchBrands(): Promise<Brand[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}/brands?page_size=100`, {
+    const response = await fetch(`/api/brands`, {
       headers: {
         "X-Telegram-ID": getTelegramIdForApi(),
       },
