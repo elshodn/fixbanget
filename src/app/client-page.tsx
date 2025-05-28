@@ -24,7 +24,7 @@ export default function HomeClient() {
   const { gender } = useGender();
 
   const [categories, setCategories] = useState<Category[]>([]);
-  const [brands, setBrands] = useState<Brand[]>([]);
+  // const [brands, setBrands] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState<Order[]>([]);
 
@@ -41,7 +41,7 @@ export default function HomeClient() {
           await fetchBrands(),
         ]);
         setCategories(categoriesData);
-        setBrands(brandsData);
+        // setBrands(brandsData);
         console.log(categoriesData);
       } catch {
         console.log("Failed");
@@ -133,7 +133,7 @@ export default function HomeClient() {
         )}
 
         <Assortment />
-        <BrendImagesCollection brands={brands} />
+        {/* <BrendImagesCollection brands={brands} /> */}
         <AboutContainer />
         <TelegramChannels />
       </div>

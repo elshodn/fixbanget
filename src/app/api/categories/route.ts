@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Make request to your API
-    const apiUrl = `${BASE_API_URL}/categories/?${queryParams.toString()}`;
+    const apiUrl = `${BASE_API_URL}/categories?${queryParams.toString()}`;
 
     const response = await fetch(apiUrl, {
       method: "GET",
