@@ -80,7 +80,6 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
   const [promoCode, setPromoCode] = useState("");
   const [discountApplied, setDiscountApplied] = useState(false);
 
-  const telegramId = 1524783641;
 
   // Loading states for missing data
   const isProductLoading = !product;
@@ -119,7 +118,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
     } finally {
       setIsBranchesLoading(false);
     }
-  }, [telegramId]);
+  }, []);
 
   useEffect(() => {
     fetchBranches();

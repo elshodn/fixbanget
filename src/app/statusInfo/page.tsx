@@ -285,7 +285,10 @@ export default function OrdersPage() {
                         <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center">
                           {item.product_image ? (
                             <Image
-                              src={item.product_image}
+                              src={
+                                process.env.NEXT_PUBLIC_API_URL! +
+                                item.product_image
+                              }
                               alt={item.product_name}
                               width={80}
                               height={80}
@@ -304,28 +307,21 @@ export default function OrdersPage() {
 
                         <div className="flex-1">
                           <h4 className="font-semibold">{item.product_name}</h4>
-                          <p className="text-sm text-gray-600 mt-1">
+                          <p className="text-[10px] text-gray-600 mt-1">
                             {item.product?.brand?.name} •{" "}
                             {item.product?.subcategory?.name}
                           </p>
-                          <div className="flex items-center justify-between mt-2">
-                            <span className="text-sm text-gray-600">
+                          <div className="flex items-end justify-between mt-2">
+                            <span className="text-[10px] sm:text-sm text-gray-600">
                               Количество: {item.quantity}
                             </span>
                             <div className="text-right">
-                              <p className="font-semibold">
+                              <p className="font-semibold text-[11px]">
                                 {selectedOrder.is_split_payment
-                                  ? `${selectedOrder.first_payment_amount} ₽`
-                                  : `${item.total_price} ₽`}
+                                  ? `${Number(selectedOrder.first_payment_amount).toLocaleString()} ₽`
+                                  : `${Number(item.total_price).toLocaleString()} ₽`}
                               </p>
-                              {selectedOrder.is_split_payment && (
-                                <p className="text-xs text-gray-500">
-                                  (Split: {selectedOrder.first_payment_amount} ₽
-                                  paid, {selectedOrder.second_payment_amount} ₽
-                                  remaining)
-                                </p>
-                              )}
-                              <p className="text-sm text-gray-500">
+                              <p className="text-[8px] text-gray-500">
                                 за {item.quantity} шт.
                               </p>
                             </div>
@@ -405,11 +401,11 @@ export default function OrdersPage() {
               <div className="flex gap-4">
                 {selectedOrder.can_cancel && (
                   <Button variant="outline" className="flex-1">
-                    Отменить заказ
+                    Отменить
                   </Button>
                 )}
                 <Button className="flex-1 bg-[#FF385C] hover:bg-[#E6325A]">
-                  Связаться с поддержкой
+                  Связаться
                 </Button>
               </div>
             </div>

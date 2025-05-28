@@ -238,13 +238,13 @@ export const PaymentSummaryCart: React.FC<PaymentSummaryCartProps> = ({
             slug: item.product_slug,
             price: item.product_price,
             discount_price: item.product_discount_price,
-            image: item.product_images?.[0]?.image || "",
+            image: item.product_images?.[0]?.url || "",
             brand_name: item.product_brand || "",
             product_name: item.product_name,
             product_slug: item.product_slug,
             product_price: item.product_price,
             product_discount_price: item.product_discount_price,
-            product_image: item.product_images?.[0]?.image || "",
+            product_image: item.product_images?.[0]?.url || "",
           };
 
           addPurchasedProduct(productData, orderData.id || orderData.order?.id);

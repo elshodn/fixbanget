@@ -28,11 +28,16 @@ interface CategoriesResponse {
 
 export async function GET(request: NextRequest) {
   try {
+    const telegramId = request.headers.get("X-Telegram-ID");
     // Get query parameters from the request
     const { searchParams } = new URL(request.url);
     const page = searchParams.get("page") || "1";
     const gender = searchParams.get("gender");
     const search = searchParams.get("search");
+
+    if (!telegramId) {
+      return NextResponse.json({ error: "No Authorized" }, { status: 401 });
+    }
 
     // Build query string
     const queryParams = new URLSearchParams();
@@ -53,7 +58,7 @@ export async function GET(request: NextRequest) {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        // Add any required headers here
+        "X-Telegram-ID": telegramId,
       },
       // Add cache control if needed
       next: { revalidate: 60 }, // Revalidate every 60 seconds
