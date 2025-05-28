@@ -25,24 +25,24 @@ export default function HomeClient() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(false);
-  const [orders, setOrders] = useState<Order[]>([])
-  
+  const [orders, setOrders] = useState<Order[]>([]);
 
-  const {wishlistItems, fetchWishlist} =useWishlistStore();
+  const { wishlistItems, fetchWishlist } = useWishlistStore();
 
-
-  console.log(wishlistItems)
+  console.log(wishlistItems);
   useEffect(() => {
     const getCategories = async () => {
-      setLoading(true); 
-      fetchWishlist()
+      setLoading(true);
+      fetchWishlist();
       const [categoriesData, brandsData] = await Promise.all([
         await fetchCategories(gender),
         await fetchBrands(),
       ]);
       setCategories(categoriesData);
       setBrands(brandsData);
-      
+
+      console.log(categoriesData);
+
       // setObuvCategories(subcategoriesData);
 
       setLoading(false);
@@ -50,12 +50,7 @@ export default function HomeClient() {
     getCategories();
   }, [gender]);
 
-  const {viewedProducts}= useViewedProductsStore()
-  
-
-  
-
- 
+  const { viewedProducts } = useViewedProductsStore();
 
   return (
     <>
@@ -73,7 +68,6 @@ export default function HomeClient() {
             title={"Популярный Продукт"}
           />
         )}
-        
 
         {loading ? (
           <CollectionSkeleton />
@@ -95,13 +89,15 @@ export default function HomeClient() {
           />
         )}
 
-         {loading ? (
+        {loading ? (
           <CarouselSkeleton />
         ) : (
-          <ViewedProductsCarousel title="Посмотрели" products={viewedProducts || []} />
+          <ViewedProductsCarousel
+            title="Посмотрели"
+            products={viewedProducts || []}
+          />
         )}
 
-       
         {/* {loading ? (
           <CarouselSkeleton />
         ) : (
@@ -122,7 +118,7 @@ export default function HomeClient() {
 
         {/* <StyliesCollection /> */}
 
-       {/*  */}
+        {/*  */}
         {loading ? (
           <CarouselSkeleton />
         ) : (
