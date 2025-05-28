@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
     // const telegramId = request.headers.get("X-Telegram-ID");
     // Get query parameters from the request
     const { searchParams } = new URL(request.url);
-    const page = searchParams.get("page") || "1";
+    // const page = searchParams.get("page") || "1";
     const gender = searchParams.get("gender");
     const search = searchParams.get("search");
 
@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
 
     // Build query string
     const queryParams = new URLSearchParams();
-    queryParams.append("page", page);
+    // queryParams.append("page", page);
 
     if (gender) {
       queryParams.append("gender", gender);
