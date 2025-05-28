@@ -24,7 +24,7 @@ export const AccessoresCollection: React.FC<Props> = ({title,product}) => {
       <div className="flex justify-between py-4 items-center">
         <p className="text-xl md:text-[32px] font-bold">{title}</p>
         <Link
-          href="/search"
+          href="/products"
           className="flex items-center rounded-2xl cursor-pointer justify-center text-base bg-[#F2F2F2] text-black w-[96px] h-12 gap-1"
         >
           Все <ChevronRight className="text-4xl" />
@@ -34,7 +34,7 @@ export const AccessoresCollection: React.FC<Props> = ({title,product}) => {
       <div className="flex flex-wrap gap-4">
         {product.map((item, index) => (
           <Link
-            href="/search"
+            href="/products"
             key={index}
             className={"grow min-w-1/4 h-[112px]"}
           >

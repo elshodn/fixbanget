@@ -16,14 +16,20 @@ const BrendImagesCollection: React.FC<Props> = ({ brands }) => {
             className="flex justify-center items-center rounded-lg p-2 sm:p-3 md:p-4 border border-[#EEEEEE] hover:border-gray-300 transition-colors"
             key={item.id}
           >
-            <Image
-              className="object-contain w-full h-6"
-              src={item?.logo}
-              width={100}
-              height={100}
-              alt={item?.name || `Brand ${index + 1}`}
-              loading="lazy"
-            />
+            {item?.logo ? (
+              <Image
+                className="object-contain w-full h-6"
+                src={item.logo}
+                width={100}
+                height={100}
+                alt={item?.name || `Brand ${index + 1}`}
+                loading="lazy"
+              />
+            ) : (
+              <div className="object-contain w-full h-6 bg-gray-100 flex items-center justify-center text-xs text-gray-400">
+                No Image
+              </div>
+            )}
           </div>
         ))}
       </div>

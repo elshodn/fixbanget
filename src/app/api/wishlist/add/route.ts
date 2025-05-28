@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import type { WishlistResponse } from "@/types/handler";
 
-const API_BASE_URL = "http://192.168.1.104:8000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL!
 
 export async function POST(request: NextRequest) {
   try {

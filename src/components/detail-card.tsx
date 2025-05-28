@@ -15,7 +15,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { Share2, X } from "lucide-react"
+import { Share2, X, MapPin, Clock, Phone } from "lucide-react"
 import { ProductCarousel } from "@/components/Carousel"
 import { Swiper, SwiperSlide } from "swiper/react"
 import "swiper/css"
@@ -23,8 +23,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import sizeImage from "@/assets/images/size.png"
 import { Separator } from "@/components/ui/separator"
 import { PaymentSummary } from "./summary-appbar"
+import { PhoneInput } from "./phone-input"
 import { fetchFilterProducts } from "@/lib/api"
 import { useGender } from "@/hooks/use-gender"
+import type { Branch } from "@/types/branch"
+import { toast } from "@/components/ui/use-toast"
 
 interface ProductDetailCardProps {
   product: Product
@@ -34,7 +37,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
   const { gender } = useGender()
   const [method, setMethod] = useState<"store" | "pickup">("pickup")
   const [minmax, setMinmax] = useState<"min" | "max">("min")
-  const [countryCode, setCountryCode] = useState("+7")
+  const [countryCode, setCountryCode] = useState("+998")
   const [customerName, setCustomerName] = useState("")
   const [phoneNumber, setPhoneNumber] = useState("")
   const [selectedColor, setSelectedColor] = useState<string | null>(
@@ -49,16 +52,60 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
   const [recommendProducts, setRecommendProducts] = useState<Product[]>([])
   const [filteredImages, setFilteredImages] = useState(product?.images || [])
   const [isLoading, setIsLoading] = useState(false)
+  const [selectedShippingMethod, setSelectedShippingMethod] = useState<any>(
+    product?.shipping_methods && product.shipping_methods.length > 0 ? product.shipping_methods[0] : null,
+  )
+  const [selectedBranch, setSelectedBranch] = useState<number | null>(null)
+  const [branches, setBranches] = useState<Branch[]>([])
+  const [isBranchesLoading, setIsBranchesLoading] = useState(false)
 
   // PaymentSummary uchun kerakli state'lar
   const [promoCode, setPromoCode] = useState("")
   const [discountApplied, setDiscountApplied] = useState(false)
+
+  const telegramId = 1524783641
 
   // Loading states for missing data
   const isProductLoading = !product
   const hasImages = product?.images && product.images.length > 0
   const hasVariants = product?.variants && product.variants.length > 0
   const hasShippingMethods = product?.shipping_methods && product.shipping_methods.length > 0
+
+  // Fetch branches
+  const fetchBranches = useCallback(async () => {
+    try {
+      setIsBranchesLoading(true)
+      const response = await fetch("/api/branches", {
+        headers: {
+          "X-Telegram-ID": telegramId.toString(),
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch branches")
+      }
+
+      const data = await response.json()
+      console.log("Branches data:", data)
+
+      // Filter only active branches
+      const activeBranches = data.filter((branch: Branch) => branch.is_active)
+      setBranches(activeBranches)
+    } catch (error) {
+      console.error("Error fetching branches:", error)
+      toast({
+        title: "Ошибка",
+        description: "Не удалось загрузить филиалы",
+        variant: "destructive",
+      })
+    } finally {
+      setIsBranchesLoading(false)
+    }
+  }, [telegramId])
+
+  useEffect(() => {
+    fetchBranches()
+  }, [fetchBranches])
 
   // Memoize unique colors and sizes to prevent infinite re-renders
   const uniqueColors = useMemo(() => {
@@ -242,19 +289,33 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
 
   // PaymentSummary uchun kerakli ma'lumotlarni hisoblash
   const calculateTotals = () => {
+    // Asosiy mahsulot narxi (chegirma hisobga olingan)
     const singlePrice = productPrice
-    const total = singlePrice * quantity
-    const shipping = hasShippingMethods ? Number(product.shipping_methods[0]?.price || 0) : 0
-    const tax = 0 // Soliq hozircha 0
-    const discount = discountApplied ? total * 0.1 : 0 // 10% chegirma
+    const subtotal = singlePrice * quantity
 
-    return { total, shipping, tax, discount }
+    // Shipping narxi
+    const shipping = selectedShippingMethod ? Number(selectedShippingMethod.price || 0) : 0
+
+    // Soliq (hozircha 0)
+    const tax = 0
+
+    // Chegirma (promo kod orqali)
+    const discount = discountApplied ? subtotal * 0.1 : 0 // 10% chegirma
+
+    // Jami narx: mahsulot narxi + shipping - chegirma
+    const total = subtotal + shipping - discount
+
+    return { total, subtotal, shipping, tax, discount }
   }
 
-  const { total, shipping, tax, discount } = calculateTotals()
+  const { total, subtotal, shipping, tax, discount } = calculateTotals()
 
   // Form validatsiyasi
-  const isFormValid = customerName.trim() !== "" && phoneNumber.trim() !== "" && selectedColor && selectedSize
+  const isFormValid =
+    customerName.trim() !== "" && phoneNumber.trim() !== "" && selectedColor && selectedSize && selectedBranch !== null
+
+  // Get selected branch details
+  const selectedBranchDetails = branches.find((branch) => branch.id === selectedBranch)
 
   return (
     <div className="pb-18">
@@ -306,7 +367,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
                 <div className="sm:hidden w-full">
                   <Swiper
                     spaceBetween={10}
-                    slidesPerView={4}
+                    slidesPerView={Math.min(4, filteredImages.length || 1)}
                     grabCursor={true}
                     freeMode={true}
                     watchSlidesProgress={true}
@@ -406,17 +467,44 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
 
           {/* Shipping Methods */}
           {hasShippingMethods && (
-            <div className="flex gap-2">
-              {product.shipping_methods.map((method: any, index: number) => (
-                <Button
-                  key={index}
-                  variant="outline"
-                  className={`${minmax === (index === 0 ? "min" : "max") && "border-[#FF3A5C]"}`}
-                  onClick={() => setMinmax(index === 0 ? "min" : "max")}
-                >
-                  {method.price === "0.00" ? "0 ₽" : `${method.price} ₽`} {method.min_days}-{method.max_days} дней
-                </Button>
-              ))}
+            <div className="space-y-4">
+              <div>
+                <p className="font-medium mb-2">Способ доставки</p>
+                <div className="flex gap-2">
+                  {product.shipping_methods.map((method: any) => (
+                    <Button
+                      key={method.id}
+                      variant="outline"
+                      className={`${selectedShippingMethod?.id === method.id ? "border-[#FF3A5C] bg-red-50" : ""} px-3 py-2 h-auto`}
+                      onClick={() => setSelectedShippingMethod(method)}
+                    >
+                      <div className="text-center flex gap-2 items-center">
+                        <span className="text-base font-semibold">
+                            {(() => {
+                              // Asl narx va discount narxini hisoblash
+                              const originalPrice = Number(product.price);
+                              const discount = Number(product.discount_price || 0);
+                              const shipping = Number(method.price || 0);
+                              const hasDiscount = !!product.discount_price;
+                              const basePrice = hasDiscount ? originalPrice - discount : originalPrice;
+
+                              // Agar shipping 0 bo'lsa, mahsulot narxini (chegirma bo'lsa chegirma bilan) chiqarish
+                              if (shipping === 0) {
+                                return `${basePrice.toLocaleString()}₽`;
+                              }
+                              // Aks holda, narx + shipping
+                              const finalPrice = basePrice + shipping;
+                              return `${finalPrice.toLocaleString()}₽`;
+                            })()}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          {method.min_days}-{method.max_days} дней
+                        </span>
+                      </div>
+                    </Button>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
 
@@ -564,39 +652,98 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
               >
                 В пункт выдачи
               </Button>
+              {/* <Button
+                variant="outline"
+                className={`${method == "store" && "border-[#FF3A5C]"}`}
+                onClick={() => setMethod("store")}
+              >
+                В магазине
+              </Button> */}
+            </div>
+
+            {/* Branch Selection */}
+            <div className="space-y-2">
+              <Label htmlFor="branch">Выберите филиал *</Label>
+              {isBranchesLoading ? (
+                <Skeleton className="h-10 w-full" />
+              ) : (
+                <Select
+                  value={selectedBranch?.toString() || ""}
+                  onValueChange={(value) => setSelectedBranch(Number(value))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Выберите филиал для получения" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {branches.map((branch) => (
+                      <SelectItem key={branch.id} value={branch.id.toString()}>
+                        <div className="flex flex-col">
+                          <span className="font-medium">
+                            {branch.name} - {branch.city}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            {branch.street}, {branch.district}
+                          </span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+
+              {/* Selected Branch Details */}
+              {selectedBranchDetails && (
+                <div className="mt-3 p-3 bg-gray-50 rounded-lg border">
+                  <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
+                    <MapPin className="h-4 w-4" />
+                    Информация о филиале
+                  </h4>
+                  <div className="space-y-1 text-xs text-gray-600">
+                    <p className="font-medium">
+                      {selectedBranchDetails.name} - {selectedBranchDetails.city}
+                    </p>
+                    <p>
+                      {selectedBranchDetails.street}, {selectedBranchDetails.district}
+                    </p>
+                    <p>
+                      {selectedBranchDetails.region}, {selectedBranchDetails.country}
+                    </p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <Phone className="h-3 w-3" />
+                      <span>{selectedBranchDetails.phone}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-3 w-3" />
+                      <span>Режим работы: {selectedBranchDetails.working_hours}</span>
+                    </div>
+                    {selectedBranchDetails.has_fitting_room && <p className="text-green-600">✓ Примерочная доступна</p>}
+                    {selectedBranchDetails.has_parking && <p className="text-green-600">✓ Парковка доступна</p>}
+                    {selectedBranchDetails.is_24_hours && <p className="text-blue-600">🕐 Работает 24/7</p>}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="name">Имя и фамилия</Label>
+              <Label htmlFor="name">Имя и фамилия *</Label>
               <Input
                 id="name"
                 placeholder="Имя и фамилия"
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
+                required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone">Телефон</Label>
-              <div className="flex gap-2 mb-5">
-                <Select value={countryCode} onValueChange={setCountryCode}>
-                  <SelectTrigger className="w-20">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="+7">+7</SelectItem>
-                    <SelectItem value="+998">+998</SelectItem>
-                    <SelectItem value="+1">+1</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Input
-                  id="phone"
-                  placeholder="000"
-                  type="tel"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                />
-              </div>
+              <Label htmlFor="phone">Телефон *</Label>
+              <PhoneInput
+                countryCode={countryCode}
+                phoneNumber={phoneNumber}
+                onCountryCodeChange={setCountryCode}
+                onPhoneNumberChange={setPhoneNumber}
+                required
+              />
               <Separator />
             </div>
           </div>
@@ -605,7 +752,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
 
       {/* Payment Summary */}
       <PaymentSummary
-        total={total}
+        total={subtotal}
         shipping={shipping}
         tax={tax}
         discount={discount}
@@ -614,8 +761,8 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
         setPromoCode={setPromoCode}
         discountApplied={discountApplied}
         setDiscountApplied={setDiscountApplied}
-        selectedShipping="standard"
-        getData={isFormValid}
+        selectedShipping={selectedShippingMethod?.name || "standard"}
+        getData={!!(isFormValid && selectedBranch !== null)}
         customerName={customerName}
         phoneNumber={`${countryCode}${phoneNumber}`}
         cartId={undefined}
@@ -625,6 +772,8 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
         selectedColor={selectedColor}
         selectedSize={selectedSize}
         deliveryMethod={method}
+        selectedShippingMethod={selectedShippingMethod}
+        selectedBranch={selectedBranch}
       />
 
       {/* Recommended Products */}

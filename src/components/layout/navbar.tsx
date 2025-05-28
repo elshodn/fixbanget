@@ -25,8 +25,8 @@ interface CartItem {
 
 function Navbar() {
   const navLinks = [
-    { label: "Мужское", href: "/search" },
-    { label: "Женское", href: "/search" },
+    { label: "Мужское", href: "/products" },
+    { label: "Женское", href: "/products" },
     { label: "Unicflo в Китае", href: "/trend" },
     { label: "Копия или реплика", href: "/brend" },
     { label: "Замеры", href: "/measurements" },
@@ -116,9 +116,9 @@ function Navbar() {
 
             {/* Profile (desktop only) */}
             <div className="hidden md:flex">
-              <Link href="/profile" className="cursor-pointer">
+              {/* <Link href="/profile" className="cursor-pointer">
                 <UserRound className="h-5 w-5" />
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>

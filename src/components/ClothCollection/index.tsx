@@ -30,7 +30,7 @@ export const ClothCollection: React.FC<Props> = ({ title, product }) => {
       <div className="flex flex-wrap gap-4">
         {product.map((item, index) => (
           <Link
-            href="/search"
+            href="/products"
             key={index}
             className={"grow min-w-1/3 h-[112px]"}
           >

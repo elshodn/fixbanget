@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Separator } from "@/components/ui/separator"
 import { ArrowLeft, Package, MapPin, Clock, Phone } from "lucide-react"
 import { toast } from "@/components/ui/use-toast"
+import type { Order } from "@/types/order"
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([])
@@ -247,7 +248,7 @@ export default function OrdersPage() {
                         <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center">
                           {item.product_image ? (
                             <Image
-                              src={item.product_image || "/placeholder.svg"}
+                              src={item.product_image}
                               alt={item.product_name}
                               width={80}
                               height={80}
@@ -272,7 +273,17 @@ export default function OrdersPage() {
                           <div className="flex items-center justify-between mt-2">
                             <span className="text-sm text-gray-600">Количество: {item.quantity}</span>
                             <div className="text-right">
-                              <p className="font-semibold">{item.price} ₽</p>
+                              <p className="font-semibold">
+                                {selectedOrder.is_split_payment
+                                  ? `${selectedOrder.first_payment_amount} ₽`
+                                  : `${item.total_price} ₽`}
+                              </p>
+                              {selectedOrder.is_split_payment && (
+                                <p className="text-xs text-gray-500">
+                                  (Split: {selectedOrder.first_payment_amount} ₽ paid,{" "}
+                                  {selectedOrder.second_payment_amount} ₽ remaining)
+                                </p>
+                              )}
                               <p className="text-sm text-gray-500">за {item.quantity} шт.</p>
                             </div>
                           </div>
@@ -291,14 +302,37 @@ export default function OrdersPage() {
               <div>
                 <h3 className="font-semibold mb-4">Детали платежа</h3>
                 <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Товары ({selectedOrder.items_count}):</span>
-                    <span>{selectedOrder.total_amount} ₽</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Доставка:</span>
-                    <span>{selectedOrder.shipping_amount} ₽</span>
-                  </div>
+                  {selectedOrder.is_split_payment ? (
+                    <>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Товары ({selectedOrder.items_count}):</span>
+                        <span>{selectedOrder.total_amount} ₽</span>
+                      </div>
+                      <div className="flex justify-between text-green-600">
+                        <span>Оплачено сейчас:</span>
+                        <span>{selectedOrder.first_payment_amount} ₽</span>
+                      </div>
+                      <div className="flex justify-between text-orange-600">
+                        <span>К доплате:</span>
+                        <span>{selectedOrder.second_payment_amount} ₽</span>
+                      </div>
+                      <div className="flex justify-between text-sm text-gray-500">
+                        <span>Срок доплаты:</span>
+                        <span>{selectedOrder.split_payment_info?.second_payment?.due_date}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Товары ({selectedOrder.items_count}):</span>
+                        <span>{selectedOrder.total_amount} ₽</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Доставка:</span>
+                        <span>{selectedOrder.shipping_amount} ₽</span>
+                      </div>
+                    </>
+                  )}
                   {Number(selectedOrder.discount_amount) > 0 && (
                     <div className="flex justify-between text-green-600">
                       <span>Скидка:</span>
@@ -308,7 +342,7 @@ export default function OrdersPage() {
                   <Separator />
                   <div className="flex justify-between font-semibold text-lg">
                     <span>Итого:</span>
-                    <span>{selectedOrder.total_amount} ₽</span>
+                    <span>{selectedOrder.final_amount} ₽</span>
                   </div>
                 </div>
               </div>
@@ -320,7 +354,7 @@ export default function OrdersPage() {
                     Отменить заказ
                   </Button>
                 )}
-                <Button className="flex-1 bg-[#FF385C] hover:bg-[#E6325A]">Связаться</Button>
+                <Button className="flex-1 bg-[#FF385C] hover:bg-[#E6325A]">Связаться с поддержкой</Button>
               </div>
             </div>
           </div>
@@ -361,7 +395,12 @@ export default function OrdersPage() {
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="font-semibold text-lg">{order.final_amount} ₽</p>
+                  <p className="font-semibold text-lg">
+                    {order.is_split_payment ? `${order.first_payment_amount} ₽` : `${order.final_amount} ₽`}
+                  </p>
+                  {order.is_split_payment && (
+                    <p className="text-xs text-gray-500">Split: +{order.second_payment_amount} ₽ осталось</p>
+                  )}
                 </div>
               </div>
             </div>

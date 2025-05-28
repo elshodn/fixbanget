@@ -1,4 +1,8 @@
+"use client"
 import React from "react";
+
+
+
 
 import telegram from "@/assets/images/telegramIcon.png";
 import instagram from "@/assets/images/instagramIcon.png";
@@ -6,8 +10,11 @@ import youtube from "@/assets/images/youtubeIcon.png";
 import logo from "@/assets/images/logo.png";
 import Image from "next/image";
 import Link from "next/link";
+import { useGender } from "@/hooks/use-gender";
 
 const Footer: React.FC = () => {
+   const { setGender} = useGender()
+    
   return (
     <footer className="bg-black mt-20">
       <div className="flex w-11/12 mx-auto md:w-full items-center p-4">
@@ -42,10 +49,10 @@ const Footer: React.FC = () => {
           <Link href="/brend" className="text-white text-sm font-bold">
             Магазин
           </Link>
-          <Link href="/search" className="text-sm font-bold text-gray-500">
+          <Link onClick={()=> setGender("male")} href="/products" className="text-sm font-bold text-gray-500">
             Мужское
           </Link>
-          <Link href="/search" className="text-sm font-bold text-gray-500">
+          <Link onClick={()=> setGender("female")} href="/products" className="text-sm font-bold text-gray-500">
             Женское
           </Link>
           <Link href="/trend" className="text-sm font-bold text-gray-500">

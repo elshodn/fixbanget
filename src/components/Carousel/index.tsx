@@ -23,7 +23,7 @@ export const ProductCarousel: React.FC<any> = ({ title, product }) => {
         <Swiper
           slidesPerView={2}
           spaceBetween={10}
-          loop={true}
+          loop={Array.isArray(product) && product.length > 8}
           autoplay={{
             delay: 5000,
           }}
@@ -55,7 +55,7 @@ export const ProductCarousel: React.FC<any> = ({ title, product }) => {
             },
           }}
         >
-          {product.map((product: Product) => (
+          {Array.isArray(product) && product.map((product: Product) => (
             <SwiperSlide className="mb-3" key={product.id}>
               <ProductCarouselCard product={product} />
             </SwiperSlide>

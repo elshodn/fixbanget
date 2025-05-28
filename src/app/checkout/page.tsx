@@ -23,8 +23,8 @@ import { Textarea } from "@/components/ui/textarea"
 import expressImage from "@/assets/images/express.png"
 import fedExImage from "@/assets/images/fedex.png"
 import productImage from "@/assets/images/mock/image2.png"
-import { PaymentSummary } from "@/components/PaymentSummary";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PaymentSummaryCart } from "@/components/PaymentSummary";
 
 function CheckOrder() {
   const [promoCode, setPromoCode] = useState("");
@@ -268,7 +268,7 @@ function CheckOrder() {
         </div>
         
         {/* Payment summary */}
-        <PaymentSummary
+        <PaymentSummaryCart
           promoCode={promoCode}
           setPromoCode={setPromoCode}
           discountApplied={discountApplied}
