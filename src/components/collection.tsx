@@ -43,13 +43,14 @@ const Collection: React.FC<Props> = ({ category, title, titleId }) => {
               )}
             >
               <img
-                src={item.image || "/nm.webp"}
+                src={item.image}
+                onClick={() => alert(item.image)}
                 alt={item.name}
                 className="absolute right-0 bottom-0 h-full object-contain pointer-events-none select-none"
                 style={{ maxWidth: "80%" }}
-                onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).src = "/nm.webp";
-                }}
+                // onError={(e) => {
+                //   (e.currentTarget as HTMLImageElement).src = "/nm.webp";
+                // }}
               />
               <Link
                 href={`/products?${
