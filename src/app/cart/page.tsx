@@ -156,7 +156,6 @@ export default function CartPage() {
       }
 
       const data = await response.json();
-      console.log("Cart data received:", data);
       setCart(data);
 
       // Sync with localStorage
@@ -190,7 +189,6 @@ export default function CartPage() {
 
     setIsUpdating(true);
     try {
-      console.log("Updating quantity:", { itemId, productId, newQuantity });
 
       // Update localStorage immediately for better UX
       cartStorage.updateQuantity(itemId, newQuantity);
@@ -213,7 +211,6 @@ export default function CartPage() {
       }
 
       const data = await response.json();
-      console.log("Update response:", data);
 
       // Refresh cart after update
       await fetchCart();
@@ -242,7 +239,6 @@ export default function CartPage() {
   const removeItem = async (itemId: number) => {
     setIsUpdating(true);
     try {
-      console.log("Removing item:", itemId);
 
       // Update localStorage immediately for better UX
       cartStorage.removeItem(itemId);
@@ -260,7 +256,6 @@ export default function CartPage() {
       }
 
       const data = await response.json();
-      console.log("Remove response:", data);
 
       // Refresh cart after removal
       await fetchCart();
@@ -288,20 +283,6 @@ export default function CartPage() {
     fetchCart();
     fetchBranches();
   }, []);
-
-  // Debug cart data
-  useEffect(() => {
-    if (cart) {
-      console.log("Cart state updated:", {
-        id: cart.id,
-        total_price: cart.total_price,
-        final_price: cart.final_price,
-        items_count: cart.items_count,
-        total_savings: cart.total_savings,
-        available_shipping_methods: cart.available_shipping_methods,
-      });
-    }
-  }, [cart]);
 
   if (isLoading) {
     return (
@@ -466,7 +447,9 @@ export default function CartPage() {
                         <div className="flex items-center gap-4">
                           <div className="text-right">
                             <p className="font-semibold">
-                              {item.total_price} ₽
+                              {Number(item.product_price) -
+                                Number(item.product_discount_price)}
+                              ₽
                             </p>
                             {item.product_discount_price && (
                               <p className="text-sm text-gray-500 line-through">
@@ -514,22 +497,14 @@ export default function CartPage() {
                               ? "border-[#FF3A5C] bg-red-50"
                               : ""
                           } px-4 py-2 h-auto`}
-                          onClick={() => {setSelectedShippingMethod(method)
-
+                          onClick={() => {
+                            setSelectedShippingMethod(method);
                           }}
                         >
                           <div className="text-center flex gap-2 items-center">
                             <span className="text-base font-semibold">
-                              {(() => {
-                                const shipping = Number(method.price);
-                                const cartTotal = Number(cart.total_price);
-
-                                if (shipping === 0) {
-                                  return `${cartTotal.toLocaleString()} ₽`; 
-                                }
-                                const finalPrice = cartTotal + shipping;
-                                return `${finalPrice.toLocaleString()} ₽`;
-                              })()}
+                              {Number(cart.total_price) + Number(method.price)}{" "}
+                              ₽
                             </span>
                             <span className="text-xs text-gray-500">
                               {method.min_days}-{method.max_days} дней
@@ -660,10 +635,16 @@ export default function CartPage() {
           {/* Payment Summary */}
           <div className="mt-8">
             <PaymentSummaryCart
-              total={Number(cart.total_price) || 0}
+              total={
+                Number(cart.items[0].product_price) *
+                  Number(cart.items[0].quantity) || 0
+              }
               shipping={shippingCost}
               tax={0}
-              discount={cart.total_savings || 0}
+              discount={
+                Number(cart.items[0].product_discount_price) *
+                  Number(cart.items[0].quantity) || 0
+              }
               redirectTo="/checkout"
               promoCode={promoCode}
               setPromoCode={setPromoCode}
@@ -692,4 +673,3 @@ export default function CartPage() {
     </div>
   );
 }
-

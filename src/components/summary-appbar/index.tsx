@@ -268,8 +268,6 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
         shipping_cost: shippingCost,
       };
 
-      console.log("Direct purchase data:", purchaseData);
-
       const response = await fetch("/api/direct-purchase", {
         method: "POST",
         headers: {
@@ -286,7 +284,6 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
       }
 
       const orderData = await response.json();
-      console.log("Direct purchase response:", orderData);
 
       const successMessage = enabled
         ? `Split to'lov bilan buyurtma yaratildi! Hozir: ${totalWithShipping.toFixed(
@@ -339,31 +336,6 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
   const safeTax = Number(tax) || 0;
   const safeDiscount = Number(discount) || 0;
   const grandTotal = safeTotal + safeShipping + safeTax - safeDiscount;
-
-  // Debug logging
-  useEffect(() => {
-    console.log("PaymentSummary Props:", {
-      total,
-      shipping,
-      tax,
-      discount,
-      customerName,
-      phoneNumber,
-      cartId,
-      getData,
-      grandTotal,
-    });
-  }, [
-    total,
-    shipping,
-    tax,
-    discount,
-    customerName,
-    phoneNumber,
-    cartId,
-    getData,
-    grandTotal,
-  ]);
 
   const isVariantSelected = selectedColor && selectedSize;
   const selectedVariant = isVariantSelected
@@ -455,43 +427,6 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
           </div>
         </div>
 
-        {/* Price Display 
-        {enabled && (
-          <div className="bg-orange-50 p-3 rounded-lg border border-orange-200 mb-3">
-            <div className="flex justify-between items-center text-sm">
-              <span className="text-gray-600">Umumiy narx:</span>
-              <span className="line-through text-gray-500">{originalPrice.toFixed(0)} ₽</span>
-            </div>
-            <div className="flex justify-between items-center text-sm font-medium">
-              <span className="text-green-600">Hozir to'lash:</span>
-              <span className="text-green-600">{splitPrice.toFixed(0)} ₽</span>
-            </div>
-            <div className="flex justify-between items-center text-sm">
-              <span className="text-orange-600">Keyinroq:</span>
-              <span className="text-orange-600">{remainingPrice.toFixed(0)} ₽</span>
-            </div>
-          </div>
-        )}
-*/}
-        {/* Promo Code Section */}
-        {/* <div className="flex gap-2 items-center">
-          <Input
-            placeholder="Промо-код"
-            className="flex-1"
-            disabled
-            value={promoCode}
-            onChange={(e) => setPromoCode(e.target.value)}
-          />
-          <Button
-            variant="outline"
-            disabled
-            className={`font-medium ${discountApplied ? "bg-green-100 text-green-700" : ""}`}
-            onClick={() => setDiscountApplied(!discountApplied)}
-          >
-            {discountApplied ? "Применено" : "Добавить"}`
-          </Button>
-        </div> */}
-
         {/* Price Details - Always show on desktop, toggle on mobile */}
         {(showMobileFullDetails || isDesktop) && (
           <>
@@ -530,8 +465,6 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
             <Separator />
           </>
         )}
-
-        {/* Total Section */}
 
         {/* Action Buttons */}
         <div className="flex gap-2">

@@ -30,7 +30,6 @@ export default function HomeClient() {
 
   const { wishlistItems, fetchWishlist } = useWishlistStore();
 
-  console.log(wishlistItems);
   useEffect(() => {
     const getCategories = async () => {
       setLoading(true);
@@ -42,7 +41,6 @@ export default function HomeClient() {
         ]);
         setCategories(categoriesData);
         setBrands(brandsData);
-        console.log(categoriesData);
       } catch {
         console.log("Failed");
       } finally {

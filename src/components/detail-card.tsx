@@ -80,7 +80,6 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
   const [promoCode, setPromoCode] = useState("");
   const [discountApplied, setDiscountApplied] = useState(false);
 
-
   // Loading states for missing data
   const isProductLoading = !product;
   const hasImages = product?.images && product.images.length > 0;
@@ -103,7 +102,6 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
       }
 
       const data = await response.json();
-      console.log("Branches data:", data);
 
       // Filter only active branches
       const activeBranches = data.filter((branch: Branch) => branch.is_active);
@@ -301,7 +299,6 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
           text: product.description,
           url: window.location.href,
         })
-        .then(() => console.log("Ulashildi"))
         .catch((error) => console.log("Ulashishda xatolik:", error));
     } else {
       navigator.clipboard.writeText(window.location.href);

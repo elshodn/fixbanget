@@ -13,7 +13,6 @@ async function getProduct(slug: string): Promise<Product | null> {
       },
       cache: "no-store", // Always fetch fresh data
     });
-    console.log(response);
     if (!response.ok) {
       if (response.status === 404) {
         return null;

@@ -20,7 +20,6 @@ export default function OrdersPage() {
   const fetchOrders = async () => {
     try {
       setIsLoading(true);
-      console.log("Fetching orders...");
 
       const response = await fetch("/api/orders", {
         headers: {
@@ -33,11 +32,9 @@ export default function OrdersPage() {
       }
 
       const data = await response.json();
-      console.log("Orders API response:", data);
 
       // Handle both direct array and paginated response
       const ordersArray = Array.isArray(data) ? data : data.results || [];
-      console.log("Orders array:", ordersArray);
 
       setOrders(ordersArray);
 
