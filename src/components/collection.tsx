@@ -47,7 +47,7 @@ const Collection: React.FC<Props> = ({ category, title, titleId }) => {
               title="Rasm manzilini nusxalash"
             >
               <img
-                src={item.image}
+                src={item?.image}
                 alt={item.name}
                 className="absolute right-0 bottom-0 h-full object-contain pointer-events-none select-none"
                 style={{ maxWidth: "80%" }}
