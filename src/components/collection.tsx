@@ -39,30 +39,19 @@ const Collection: React.FC<Props> = ({ category, title, titleId }) => {
               key={item.id}
               className={cn(
                 getColSpan(index, categories.length),
-                "p-2 bg-[#EFEDEC] w-full relative overflow-hidden h-36 rounded-3xl shadow flex items-end"
+                "p-2 bg-[#EFEDEC] w-full relative overflow-hidden h-36 rounded-3xl shadow flex items-end cursor-pointer"
               )}
+              onClick={() => {
+                navigator.clipboard.writeText(item.image);
+              }}
+              title="Rasm manzilini nusxalash"
             >
               <img
                 src={item.image}
-                onClick={() => alert(item.image)}
                 alt={item.name}
                 className="absolute right-0 bottom-0 h-full object-contain pointer-events-none select-none"
                 style={{ maxWidth: "80%" }}
-                // onError={(e) => {
-                //   (e.currentTarget as HTMLImageElement).src = "/nm.webp";
-                // }}
               />
-              <Link
-                href={`/products?${
-                  title == "Популярный Продукт"
-                    ? "categories=" + item.id
-                    : "subcategories=" + item.id
-                }`}
-                className={`text-base ml-2 mt-2 md:text-2xl font-bold z-10 break-words relative`}
-              >
-                {item.name}
-                <span className="inset-0 absolute"></span>
-              </Link>
             </div>
             // <Link
             //   href="/search"
