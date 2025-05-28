@@ -25,6 +25,7 @@ interface CartItem {
 
 function Navbar() {
   const navLinks = [
+    { label: "Testpage", href: "/test" },
     { label: "Мужское", href: "/products" },
     { label: "Женское", href: "/products" },
     { label: "Unicflo в Китае", href: "/trend" },
