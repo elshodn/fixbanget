@@ -36,9 +36,9 @@ export default function HomeClient() {
       setLoading(true);
       fetchWishlist();
       try {
-        const [categoriesData, brandsData] = await Promise.all([
+        const [categoriesData] = await Promise.all([
           await fetchCategories(gender),
-          await fetchBrands(),
+          // await fetchBrands(),
         ]);
         setCategories(categoriesData);
         // setBrands(brandsData);
