@@ -16,6 +16,7 @@ import { useViewedProductsStore } from "@/stores/viewed-product-store";
 import { ProductCarousel } from "@/components/Carousel";
 
 import { useWishlistStore } from "@/stores/wishlist-store";
+import { Card } from "@/components/ui/card";
 
 // Fetcher function for SWR
 
@@ -34,20 +35,24 @@ export default function HomeClient() {
     const getCategories = async () => {
       setLoading(true);
       fetchWishlist();
-      const [categoriesData, brandsData] = await Promise.all([
-        await fetchCategories(gender),
-        await fetchBrands(),
-      ]);
-      setCategories(categoriesData);
-      setBrands(brandsData);
-
-      console.log(categoriesData);
+      try {
+        const [categoriesData, brandsData] = await Promise.all([
+          await fetchCategories(gender),
+          await fetchBrands(),
+        ]);
+        setCategories(categoriesData);
+        setBrands(brandsData);
+        console.log(categoriesData);
+      } catch {
+        console.log("Failed");
+      } finally {
+        setLoading(false);
+      }
 
       // setObuvCategories(subcategoriesData);
-
-      setLoading(false);
     };
     getCategories();
+    setLoading(false);
   }, [gender]);
 
   const { viewedProducts } = useViewedProductsStore();
@@ -60,7 +65,7 @@ export default function HomeClient() {
           <SelectGender />
           <Header />
         </main>
-        <div className="fixed bottom-1 left-0 w-48">{jsonformat}</div>
+        <Card className="fixed bottom-1 left-0 z-10 p-1">{jsonformat}</Card>
 
         {loading ? (
           <CollectionSkeleton />
