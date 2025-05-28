@@ -18,6 +18,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${SFProDisplay.variable}`}>
+      <script src="https://telegram.org/js/telegram-web-app.js"></script>
       <body className={`antialiased flex flex-col min-h-screen font-sans`}>
         <ToastContainer
           autoClose={3000}
