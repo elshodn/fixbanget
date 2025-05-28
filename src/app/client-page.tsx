@@ -51,6 +51,7 @@ export default function HomeClient() {
   }, [gender]);
 
   const { viewedProducts } = useViewedProductsStore();
+  const jsonformat = JSON.stringify({ loading, categories });
 
   return (
     <>
@@ -59,6 +60,7 @@ export default function HomeClient() {
           <SelectGender />
           <Header />
         </main>
+        <div className="fixed bottom-1 left-0 w-48">{jsonformat}</div>
 
         {loading ? (
           <CollectionSkeleton />
