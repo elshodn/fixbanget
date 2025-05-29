@@ -1,100 +1,124 @@
-import { type NextRequest, NextResponse } from "next/server";
-import type {
-  PaginatedResponse,
-  Product,
-  ProductFilterParams,
-} from "@/types/handler";
+import { NextResponse } from "next/server"
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL!
+const DATA_SOURCE_URL = process.env.NEXT_PUBLIC_API_URL
 
-export async function GET(request: NextRequest) {
+interface FilterParams {
+  gender?: string
+  brand?: string
+  category?: string
+  delivery_max?: number
+  delivery_min?: number
+  has_discount?: boolean
+  is_featured?: boolean
+  in_stock?: boolean
+  is_active?: boolean
+  ordering?: string
+  page?: number
+  price_max?: number
+  price_min?: number
+  search?: string
+  size?: string
+  size_eu?: string
+  size_uk?: string
+  size_us?: string
+  slug?: string
+  subcategory?: string
+  page_size?: number
+}
+
+export async function GET(request: Request) {
   try {
-    const searchParams = request.nextUrl.searchParams;
-    const telegramId = request.headers.get("X-Telegram-ID");
+    const { searchParams } = new URL(request.url)
 
-    if (!telegramId) {
-      return NextResponse.json(
-        { error: "X-Telegram-ID header is required" },
-        { status: 400 }
-      );
-    }
-    
-    // Construct filter parameters
-    const filterParams: ProductFilterParams = {};
+    // Get Telegram ID from headers (optional for now)
+    const telegramId = request.headers.get("X-Telegram-ID")
+    console.log("📱 Telegram ID from header:", telegramId)
 
-    // Add all search parameters to the filter
-    if (searchParams.has("gender"))
-      filterParams.gender = Number(searchParams.get("gender"));
-    if (searchParams.has("brand"))
-      filterParams.brand = Number(searchParams.get("brand"));
-    if (searchParams.has("category"))
-      filterParams.category = Number(searchParams.get("category"));
-    if (searchParams.has("delivery_max"))
-      filterParams.delivery_max = Number(searchParams.get("delivery_max"));
-    if (searchParams.has("delivery_min"))
-      filterParams.delivery_min = Number(searchParams.get("delivery_min"));
-    if (searchParams.has("has_discount"))
-      filterParams.has_discount = searchParams.get("has_discount") === "true";
-    if (searchParams.has("is_featured"))
-      filterParams.is_featured = searchParams.get("is_featured") === "true";
-    if (searchParams.has("in_stock"))
-      filterParams.in_stock = searchParams.get("in_stock") === "true";
-    if (searchParams.has("is_active"))
-      filterParams.is_active = searchParams.get("is_active") === "true";
-    if (searchParams.has("ordering"))
-      filterParams.ordering = searchParams.get("ordering") as string;
-    if (searchParams.has("page"))
-      filterParams.page = Number(searchParams.get("page"));
-    if (searchParams.has("price_max"))
-      filterParams.price_max = Number(searchParams.get("price_max"));
-    if (searchParams.has("price_min"))
-      filterParams.price_min = Number(searchParams.get("price_min"));
-    if (searchParams.has("search"))
-      filterParams.search = searchParams.get("search") as string;
-    if (searchParams.has("size"))
-      filterParams.size = Number(searchParams.get("size"));
-    if (searchParams.has("size_eu"))
-      filterParams.size_eu = Number(searchParams.get("size_eu"));
-    if (searchParams.has("size_uk"))
-      filterParams.size_uk = Number(searchParams.get("size_uk"));
-    if (searchParams.has("size_us"))
-      filterParams.size_us = Number(searchParams.get("size_us"));
-    if (searchParams.has("slug"))
-      filterParams.slug = searchParams.get("slug") as string;
-    if (searchParams.has("subcategory"))
-      filterParams.subcategory = Number(searchParams.get("subcategory"));
+    const filterParams: FilterParams = {}
 
-    // Build query string
-    const queryString = new URLSearchParams();
+    // Extract filter parameters from searchParams - FAQAT BIRINCHI QIYMATNI OLAMIZ
+    searchParams.forEach((value, key) => {
+      // Agar key allaqachon mavjud bo'lsa, skip qilamiz (duplicate'larni oldini olamiz)
+      if (filterParams.hasOwnProperty(key)) {
+        console.log(`⚠️ Duplicate parameter detected: ${key}, skipping...`)
+        return
+      }
+
+      if (key === "gender") filterParams.gender = value
+      if (key === "brand") filterParams.brand = value
+      if (key === "category") filterParams.category = value
+      if (key === "delivery_max") filterParams.delivery_max = Number(value)
+      if (key === "delivery_min") filterParams.delivery_min = Number(value)
+      if (key === "has_discount") filterParams.has_discount = value === "true"
+      if (key === "is_featured") filterParams.is_featured = value === "true"
+      if (key === "in_stock") filterParams.in_stock = value === "true"
+      if (key === "is_active") filterParams.is_active = value === "true"
+      if (key === "ordering") filterParams.ordering = value
+      if (key === "page") filterParams.page = Number(value)
+      if (key === "price_max") filterParams.price_max = Number(value)
+      if (key === "price_min") filterParams.price_min = Number(value)
+      if (key === "search") filterParams.search = value
+      if (key === "size") filterParams.size = value
+      if (key === "size_eu") filterParams.size_eu = value
+      if (key === "size_uk") filterParams.size_uk = value
+      if (key === "size_us") filterParams.size_us = value
+      if (key === "slug") filterParams.slug = value
+      if (key === "subcategory") filterParams.subcategory = value
+      if (key === "page_size") filterParams.page_size = Number(value)
+    })
+
+    console.log("🔍 Processed filter params:", filterParams)
+
+    // Build query string - FAQAT BIR MARTA QO'SHAMIZ
+    const queryParams = new URLSearchParams()
+
     Object.entries(filterParams).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        queryString.append(key, String(value));
+      if (value !== undefined && value !== null && value !== "") {
+        queryParams.set(key, String(value)) // set() ishlatamiz, append() emas
       }
-    });
+    })
 
-    // Make API request
-    const response = await fetch(
-      `${API_BASE_URL}/products/?${queryString.toString()}`,
-      {
-        headers: {
-          "X-Telegram-ID": telegramId,
-          Accept: "application/json",
-        },
-      }
-    );
+    const url = `${DATA_SOURCE_URL}?${queryParams.toString()}`
+    console.log("🌐 Final API URL:", url)
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      return NextResponse.json(errorData, { status: response.status });
+    const headers: Record<string, string> = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
     }
 
-    const data: PaginatedResponse<Product> = await response.json();
-    return NextResponse.json(data);
+    // Add Telegram ID if available
+    if (telegramId) {
+      headers["X-Telegram-ID"] = telegramId
+    }
+
+    const res = await fetch(url, { headers })
+
+    if (!res.ok) {
+      console.error("❌ External API error:", res.status, res.statusText)
+      const errorText = await res.text()
+      console.error("Error details:", errorText)
+      return NextResponse.json(
+        {
+          error: "Failed to fetch data",
+          details: errorText,
+          status: res.status,
+        },
+        { status: res.status },
+      )
+    }
+
+    const products = await res.json()
+    console.log("✅ External API response received successfully")
+
+    return NextResponse.json(products)
   } catch (error) {
-    console.error("Error fetching products:", error);
+    console.error("❌ Error in products API route:", error)
     return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+      {
+        error: "Internal server error",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 },
+    )
   }
 }

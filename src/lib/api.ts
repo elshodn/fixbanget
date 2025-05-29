@@ -404,53 +404,60 @@ export async function fetchProducts(): Promise<Product[]> {
   }
 }
 
-export async function fetchFilterProducts(
-  filters: FilterParams = {},
-  gender: IGender
-): Promise<ApiResponse<Product>> {
+export const fetchFilterProducts = async (params: FilterParams, gender: string) => {
   try {
-    // Build query parameters
-    const queryParams = new URLSearchParams();
+    const queryParams = new URLSearchParams()
 
-    // Add all filter parameters to the query
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== "") {
+    // FAQAT BU YERDA gender qo'shamiz
+    const genderValue = gender === "female" ? "2" : "1"
+    queryParams.set("gender", genderValue)
+
+    // Boshqa parametrlarni qo'shamiz, lekin gender'ni skip qilamiz
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "" && key !== "gender") {
         if (Array.isArray(value)) {
-          value.forEach((v) => queryParams.append(key, v.toString()));
-          queryParams.append("gender", getGenderId(gender).toString());
+          queryParams.set(key, value.join(","))
         } else {
-          queryParams.append(key, value.toString());
-          queryParams.append("gender", getGenderId(gender).toString());
+          queryParams.set(key, String(value))
         }
       }
-    });
+    })
 
-    const queryString = queryParams.toString()
-      ? `?${queryParams.toString()}`
-      : "";
-    const url = `/api/products${queryString}`;
+
+const createHeaders = () => {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  }
+
+  const telegramId = getTelegramIdForApi()
+  if (telegramId) {
+    headers["X-Telegram-ID"] = telegramId
+  }
+
+  return headers
+}
+    const url = `${API_BASE_URL}/products?${queryParams.toString()}`
+    console.log("🚀 Fetching products from:", url)
 
     const response = await fetch(url, {
-      headers: {
-        "X-Telegram-ID": getTelegramIdForApi(),
-        Accept: "application/json",
-      },
-    });
+      method: "GET",
+      headers: createHeaders(),
+    })
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      console.error("❌ API Error:", response.status, response.statusText)
+      const errorText = await response.text()
+      console.error("Error details:", errorText)
+      throw new Error(`HTTP error! status: ${response.status}`)
     }
 
-    const data: ApiResponse<Product> = await response.json();
-    return data;
+    const data = await response.json()
+    console.log("✅ API Response received successfully")
+    return data
   } catch (error) {
-    console.error("Error fetching products:", error);
-    return {
-      count: 0,
-      next: null,
-      previous: null,
-      results: [],
-    };
+    console.error("❌ Error fetching products:", error)
+    throw error
   }
 }
 
