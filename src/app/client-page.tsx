@@ -16,6 +16,7 @@ import { useViewedProductsStore } from "@/stores/viewed-product-store";
 import { ProductCarousel } from "@/components/Carousel";
 
 import { useWishlistStore } from "@/stores/wishlist-store";
+import { Card } from "@/components/ui/card";
 
 // Fetcher function for SWR
 
@@ -25,37 +26,34 @@ export default function HomeClient() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(false);
-  const [orders, setOrders] = useState<Order[]>([])
-  
+  // const [orders, setOrders] = useState<Order[]>([]);
 
-  const {wishlistItems, fetchWishlist} =useWishlistStore();
+  const { wishlistItems, fetchWishlist } = useWishlistStore();
 
-
-  console.log(wishlistItems)
   useEffect(() => {
     const getCategories = async () => {
-      setLoading(true); 
-      fetchWishlist()
-      const [categoriesData, brandsData] = await Promise.all([
-        await fetchCategories(gender),
-        await fetchBrands(),
-      ]);
-      setCategories(categoriesData);
-      setBrands(brandsData);
-      
-      // setObuvCategories(subcategoriesData);
+      setLoading(true);
+      fetchWishlist();
+      try {
+        const [categoriesData, brandsData] = await Promise.all([
+          await fetchCategories(gender),
+          await fetchBrands(),
+        ]);
+        setCategories(categoriesData);
+        setBrands(brandsData);
+      } catch {
+        console.log("Failed");
+      } finally {
+        setLoading(false);
+      }
 
-      setLoading(false);
+      // setObuvCategories(subcategoriesData);
     };
     getCategories();
+    setLoading(false);
   }, [gender]);
 
-  const {viewedProducts}= useViewedProductsStore()
-  
-
-  
-
- 
+  const { viewedProducts } = useViewedProductsStore();
 
   return (
     <>
@@ -73,7 +71,6 @@ export default function HomeClient() {
             title={"Популярный Продукт"}
           />
         )}
-        
 
         {loading ? (
           <CollectionSkeleton />
@@ -95,13 +92,15 @@ export default function HomeClient() {
           />
         )}
 
-         {loading ? (
+        {loading ? (
           <CarouselSkeleton />
         ) : (
-          <ViewedProductsCarousel title="Посмотрели" products={viewedProducts || []} />
+          <ViewedProductsCarousel
+            title="Посмотрели"
+            products={viewedProducts || []}
+          />
         )}
 
-       
         {/* {loading ? (
           <CarouselSkeleton />
         ) : (
@@ -122,7 +121,7 @@ export default function HomeClient() {
 
         {/* <StyliesCollection /> */}
 
-       {/*  */}
+        {/*  */}
         {loading ? (
           <CarouselSkeleton />
         ) : (

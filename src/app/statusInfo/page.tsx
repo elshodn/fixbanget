@@ -1,63 +1,61 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Separator } from "@/components/ui/separator"
-import { ArrowLeft, Package, MapPin, Clock, Phone } from "lucide-react"
-import { toast } from "@/components/ui/use-toast"
-import type { Order } from "@/types/order"
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
+import { ArrowLeft, Package, MapPin, Clock, Phone } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
+import type { Order } from "@/types/order";
+import { getTelegramIdForApi } from "@/lib/api";
 
 export default function OrdersPage() {
-  const [orders, setOrders] = useState<Order[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
-  const telegramId = 1524783641
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const telegramId = 1524783641;
 
   const fetchOrders = async () => {
     try {
-      setIsLoading(true)
-      console.log("Fetching orders...")
+      setIsLoading(true);
 
       const response = await fetch("/api/orders", {
         headers: {
-          "X-Telegram-ID": telegramId.toString(),
+          "X-Telegram-ID": getTelegramIdForApi(),
         },
-      })
+      });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch orders")
+        throw new Error("Failed to fetch orders");
       }
 
-      const data = await response.json()
-      console.log("Orders API response:", data)
+      const data = await response.json();
 
       // Handle both direct array and paginated response
-      const ordersArray = Array.isArray(data) ? data : data.results || []
-      console.log("Orders array:", ordersArray)
+      const ordersArray = Array.isArray(data) ? data : data.results || [];
 
-      setOrders(ordersArray)
+      setOrders(ordersArray);
 
       // If there are orders, don't auto-select the first one
       // Let user choose which order to view
     } catch (error) {
-      console.error("Error fetching orders:", error)
+      console.error("Error fetching orders:", error);
       toast({
         title: "Ошибка",
         description: "Не удалось загрузить заказы",
         variant: "destructive",
-      })
-      setOrders([]) // Set empty array on error
+      });
+      setOrders([]); // Set empty array on error
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchOrders()
-  }, [])
+    fetchOrders();
+  }, []);
 
   const getStatusColor = (status: string) => {
     const colorMap: Record<string, string> = {
@@ -67,24 +65,24 @@ export default function OrdersPage() {
       delivered: "bg-green-100 text-green-800",
       cancelled: "bg-red-100 text-red-800",
       canceled: "bg-red-100 text-red-800", // Handle both spellings
-    }
-    return colorMap[status] || "bg-gray-100 text-gray-800"
-  }
+    };
+    return colorMap[status] || "bg-gray-100 text-gray-800";
+  };
 
   const formatDate = (dateString: string) => {
     try {
-      const date = new Date(dateString)
+      const date = new Date(dateString);
       return date.toLocaleDateString("ru-RU", {
         day: "numeric",
         month: "long",
         year: "numeric",
         hour: "2-digit",
         minute: "2-digit",
-      })
+      });
     } catch (error) {
-      return dateString // Return original string if parsing fails
+      return dateString; // Return original string if parsing fails
     }
-  }
+  };
 
   if (isLoading) {
     return (
@@ -102,7 +100,7 @@ export default function OrdersPage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   if (!Array.isArray(orders) || orders.length === 0) {
@@ -111,13 +109,15 @@ export default function OrdersPage() {
         <div className="max-w-4xl mx-auto text-center">
           <Package className="w-24 h-24 mx-auto text-gray-300 mb-4" />
           <h1 className="text-2xl font-bold mb-2">У вас пока нет заказов</h1>
-          <p className="text-gray-600 mb-6">Сделайте свой первый заказ, чтобы увидеть его здесь</p>
+          <p className="text-gray-600 mb-6">
+            Сделайте свой первый заказ, чтобы увидеть его здесь
+          </p>
           <Link href="/">
             <Button>Начать покупки</Button>
           </Link>
         </div>
       </div>
-    )
+    );
   }
 
   if (selectedOrder) {
@@ -141,10 +141,18 @@ export default function OrdersPage() {
               {/* Order Header */}
               <div className="flex justify-between items-start">
                 <div>
-                  <h1 className="text-2xl font-bold mb-2">Заказ #{selectedOrder.id}</h1>
-                  <p className="text-gray-600">от {formatDate(selectedOrder.created_at)}</p>
+                  <h1 className="text-2xl font-bold mb-2">
+                    Заказ #{selectedOrder.id}
+                  </h1>
+                  <p className="text-gray-600">
+                    от {formatDate(selectedOrder.created_at)}
+                  </p>
                 </div>
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(selectedOrder.status)}`}>
+                <span
+                  className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
+                    selectedOrder.status
+                  )}`}
+                >
                   {selectedOrder.status_display}
                 </span>
               </div>
@@ -160,24 +168,33 @@ export default function OrdersPage() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Статус:</span>
-                    <span className={`px-2 py-1 rounded text-sm ${getStatusColor(selectedOrder.status)}`}>
+                    <span
+                      className={`px-2 py-1 rounded text-sm ${getStatusColor(
+                        selectedOrder.status
+                      )}`}
+                    >
                       {selectedOrder.status_display}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Дата заказа:</span>
-                    <span className="font-medium">{formatDate(selectedOrder.created_at)}</span>
+                    <span className="font-medium">
+                      {formatDate(selectedOrder.created_at)}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Ожидаемая доставка:</span>
                     <span className="font-medium">
-                      {selectedOrder.estimated_delivery_date?.formatted || "Не указано"}
+                      {selectedOrder.estimated_delivery_date?.formatted ||
+                        "Не указано"}
                     </span>
                   </div>
                   {selectedOrder.tracking_number && (
                     <div className="flex justify-between">
                       <span className="text-gray-600">Трек-номер:</span>
-                      <span className="font-medium text-blue-600">{selectedOrder.tracking_number}</span>
+                      <span className="font-medium text-blue-600">
+                        {selectedOrder.tracking_number}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -190,12 +207,16 @@ export default function OrdersPage() {
                         Пункт выдачи
                       </h3>
                       <div className="text-sm text-gray-600 space-y-1">
-                        <p className="font-medium">{selectedOrder.pickup_branch.name}</p>
-                        <p>
-                          {selectedOrder.pickup_branch.street}, {selectedOrder.pickup_branch.district}
+                        <p className="font-medium">
+                          {selectedOrder.pickup_branch.name}
                         </p>
                         <p>
-                          {selectedOrder.pickup_branch.city}, {selectedOrder.pickup_branch.region}
+                          {selectedOrder.pickup_branch.street},{" "}
+                          {selectedOrder.pickup_branch.district}
+                        </p>
+                        <p>
+                          {selectedOrder.pickup_branch.city},{" "}
+                          {selectedOrder.pickup_branch.region}
                         </p>
                         <div className="flex items-center gap-2 mt-2">
                           <Phone className="h-3 w-3" />
@@ -203,7 +224,9 @@ export default function OrdersPage() {
                         </div>
                         <div className="flex items-center gap-2">
                           <Clock className="h-3 w-3" />
-                          <span>{selectedOrder.pickup_branch.working_hours}</span>
+                          <span>
+                            {selectedOrder.pickup_branch.working_hours}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -219,19 +242,27 @@ export default function OrdersPage() {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Имя:</span>
-                    <span className="font-medium">{selectedOrder.customer_name}</span>
+                    <span className="font-medium">
+                      {selectedOrder.customer_name}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Телефон:</span>
-                    <span className="font-medium">{selectedOrder.phone_number}</span>
+                    <span className="font-medium">
+                      {selectedOrder.phone_number}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Способ оплаты:</span>
-                    <span className="font-medium">{selectedOrder.payment_method_display}</span>
+                    <span className="font-medium">
+                      {selectedOrder.payment_method_display}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Статус оплаты:</span>
-                    <span className="font-medium">{selectedOrder.payment_status}</span>
+                    <span className="font-medium">
+                      {selectedOrder.payment_status}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -244,11 +275,17 @@ export default function OrdersPage() {
                 <div className="space-y-4">
                   {selectedOrder.items && selectedOrder.items.length > 0 ? (
                     selectedOrder.items.map((item) => (
-                      <div key={item.id} className="flex gap-4 p-4 border rounded-lg">
+                      <div
+                        key={item.id}
+                        className="flex gap-4 p-4 border rounded-lg"
+                      >
                         <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center">
                           {item.product_image ? (
                             <Image
-                              src={item.product_image}
+                              src={
+                                process.env.NEXT_PUBLIC_API_URL! +
+                                item.product_image
+                              }
                               alt={item.product_name}
                               width={80}
                               height={80}
@@ -267,31 +304,32 @@ export default function OrdersPage() {
 
                         <div className="flex-1">
                           <h4 className="font-semibold">{item.product_name}</h4>
-                          <p className="text-sm text-gray-600 mt-1">
-                            {item.product?.brand?.name} • {item.product?.subcategory?.name}
+                          <p className="text-[10px] text-gray-600 mt-1">
+                            {item.product?.brand?.name} •{" "}
+                            {item.product?.subcategory?.name}
                           </p>
-                          <div className="flex items-center justify-between mt-2">
-                            <span className="text-sm text-gray-600">Количество: {item.quantity}</span>
+                          <div className="flex items-end justify-between mt-2">
+                            <span className="text-[10px] sm:text-sm text-gray-600">
+                              Количество: {item.quantity}
+                            </span>
                             <div className="text-right">
-                              <p className="font-semibold">
+                              <p className="font-semibold text-[11px]">
                                 {selectedOrder.is_split_payment
-                                  ? `${selectedOrder.first_payment_amount} ₽`
-                                  : `${item.total_price} ₽`}
+                                  ? `${Number(selectedOrder.first_payment_amount).toLocaleString()} ₽`
+                                  : `${Number(item.total_price).toLocaleString()} ₽`}
                               </p>
-                              {selectedOrder.is_split_payment && (
-                                <p className="text-xs text-gray-500">
-                                  (Split: {selectedOrder.first_payment_amount} ₽ paid,{" "}
-                                  {selectedOrder.second_payment_amount} ₽ remaining)
-                                </p>
-                              )}
-                              <p className="text-sm text-gray-500">за {item.quantity} шт.</p>
+                              <p className="text-[8px] text-gray-500">
+                                за {item.quantity} шт.
+                              </p>
                             </div>
                           </div>
                         </div>
                       </div>
                     ))
                   ) : (
-                    <p className="text-gray-500 text-center py-4">Нет товаров в заказе</p>
+                    <p className="text-gray-500 text-center py-4">
+                      Нет товаров в заказе
+                    </p>
                   )}
                 </div>
               </div>
@@ -305,7 +343,9 @@ export default function OrdersPage() {
                   {selectedOrder.is_split_payment ? (
                     <>
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Товары ({selectedOrder.items_count}):</span>
+                        <span className="text-gray-600">
+                          Товары ({selectedOrder.items_count}):
+                        </span>
                         <span>{selectedOrder.total_amount} ₽</span>
                       </div>
                       <div className="flex justify-between text-green-600">
@@ -318,13 +358,20 @@ export default function OrdersPage() {
                       </div>
                       <div className="flex justify-between text-sm text-gray-500">
                         <span>Срок доплаты:</span>
-                        <span>{selectedOrder.split_payment_info?.second_payment?.due_date}</span>
+                        <span>
+                          {
+                            selectedOrder.split_payment_info?.second_payment
+                              ?.due_date
+                          }
+                        </span>
                       </div>
                     </>
                   ) : (
                     <>
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Товары ({selectedOrder.items_count}):</span>
+                        <span className="text-gray-600">
+                          Товары ({selectedOrder.items_count}):
+                        </span>
                         <span>{selectedOrder.total_amount} ₽</span>
                       </div>
                       <div className="flex justify-between">
@@ -351,16 +398,18 @@ export default function OrdersPage() {
               <div className="flex gap-4">
                 {selectedOrder.can_cancel && (
                   <Button variant="outline" className="flex-1">
-                    Отменить заказ
+                    Отменить
                   </Button>
                 )}
-                <Button className="flex-1 bg-[#FF385C] hover:bg-[#E6325A]">Связаться с поддержкой</Button>
+                <Button className="flex-1 bg-[#FF385C] hover:bg-[#E6325A]">
+                  Связаться
+                </Button>
               </div>
             </div>
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -378,9 +427,15 @@ export default function OrdersPage() {
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="font-semibold text-lg">Заказ #{order.id}</h3>
-                  <p className="text-gray-600 text-sm">{formatDate(order.created_at)}</p>
+                  <p className="text-gray-600 text-sm">
+                    {formatDate(order.created_at)}
+                  </p>
                 </div>
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
+                <span
+                  className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
+                    order.status
+                  )}`}
+                >
                   {order.status_display}
                 </span>
               </div>
@@ -388,18 +443,24 @@ export default function OrdersPage() {
               <div className="flex justify-between items-center">
                 <div>
                   <p className="text-sm text-gray-600">
-                    {order.items_count} товар{order.items_count > 1 ? "а" : ""} • {order.payment_method_display}
+                    {order.items_count} товар{order.items_count > 1 ? "а" : ""}{" "}
+                    • {order.payment_method_display}
                   </p>
                   <p className="text-sm text-gray-600">
-                    Доставка: {order.estimated_delivery_date?.formatted || "Не указано"}
+                    Доставка:{" "}
+                    {order.estimated_delivery_date?.formatted || "Не указано"}
                   </p>
                 </div>
                 <div className="text-right">
                   <p className="font-semibold text-lg">
-                    {order.is_split_payment ? `${order.first_payment_amount} ₽` : `${order.final_amount} ₽`}
+                    {order.is_split_payment
+                      ? `${order.first_payment_amount} ₽`
+                      : `${order.final_amount} ₽`}
                   </p>
                   {order.is_split_payment && (
-                    <p className="text-xs text-gray-500">Split: +{order.second_payment_amount} ₽ осталось</p>
+                    <p className="text-xs text-gray-500">
+                      Split: +{order.second_payment_amount} ₽ осталось
+                    </p>
                   )}
                 </div>
               </div>
@@ -408,5 +469,5 @@ export default function OrdersPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

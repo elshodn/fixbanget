@@ -11,7 +11,6 @@ export async function GET(
     const { slug } = await params;
     const telegramId = request.headers.get("X-Telegram-ID");
 
-    console.log("slug", slug, "telegramId", telegramId);
 
     if (!telegramId) {
       return NextResponse.json(

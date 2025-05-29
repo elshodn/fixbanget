@@ -17,7 +17,6 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "item_id is required" }, { status: 400 })
     }
 
-    console.log("Removing cart item:", itemId)
 
     const response = await fetch(`${API_BASE_URL}/cart/items/${itemId}/`, {
       method: "DELETE",

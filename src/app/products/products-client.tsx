@@ -6,21 +6,10 @@ import { Button } from "@/components/ui/button";
 import clsx from "clsx";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { SwiperSlide, Swiper } from "swiper/react";
-import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/navigation";
-import {
-  ArrowRight,
-  ArrowLeft,
-  ChevronRight,
-  ArrowDownWideNarrow,
-  Filter,
-  Search,
-  Loader,
-  X,
-} from "lucide-react";
+import { ArrowDownWideNarrow, Filter, Search, Loader, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import {
@@ -156,6 +145,9 @@ const ProductsClient = ({ initialCategory }: { initialCategory?: string }) => {
     if (filters.category) params.set("categories", filters.category);
     if (filters.subcategory) params.set("subcategories", filters.subcategory);
 
+    // Gender parametrini bir marta qo'shamiz
+    params.set("gender", gender);
+
     // URL-ni yangilash
     const newUrl = params.toString()
       ? `${pathname}?${params.toString()}`
@@ -230,7 +222,7 @@ const ProductsClient = ({ initialCategory }: { initialCategory?: string }) => {
 
       return () => window.removeEventListener("resize", checkIfMobile);
     }
-  }, [filters.category, filters.subcategory]);
+  }, [filters.category, filters.subcategory, gender]);
 
   // URL o'zgarishini kuzatish
   useEffect(() => {
@@ -282,6 +274,7 @@ const ProductsClient = ({ initialCategory }: { initialCategory?: string }) => {
     filters.category,
     filters.subcategory,
     updateUrl,
+    gender,
   ]);
 
   // Load more products when scrolling to the bottom
@@ -762,7 +755,7 @@ const ProductsClient = ({ initialCategory }: { initialCategory?: string }) => {
     switch (visibleFilter) {
       case "size":
         return (
-          <div className="absolute z-10 mt-2 p-4 bg-white rounded-lg shadow-lg border w-80">
+          <div className="absolute z-20 mt-2 p-4 bg-white rounded-lg shadow-lg border w-80">
             <div className="flex justify-between items-center mb-3">
               <h3 className="font-medium">Размер</h3>
               <Button
@@ -848,7 +841,7 @@ const ProductsClient = ({ initialCategory }: { initialCategory?: string }) => {
         );
       case "price":
         return (
-          <div className="absolute z-10 mt-2 p-4 bg-white rounded-lg shadow-lg border w-80">
+          <div className="absolute z-20 mt-2 p-4 bg-white rounded-lg shadow-lg border w-80">
             <div className="flex justify-between items-center mb-3">
               <h3 className="font-medium">Цена, RUB</h3>
               <Button
@@ -901,7 +894,7 @@ const ProductsClient = ({ initialCategory }: { initialCategory?: string }) => {
         );
       case "brand":
         return (
-          <div className="absolute z-10 mt-2 p-4 bg-white rounded-lg shadow-lg border w-80">
+          <div className="absolute z-20 mt-2 p-4 bg-white rounded-lg shadow-lg border w-80">
             <div className="flex justify-between items-center mb-3">
               <h3 className="font-medium">Бренды</h3>
               <Button
@@ -943,7 +936,7 @@ const ProductsClient = ({ initialCategory }: { initialCategory?: string }) => {
         );
       case "delivery":
         return (
-          <div className="absolute z-10 mt-2 p-4 bg-white rounded-lg shadow-lg border w-80">
+          <div className="absolute z-20 mt-2 p-4 bg-white rounded-lg shadow-lg border w-80">
             <div className="flex justify-between items-center mb-3">
               <h3 className="font-medium">Срок доставки, дни</h3>
               <Button
@@ -1010,9 +1003,10 @@ const ProductsClient = ({ initialCategory }: { initialCategory?: string }) => {
       </p>
       <h1 className="p-5 text-3xl">
         {filters.category
-          ? brands.find((brand) => brand.id === Number(filters.category))?.name ||
-        sizes.find((size) => size.id === Number(filters.category))?.name ||
-        "Товары"
+          ? brands.find((brand) => brand.id === Number(filters.category))
+              ?.name ||
+            sizes.find((size) => size.id === Number(filters.category))?.name ||
+            "Товары"
           : "Товары"}
       </h1>
       <div className="flex p-5 flex-col md:flex-row">
@@ -1041,7 +1035,7 @@ const ProductsClient = ({ initialCategory }: { initialCategory?: string }) => {
                   </Button>
                   <div
                     id="sort-dropdown"
-                    className="hidden absolute sm:right-0 left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
+                    className="hidden absolute sm:right-0 left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20"
                   >
                     {sortOptions.map((option) => (
                       <button
@@ -1239,7 +1233,7 @@ const ProductsClient = ({ initialCategory }: { initialCategory?: string }) => {
                     </Button>
                     <div
                       id="sort-dropdown"
-                      className="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
+                      className="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20"
                     >
                       {sortOptions.map((option) => (
                         <button
@@ -1264,56 +1258,6 @@ const ProductsClient = ({ initialCategory }: { initialCategory?: string }) => {
                 )}
               </div>
             )}
-
-            <div className="flex justify-between py-4">
-              <div>
-                <p className="text-base font-bold">Быстрая доставка ⚡</p>
-                <p className="text-sm text-gray-600">
-                  Товары с доставкой за 0-2 дня или самовывоз
-                </p>
-              </div>
-              <Button
-                variant="outline"
-                className="flex items-center rounded-2xl h-12 gap-1"
-              >
-                Все <ChevronRight className="text-4xl" />
-              </Button>
-            </div>
-
-            <div className="w-full px-1">
-              <Swiper
-                slidesPerView={isMobile ? 2 : 6}
-                spaceBetween={10}
-                loop={featuredProducts.length > (isMobile ? 2 : 6)}
-                autoplay={{
-                  delay: 5000,
-                  disableOnInteraction: false,
-                }}
-                modules={[Navigation, Autoplay]}
-                navigation={{
-                  nextEl: ".product-carousel-next",
-                  prevEl: ".product-carousel-prev",
-                }}
-              >
-                {featuredProducts.map((product) => (
-                  <SwiperSlide className="mb-3" key={product.id}>
-                    <ProductCarouselCard key={product.id} product={product} />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-            <button
-              style={{ boxShadow: "0px 1px 7px 0px rgba(0,0,0,0.3)" }}
-              className="product-carousel-prev cursor-pointer absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-            >
-              <ArrowLeft />
-            </button>
-            <button
-              style={{ boxShadow: "0px 1px 7px 0px rgba(0,0,0,0.3)" }}
-              className="product-carousel-next cursor-pointer absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-            >
-              <ArrowRight />
-            </button>
           </div>
           <hr className="mb-6" />
 
@@ -1328,7 +1272,10 @@ const ProductsClient = ({ initialCategory }: { initialCategory?: string }) => {
               >
                 {products.length > 0 ? (
                   products.map((product, index) => (
-                    <ProductCarouselCard key={product.id+index+ Math.random()} product={product} />
+                    <ProductCarouselCard
+                      key={product.id + index + Math.random()}
+                      product={product}
+                    />
                   ))
                 ) : (
                   <div className="col-span-full text-center py-10">

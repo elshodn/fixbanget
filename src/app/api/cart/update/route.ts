@@ -24,7 +24,6 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "product and quantity are required" }, { status: 400 })
     }
 
-    console.log("Updating cart item:", { itemId, product, quantity })
 
     const response = await fetch(`${API_BASE_URL}/cart/items/${itemId}/`, {
       method: "PUT",
