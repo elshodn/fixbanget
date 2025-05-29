@@ -41,6 +41,7 @@ import { fetchFilterProducts, getTelegramIdForApi } from "@/lib/api";
 import { useGender } from "@/hooks/use-gender";
 import type { Branch } from "@/types/branch";
 import { toast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
 interface ProductDetailCardProps {
   product: Product;
@@ -524,11 +525,11 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
           </h1>
           <div className="flex items-center gap-2">
             <p className="text-xl sm:text-2xl font-semibold">
-              {productPrice || 0} ₽
+              {Number(productPrice).toLocaleString() || 0} ₽
             </p>
             {product?.discount_price && (
               <p className="text-lg text-gray-500 line-through">
-                {product.price} ₽
+                {Number(product.price).toLocaleString()} ₽
               </p>
             )}
           </div>
@@ -785,7 +786,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
 
             {/* Branch Selection */}
             <div className="space-y-2">
-              <Label htmlFor="branch">Выберите филиал *</Label>
+              <Label htmlFor="branch">Выберите филиал <span className="text-red-500">*</span></Label>
               {isBranchesLoading ? (
                 <Skeleton className="h-10 w-full" />
               ) : (
@@ -793,13 +794,13 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
                   value={selectedBranch?.toString() || ""}
                   onValueChange={(value) => setSelectedBranch(Number(value))}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Выберите филиал для получения" />
                   </SelectTrigger>
                   <SelectContent>
                     {branches.map((branch) => (
                       <SelectItem key={branch.id} value={branch.id.toString()}>
-                        <div className="flex flex-col">
+                        <div className="flex flex-col w-full">
                           <span className="font-medium">
                             {branch.name} - {branch.city}
                           </span>
@@ -858,7 +859,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="name">Имя и фамилия *</Label>
+              <Label htmlFor="name">Имя и фамилия <span className="text-red-500">*</span></Label>
               <Input
                 id="name"
                 placeholder="Имя и фамилия"
@@ -869,7 +870,7 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone">Телефон *</Label>
+              <Label htmlFor="phone">Телефон <span className="text-red-500">*</span></Label>
               <PhoneInput
                 countryCode={countryCode}
                 phoneNumber={phoneNumber}

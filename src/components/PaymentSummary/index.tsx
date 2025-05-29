@@ -39,15 +39,11 @@ export const PaymentSummaryCart: React.FC<PaymentSummaryCartProps> = ({
   discount = 0,
   redirectTo,
   promoCode,
-  setPromoCode,
   discountApplied,
-  setDiscountApplied,
-  selectedShipping,
   getData,
   customerName = "",
   phoneNumber = "",
   cartId,
-  telegramId = 1524783641,
   selectedBranch,
   selectedShippingMethod,
   cartItems = [],
@@ -270,7 +266,7 @@ export const PaymentSummaryCart: React.FC<PaymentSummaryCartProps> = ({
             <div>
               <p className="text-[12px] font-medium">
                 Сплит:{" "}
-                <span className="text-[#FF385C]">{grandTotal / 2} ₽</span>
+                <span className="text-[#FF385C]">{(grandTotal / 2).toLocaleString()} ₽</span>
               </p>
             </div>
           </div>

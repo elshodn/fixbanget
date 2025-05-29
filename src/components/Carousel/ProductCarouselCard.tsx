@@ -8,6 +8,7 @@ import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
 import { useState } from "react";
+import { useViewedProductsStore } from "@/stores/viewed-product-store";
 
 interface ProductCarouselCardProps {
   product: Product;
@@ -18,6 +19,7 @@ export const ProductCarouselCard: React.FC<ProductCarouselCardProps> = ({
 }) => {
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
+  const { addViewedProduct } = useViewedProductsStore();
 
   const toggleWishlistItem = useWishlistStore(
     (state) => state.toggleWishlistItem
@@ -50,7 +52,10 @@ export const ProductCarouselCard: React.FC<ProductCarouselCardProps> = ({
             className={isInWishlist ? "fill-current" : "fill-none"}
           />
         </button>
-        <Link href={`/products/${product.slug}`}>
+        <Link
+          onClick={() => addViewedProduct(product)}
+          href={`/products/${product.slug}`}
+        >
           <div>
             <div className="h-36 overflow-hidden relative flex justify-center items-center">
               {isImageLoading && !imageError && (
@@ -81,7 +86,7 @@ export const ProductCarouselCard: React.FC<ProductCarouselCardProps> = ({
                 />
               )}
             </div>
-            <div className="px-3 pb-2">
+            <div className="px-0.5 pb-2">
               <div className="p-1 ">
                 <div className="flex items-end gap-3">
                   <span

@@ -317,7 +317,7 @@ export default function CartPage() {
             <p className="text-gray-600 mb-6">
               Добавьте товары в корзину, чтобы продолжить покупки
             </p>
-            <Link href="/">
+            <Link href="/products">
               <Button>Продолжить покупки</Button>
             </Link>
           </div>
@@ -447,13 +447,12 @@ export default function CartPage() {
                         <div className="flex items-center gap-4">
                           <div className="text-right">
                             <p className="font-semibold">
-                              {Number(item.product_price) -
-                                Number(item.product_discount_price)}
+                              {((Number(item.product_price) - Number(item.product_discount_price)) * item.quantity).toLocaleString()}
                               ₽
                             </p>
                             {item.product_discount_price && (
                               <p className="text-sm text-gray-500 line-through">
-                                {Number(item.product_price) * item.quantity} ₽
+                                {(Number(item.product_price) * item.quantity).toLocaleString()} ₽
                               </p>
                             )}
                           </div>
@@ -503,7 +502,7 @@ export default function CartPage() {
                         >
                           <div className="text-center flex gap-2 items-center">
                             <span className="text-base font-semibold">
-                              {Number(cart.total_price) + Number(method.price)}{" "}
+                              {(Number(cart.total_price) + Number(method.price)).toLocaleString()}
                               ₽
                             </span>
                             <span className="text-xs text-gray-500">
