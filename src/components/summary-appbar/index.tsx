@@ -164,13 +164,16 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
         );
       }
 
-      const response = await fetch("/api/cart/add", {
-        method: "POST",
-        headers: {
-          "X-Telegram-ID": getTelegramIdForApi(),
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL!}/cart/add`,
+        {
+          method: "POST",
+          headers: {
+            "X-Telegram-ID": getTelegramIdForApi(),
+          },
+          body: formData,
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to add to cart");
@@ -268,14 +271,17 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
         shipping_cost: shippingCost,
       };
 
-      const response = await fetch("/api/direct-purchase", {
-        method: "POST",
-        headers: {
-          "X-Telegram-ID": telegramId.toString(),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(purchaseData),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL!}/direct-purchase`,
+        {
+          method: "POST",
+          headers: {
+            "X-Telegram-ID": telegramId.toString(),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(purchaseData),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.text();

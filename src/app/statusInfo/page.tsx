@@ -21,11 +21,14 @@ export default function OrdersPage() {
     try {
       setIsLoading(true);
 
-      const response = await fetch("/api/orders", {
-        headers: {
-          "X-Telegram-ID": getTelegramIdForApi(),
-        },
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL!}/orders`,
+        {
+          headers: {
+            "X-Telegram-ID": getTelegramIdForApi(),
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch orders");
@@ -315,8 +318,12 @@ export default function OrdersPage() {
                             <div className="text-right">
                               <p className="font-semibold text-[11px]">
                                 {selectedOrder.is_split_payment
-                                  ? `${Number(selectedOrder.first_payment_amount).toLocaleString()} ₽`
-                                  : `${Number(item.total_price).toLocaleString()} ₽`}
+                                  ? `${Number(
+                                      selectedOrder.first_payment_amount
+                                    ).toLocaleString()} ₽`
+                                  : `${Number(
+                                      item.total_price
+                                    ).toLocaleString()} ₽`}
                               </p>
                               <p className="text-[8px] text-gray-500">
                                 за {item.quantity} шт.

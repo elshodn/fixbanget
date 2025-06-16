@@ -6,7 +6,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
 
 async function getProduct(slug: string): Promise<Product | null> {
   try {
-    const response = await fetch(`${API_BASE_URL}/products/${slug}`, {
+    const response = await fetch(`${API_BASE_URL}/products${slug}`, {
       headers: {
         "X-Telegram-ID": getTelegramIdForApi(),
         Accept: "application/json",

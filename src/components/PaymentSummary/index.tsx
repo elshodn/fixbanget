@@ -149,13 +149,16 @@ export const PaymentSummaryCart: React.FC<PaymentSummaryCartProps> = ({
         orderFormData.append("promo_discount", promoDiscount.toString());
       }
 
-      const orderResponse = await fetch("/api/orders", {
-        method: "POST",
-        headers: {
-          "X-Telegram-ID": getTelegramIdForApi(),
-        },
-        body: orderFormData,
-      });
+      const orderResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL!}/orders`,
+        {
+          method: "POST",
+          headers: {
+            "X-Telegram-ID": getTelegramIdForApi(),
+          },
+          body: orderFormData,
+        }
+      );
 
       if (!orderResponse.ok) {
         const errorData = await orderResponse.json().catch(() => ({}));
@@ -266,7 +269,9 @@ export const PaymentSummaryCart: React.FC<PaymentSummaryCartProps> = ({
             <div>
               <p className="text-[12px] font-medium">
                 Сплит:{" "}
-                <span className="text-[#FF385C]">{(grandTotal / 2).toLocaleString()} ₽</span>
+                <span className="text-[#FF385C]">
+                  {(grandTotal / 2).toLocaleString()} ₽
+                </span>
               </p>
             </div>
           </div>

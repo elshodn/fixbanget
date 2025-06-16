@@ -117,11 +117,14 @@ export default function CartPage() {
   const fetchBranches = async () => {
     try {
       setIsBranchesLoading(true);
-      const response = await fetch("/api/branches", {
-        headers: {
-          "X-Telegram-ID": getTelegramIdForApi(),
-        },
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL!}/branches`,
+        {
+          headers: {
+            "X-Telegram-ID": getTelegramIdForApi(),
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch branches");
@@ -145,7 +148,7 @@ export default function CartPage() {
   const fetchCart = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch("/api/cart", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL!}/cart`, {
         headers: {
           "X-Telegram-ID": getTelegramIdForApi(),
         },
@@ -189,21 +192,23 @@ export default function CartPage() {
 
     setIsUpdating(true);
     try {
-
       // Update localStorage immediately for better UX
       cartStorage.updateQuantity(itemId, newQuantity);
 
-      const response = await fetch(`/api/cart/update?item_id=${itemId}`, {
-        method: "PUT",
-        headers: {
-          "X-Telegram-ID": getTelegramIdForApi(),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          product: productId,
-          quantity: newQuantity,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL!}/cart/update?item_id=${itemId}`,
+        {
+          method: "PUT",
+          headers: {
+            "X-Telegram-ID": getTelegramIdForApi(),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            product: productId,
+            quantity: newQuantity,
+          }),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -239,16 +244,18 @@ export default function CartPage() {
   const removeItem = async (itemId: number) => {
     setIsUpdating(true);
     try {
-
       // Update localStorage immediately for better UX
       cartStorage.removeItem(itemId);
 
-      const response = await fetch(`/api/cart/remove?item_id=${itemId}`, {
-        method: "DELETE",
-        headers: {
-          "X-Telegram-ID": getTelegramIdForApi(),
-        },
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL!}/cart/remove?item_id=${itemId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "X-Telegram-ID": getTelegramIdForApi(),
+          },
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -447,12 +454,19 @@ export default function CartPage() {
                         <div className="flex items-center gap-4">
                           <div className="text-right">
                             <p className="font-semibold">
-                              {((Number(item.product_price) - Number(item.product_discount_price)) * item.quantity).toLocaleString()}
+                              {(
+                                (Number(item.product_price) -
+                                  Number(item.product_discount_price)) *
+                                item.quantity
+                              ).toLocaleString()}
                               ₽
                             </p>
                             {item.product_discount_price && (
                               <p className="text-sm text-gray-500 line-through">
-                                {(Number(item.product_price) * item.quantity).toLocaleString()} ₽
+                                {(
+                                  Number(item.product_price) * item.quantity
+                                ).toLocaleString()}{" "}
+                                ₽
                               </p>
                             )}
                           </div>
@@ -502,7 +516,9 @@ export default function CartPage() {
                         >
                           <div className="text-center flex gap-2 items-center">
                             <span className="text-base font-semibold">
-                              {(Number(cart.total_price) + Number(method.price)).toLocaleString()}
+                              {(
+                                Number(cart.total_price) + Number(method.price)
+                              ).toLocaleString()}
                               ₽
                             </span>
                             <span className="text-xs text-gray-500">

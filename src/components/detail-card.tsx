@@ -92,11 +92,14 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
   const fetchBranches = useCallback(async () => {
     try {
       setIsBranchesLoading(true);
-      const response = await fetch("/api/branches", {
-        headers: {
-          "X-Telegram-ID": getTelegramIdForApi(),
-        },
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL!}/branches`,
+        {
+          headers: {
+            "X-Telegram-ID": getTelegramIdForApi(),
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch branches");
@@ -786,7 +789,9 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
 
             {/* Branch Selection */}
             <div className="space-y-2">
-              <Label htmlFor="branch">Выберите филиал <span className="text-red-500">*</span></Label>
+              <Label htmlFor="branch">
+                Выберите филиал <span className="text-red-500">*</span>
+              </Label>
               {isBranchesLoading ? (
                 <Skeleton className="h-10 w-full" />
               ) : (
@@ -859,7 +864,9 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="name">Имя и фамилия <span className="text-red-500">*</span></Label>
+              <Label htmlFor="name">
+                Имя и фамилия <span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="name"
                 placeholder="Имя и фамилия"
@@ -870,7 +877,9 @@ const ProductDetailCard: FC<ProductDetailCardProps> = ({ product }) => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone">Телефон <span className="text-red-500">*</span></Label>
+              <Label htmlFor="phone">
+                Телефон <span className="text-red-500">*</span>
+              </Label>
               <PhoneInput
                 countryCode={countryCode}
                 phoneNumber={phoneNumber}

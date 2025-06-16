@@ -17,7 +17,7 @@ interface WishlistState {
 }
 
 // API endpoint constants
-const API_BASE = "/api";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL!;
 
 export const useWishlistStore = create<WishlistState>()((set, get) => ({
   wishlistItems: [],

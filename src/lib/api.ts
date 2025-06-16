@@ -268,7 +268,7 @@ export interface AddToCartResponse {
 export async function fetchCategories(gender: IGender): Promise<Category[]> {
   try {
     const response = await fetch(
-      `/api/categories?gender=${getGenderId(gender)}`
+      `${API_BASE_URL}/categories?gender=${getGenderId(gender)}`
       // {
       //   headers: {
       //     "X-Telegram-ID": getTelegramIdForApi(),
@@ -289,7 +289,7 @@ export async function fetchCategories(gender: IGender): Promise<Category[]> {
 
 export async function getHandleCart(): Promise<CartGetResponse | null> {
   try {
-    const response = await fetch(`/api/cart/`, {
+    const response = await fetch(`${API_BASE_URL}/cart/`, {
       headers: {
         "X-Telegram-ID": getTelegramIdForApi(),
         Accept: "application/json",
@@ -345,7 +345,7 @@ export async function fetchSubCategories(
  */
 export async function fetchBrands(): Promise<Brand[]> {
   try {
-    const response = await fetch(`/api/brands`, {
+    const response = await fetch(`${API_BASE_URL}/brands`, {
       headers: {
         "X-Telegram-ID": getTelegramIdForApi(),
       },
@@ -369,7 +369,7 @@ export async function fetchBrands(): Promise<Brand[]> {
 
 export async function fetchProductsBySlug(slug: string): Promise<Product> {
   try {
-    const response = await fetch(`/api/products/${slug}`, {
+    const response = await fetch(`${API_BASE_URL}/products${slug}`, {
       headers: {
         "X-Telegram-ID": getTelegramIdForApi(),
         Accept: "application/json",
@@ -404,62 +404,69 @@ export async function fetchProducts(): Promise<Product[]> {
   }
 }
 
-export const fetchFilterProducts = async (params: FilterParams, gender: string) => {
+export const fetchFilterProducts = async (
+  params: FilterParams,
+  gender: string
+) => {
   try {
-    const queryParams = new URLSearchParams()
+    const queryParams = new URLSearchParams();
 
     // FAQAT BU YERDA gender qo'shamiz
-    const genderValue = gender === "female" ? "2" : "1"
-    queryParams.set("gender", genderValue)
+    const genderValue = gender === "female" ? "2" : "1";
+    queryParams.set("gender", genderValue);
 
     // Boshqa parametrlarni qo'shamiz, lekin gender'ni skip qilamiz
     Object.entries(params).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== "" && key !== "gender") {
+      if (
+        value !== undefined &&
+        value !== null &&
+        value !== "" &&
+        key !== "gender"
+      ) {
         if (Array.isArray(value)) {
-          queryParams.set(key, value.join(","))
+          queryParams.set(key, value.join(","));
         } else {
-          queryParams.set(key, String(value))
+          queryParams.set(key, String(value));
         }
       }
-    })
+    });
 
+    const createHeaders = () => {
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      };
 
-const createHeaders = () => {
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  }
+      const telegramId = getTelegramIdForApi();
+      if (telegramId) {
+        headers["X-Telegram-ID"] = telegramId;
+      }
 
-  const telegramId = getTelegramIdForApi()
-  if (telegramId) {
-    headers["X-Telegram-ID"] = telegramId
-  }
-
-  return headers
-}
-    const url = `${API_BASE_URL}/products?${queryParams.toString()}`
-    console.log("🚀 Fetching products from:", url)
+      return headers;
+    };
+    const url = `${API_BASE_URL}/products?${queryParams.toString()}`;
+    console.log("🚀 Fetching products from:", url);
 
     const response = await fetch(url, {
       method: "GET",
       headers: createHeaders(),
-    })
+    });
 
     if (!response.ok) {
-      console.error("❌ API Error:", response.status, response.statusText)
-      const errorText = await response.text()
-      console.error("Error details:", errorText)
-      throw new Error(`HTTP error! status: ${response.status}`)
+      console.error("❌ API Error:", response.status, response.statusText);
+      const errorText = await response.text();
+      console.error("Error details:", errorText);
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data = await response.json()
-    console.log("✅ API Response received successfully")
-    return data
+    const data = await response.json();
+    console.log("✅ API Response received successfully");
+    return data;
   } catch (error) {
-    console.error("❌ Error fetching products:", error)
-    throw error
+    console.error("❌ Error fetching products:", error);
+    throw error;
   }
-}
+};
 
 // Sizes API endpoint path should be updated to match the actual endpoint
 export async function fetchSizes(): Promise<any[]> {
@@ -550,7 +557,7 @@ export async function addToCart(
  */
 export async function getCart(): Promise<any> {
   try {
-    const response = await fetch(`api/cart/`, {
+    const response = await fetch(`${API_BASE_URL}/cart/`, {
       headers: {
         "X-Telegram-ID": getTelegramIdForApi(),
         Accept: "application/json",
@@ -581,7 +588,7 @@ export async function getCart(): Promise<any> {
  */
 export async function getCartItems(): Promise<CartItemsResponse> {
   try {
-    const response = await fetch(`/api/cart`, {
+    const response = await fetch(`${API_BASE_URL}/cart`, {
       headers: {
         "X-Telegram-ID": getTelegramIdForApi(),
         Accept: "application/json",
@@ -626,7 +633,7 @@ export async function addToHandleCart(
     formData.append("quantity", quantity.toString());
     formData.append("variant_id", variant_id.toString());
 
-    const response = await fetch(`/api/cart/add/`, {
+    const response = await fetch(`${API_BASE_URL}/cart/add/`, {
       method: "POST",
       headers: {
         "X-Telegram-ID": getTelegramIdForApi(),
@@ -664,7 +671,7 @@ export async function getWishlist(
   telegramId: number
 ): Promise<Wishlist | null> {
   try {
-    const response = await fetch(`/api/wishlist/`, {
+    const response = await fetch(`${API_BASE_URL}/wishlist/`, {
       headers: {
         "X-Telegram-ID": getTelegramIdForApi(),
         Accept: "application/json",
@@ -697,7 +704,7 @@ export async function addToWishlist(
     const formData = new URLSearchParams();
     formData.append("product_id", productId.toString());
 
-    const response = await fetch(`/api/wishlist/add/`, {
+    const response = await fetch(`${API_BASE_URL}/wishlist/add/`, {
       method: "POST",
       headers: {
         "X-Telegram-ID": getTelegramIdForApi(),
