@@ -5,7 +5,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
 
 export function getTelegramIdForApi(): string {
   const telegramId = getTelegramUserId();
-  return telegramId ? telegramId.toString() : "1524783641"; // fallback ID
+  return telegramId ? telegramId.toString() : ""; // fallback ID
 }
 
 /**
